@@ -6,4 +6,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+/* GET overview dashboard */
+router.get('/overview', function(req, res, next) {
+  res.render('dash_o', { title: 'Overview' });
+});
+
 module.exports = router;
