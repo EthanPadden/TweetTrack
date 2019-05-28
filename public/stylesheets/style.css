@@ -42,3 +42,15 @@ body > div {
 .row {
   max-width: 100%;
 }
+
+.overview-card div.card-body {
+ padding: 0;
+}
+
+.overview-card div.card {
+  border: 0;
+}
+
+.overview-card div.row {
+  margin: 1%;
+}
