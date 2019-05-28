@@ -3,13 +3,17 @@ html {
 }
 
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   height: 100%;
 }
 
 /* Applied only to row containing nav bar and body */
 body > div {
   height: 100%;
+}
+
+#title {
+  font-size: 3em;
+  margin: 0.2em;
 }
 
 :root{
