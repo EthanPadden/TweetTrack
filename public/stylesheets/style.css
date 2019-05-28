@@ -30,9 +30,13 @@ body > div {
   background-color: var(--grey-dark);
 }
 
-.overview-card {
-  width: 90%;
-  
+.overview-accounts {
+  /* width: 90% */
+  margin: 0;
+}
+
+.overview-accounts > div {
+  width: 100%;
 }
 
 .row {
