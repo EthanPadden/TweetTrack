@@ -3,6 +3,12 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+:root{
+  --grey-dark: #272727;
+  --grey-light: #747474;
+  --red: #FF652F;
+  --yellow: #FFE400;
+  --green: #14A76C;
 }
+
+/* var(--main-color); */
