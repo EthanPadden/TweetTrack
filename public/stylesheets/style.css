@@ -1,9 +1,11 @@
 html {
   height: 100%;
+  width: 100%;
 }
 
 body {
   height: 100%;
+  max-width: 100%;
 }
 
 /* Applied only to row containing nav bar and body */
@@ -29,6 +31,10 @@ body > div {
 }
 
 .overview-card {
-  width: 100%;
+  width: 90%;
   height: 10%;
+}
+
+.row {
+  max-width: 100%;
 }
