@@ -1,6 +1,15 @@
+html {
+  height: 100%;
+}
+
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100%;
+}
+
+/* Applied only to row containing nav bar and body */
+body > div {
+  height: 100%;
 }
 
 :root{
@@ -11,4 +20,6 @@ body {
   --green: #14A76C;
 }
 
-/* var(--main-color); */
+.navbar {
+  background-color: var(--grey-dark);
+}
