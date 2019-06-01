@@ -1,20 +1,7 @@
-var tableRowHTML = [
-    "<tr>",
-    "<th scope='row'>",
-    "</th>",
-    "<td>",
-    "</td>",
-    "</tr>"
-];
-
 var invalidHandleChars = ['{', '}'];
 
-// {{!-- <tr>
-//     <th scope="row">Donald J. Trump</th>
-//     <td>@realDonaldTrump</td>
-//     <td>42.1K</td>
-//     <td>60.6M</td>
-//   </tr> --}}
+
+    
 
 $('#add-account-btn').click(function(event){
     var handle = $('#handle-input').val();
@@ -25,6 +12,15 @@ $('#add-account-btn').click(function(event){
             data: {'handle':handle},
             success: function(data){
                 console.log(data);
+                var tableRow = '<tr>'
+                + '<th scope="row">' + data.name + '</th>'
+                + '<td>@' + data.handle + '</td>'
+                + '<td>' + data.tweetCount + '</td>'
+                + '<td>' + data.followersCount + '</td>'
+                + '</tr>';
+                var tableHTML = $('#overview-table-body').html();
+                tableHTML += tableRow;
+                $('#overview-table-body').html(tableHTML);
             },
             error: function(errMsg) {
                 console.log(errMsg);
