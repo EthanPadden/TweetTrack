@@ -18,5 +18,14 @@ var invalidHandleChars = ['{', '}'];
 
 $('#add-account-btn').click(function(event){
     var handle = $('#handle-input').val();
-    console.log(handle);
+    console.log(isHandleValid(handle));
 });
+
+function isHandleValid(handle) {
+    var i;
+    for(i in invalidHandleChars) {
+        if(handle.includes(invalidHandleChars[i])) return false;
+    }
+
+    return true;
+ }
