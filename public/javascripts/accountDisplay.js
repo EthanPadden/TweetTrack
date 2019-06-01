@@ -18,7 +18,15 @@ var invalidHandleChars = ['{', '}'];
 
 $('#add-account-btn').click(function(event){
     var handle = $('#handle-input').val();
-    console.log(isHandleValid(handle));
+    if (isHandleValid(handle)) {
+
+    } else {
+        var errMsg = "Please enter valid Twitter handle. Twitter handles must not contain the following characters: ";
+        for(i in invalidHandleChars) {
+            errMsg += invalidHandleChars[i] + ' ';
+        }
+        alert(errMsg);
+    }
 });
 
 function isHandleValid(handle) {
