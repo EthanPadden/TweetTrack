@@ -4,23 +4,13 @@ $('#handle-input').keyup(function(event){
 });
 $('#add-account-btn').click(function(event){
     var handle = $('#handle-input').val();
-    console.log(handle);
     if (isHandleValid(handle)) {
         $.ajax({
             type: 'GET',
             url: '/account/getBasicInfo',
             data: {'handle':handle},
             success: function(data){
-                console.log(data);
-                var tableRow = '<tr>'
-                + '<th scope="row">' + data.name + '</th>'
-                + '<td>@' + data.handle + '</td>'
-                + '<td>' + data.tweetCount + '</td>'
-                + '<td>' + data.followersCount + '</td>'
-                + '</tr>';
-                var tableHTML = $('#overview-table-body').html();
-                tableHTML += tableRow;
-                $('#overview-table-body').html(tableHTML);
+                addUserToTable(data);
             },
             error: function(errMsg) {
                 console.log(errMsg);
@@ -29,6 +19,17 @@ $('#add-account-btn').click(function(event){
     } 
 });
 
+function addUserToTable(data) {
+    var tableRow = '<tr>'
+                + '<th scope="row">' + data.name + '</th>'
+                + '<td>@' + data.handle + '</td>'
+                + '<td>' + data.tweetCount + '</td>'
+                + '<td>' + data.followersCount + '</td>'
+                + '</tr>';
+                var tableHTML = $('#overview-table-body').html();
+                tableHTML += tableRow;
+                $('#overview-table-body').html(tableHTML);
+}
 function isHandleValid(handle) {
     var specialCharReg =  /^[A-Za-z0-9_]{1,15}$/;
 
