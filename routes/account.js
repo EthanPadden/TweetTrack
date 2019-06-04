@@ -10,6 +10,7 @@ router.get('/getBasicInfo', function(req, res ,next){
                 var components = stdout.split('{');
                 var outputString = '{' + components[components.length-1];
                 var outputJSON = JSON.parse(outputString);
+                console.log(outputString);
                 res.json(outputJSON);
             }
         }
