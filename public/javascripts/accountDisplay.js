@@ -4,7 +4,7 @@ $('#handle-input').keyup(function(event){
 });
 $('#add-account-btn').click(function(event){
     var handle = $('#handle-input').val();
-
+    console.log(handle);
     if (isHandleValid(handle)) {
         $.ajax({
             type: 'GET',
