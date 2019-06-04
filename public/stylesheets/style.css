@@ -30,7 +30,7 @@ body > div {
   background-color: var(--grey-dark);
 }
 
-.overview-accounts {
+.no-margin {
   /* width: 90% */
   margin: 0;
 }
