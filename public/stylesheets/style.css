@@ -1,8 +1,56 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+html {
+  height: 100%;
+  width: 100%;
 }
 
-a {
-  color: #00B7FF;
+body {
+  height: 100%;
+  max-width: 100%;
+}
+
+/* Applied only to row containing nav bar and body */
+body > div {
+  height: 100%;
+}
+
+#title {
+  font-size: 3em;
+  margin: 0.2em;
+}
+
+:root{
+  --grey-dark: #272727;
+  --grey-light: #747474;
+  --red: #FF652F;
+  --yellow: #FFE400;
+  --green: #14A76C;
+}
+
+.navbar {
+  background-color: var(--grey-dark);
+}
+
+.overview-accounts {
+  /* width: 90% */
+  margin: 0;
+}
+
+.overview-accounts > div {
+  width: 100%;
+}
+
+.row {
+  max-width: 100%;
+}
+
+.overview-card div.card-body {
+ padding: 0;
+}
+
+.overview-card div.card {
+  border: 0;
+}
+
+.overview-card div.row {
+  margin: 1%;
 }

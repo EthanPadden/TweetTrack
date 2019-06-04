@@ -2,9 +2,23 @@
 <html>
   <head>
     <title>{{title}}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous">
+    </script>
   </head>
   <body>
-    {{{body}}}
+    <div class="row no-gutters">
+      <div class="col-1 navbar">nav</div>
+      <div class="col-11">
+        <div class="row no-gutters"><h1 id="title">TweetTracker</h1></div>
+        {{{body}}}
+      </div>
+    </div>
+
   </body>
+  <script src="/javascripts/accountDisplay.js"></script>
 </html>
