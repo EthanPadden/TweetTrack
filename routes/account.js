@@ -30,8 +30,6 @@ router.get('/getTweetInfo', function(req, res, next){
                 var tweetJSON = JSON.parse(tweetData);
                 tweetJSON.status = 0;
                 res.json(tweetJSON);
-                // outputJSON.status = 0;
-                // res.json(outputJSON);
             }
         }
     });
