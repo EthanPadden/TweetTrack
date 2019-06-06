@@ -14,7 +14,8 @@ $('#add-account-btn').click(function(event){
             success: function(data){
                 if(data.status == 0) {
                     addUserToTable(data);
-                    makeCharts(data);
+                    // FUTURE FUNCTION
+                    // getTweetStream(handle);
                 }
                 else if (data.status == -1) $('#handle-msg').html("Account not found");
             },
@@ -54,6 +55,24 @@ function isHandleValid(handle) {
     $('#handle-msg').html('Click \'+\' to add account');
     return true;
  }
+/* FUTURE FUNCTIONS
+ function getTweetStream(handle) {
+    $.ajax({
+        type: 'GET',
+        url: '/account/getTweetInfo',
+        data: {'handle':handle},
+        success: function(data){
+            console.log(data);
+            if(data.status == 0) {
+                makeCharts(data);
+            }
+            else if (data.status == -1) $('#handle-msg').html("Account not found");
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
+}
 
  function makeCharts(data) {
     // If this is the first chart being created
@@ -71,12 +90,17 @@ function isHandleValid(handle) {
     createTweetChart(data);
  }
 
+ // x axis labels
+//  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+
  function createTweetChart(data) {
     var ctx = $('#likesChart');
-
+    // console.log(data);
+    var i;
+    for(i in data.tweetStream) {
+        console.log(i);
+    }
     var chartData = {
-        // x axis labels
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [{
             // line label
             label: '# of Votes',
@@ -98,7 +122,7 @@ function isHandleValid(handle) {
  }
 
 
- /* 
+ 
  data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [{
