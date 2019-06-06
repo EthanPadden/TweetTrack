@@ -36,6 +36,7 @@ function addUserToTable(data) {
                 var tableHTML = $('#overview-table-body').html();
                 tableHTML += tableRow;
                 $('#overview-table-body').html(tableHTML);
+                addGraphOptions();
 }
 
 function isHandleValid(handle) {
@@ -55,6 +56,28 @@ function isHandleValid(handle) {
     $('#handle-msg').html('Click \'+\' to add account');
     return true;
  }
+
+ function addGraphOptions() {
+    $('#graph-options').removeClass('hidden');
+ }
+
+ function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                alert(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
 /* FUTURE FUNCTIONS
  function getTweetStream(handle) {
     $.ajax({
