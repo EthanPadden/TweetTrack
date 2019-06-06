@@ -54,3 +54,7 @@ body > div {
 .overview-card div.row {
   margin: 1%;
 }
+
+.hidden {
+  display: none;
+}
