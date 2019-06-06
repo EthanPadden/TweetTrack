@@ -1,3 +1,5 @@
+var greenTheme = 'rgba(20, 167, 108, 1)';
+
 $('#handle-input').keyup(function(event){
     var handle = event.target.value;
     isHandleValid(handle);
@@ -57,17 +59,68 @@ function isHandleValid(handle) {
     // If this is the first chart being created
     if ($('#overview-table-body').children().length == 1) {
         var structureHTML = '<div class="row no-margin">'
-        + '<div class="col" style="background-color: red">A</div>'
+        + '<div class="col"><canvas id="likesChart"></canvas></div>'
         + '<div class="col" style="background-color: green">B</div>'        
         + '<div class="col" style="background-color: blue">C</div>'
         + '</div>';
 
         $('#handle-input-group').after(structureHTML);
+        createTweetChart(data);
     }
 
     createTweetChart(data);
  }
 
  function createTweetChart(data) {
-    
+    var ctx = $('#likesChart');
+
+    var chartData = {
+        // x axis labels
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            // line label
+            label: '# of Votes',
+            // values to be plotted
+            data: [12, 19, 3, 5, 2, 3],
+            // line options
+            borderWidth: 1,
+            borderColor: greenTheme,
+            fill: false,
+            lineTension: 0
+        }]
+    };
+
+    var likesChart = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        // options: options
+    });
  }
+
+
+ /* 
+ data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }
+
+        */
