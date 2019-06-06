@@ -10,7 +10,10 @@ $('#add-account-btn').click(function(event){
             url: '/account/getBasicInfo',
             data: {'handle':handle},
             success: function(data){
-                if(data.status == 0) addUserToTable(data);
+                if(data.status == 0) {
+                    addUserToTable(data);
+                    makeCharts(data);
+                }
                 else if (data.status == -1) $('#handle-msg').html("Account not found");
             },
             error: function(errMsg) {
@@ -48,4 +51,23 @@ function isHandleValid(handle) {
 
     $('#handle-msg').html('Click \'+\' to add account');
     return true;
+ }
+
+ function makeCharts(data) {
+    // If this is the first chart being created
+    if ($('#overview-table-body').children().length == 1) {
+        var structureHTML = '<div class="row no-margin">'
+        + '<div class="col" style="background-color: red">A</div>'
+        + '<div class="col" style="background-color: green">B</div>'        
+        + '<div class="col" style="background-color: blue">C</div>'
+        + '</div>';
+
+        $('#handle-input-group').after(structureHTML);
+    }
+
+    createTweetChart(data);
+ }
+
+ function createTweetChart(data) {
+    
  }
