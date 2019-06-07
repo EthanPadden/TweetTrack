@@ -6,8 +6,23 @@ html {
 body {
   height: 100%;
   max-width: 100%;
+  background-color: var(--grey-light)
 }
+ 
+ body > div.row {
+   margin-top: 0.6%;
+    margin-bottom: 0.6%;
 
+ }
+
+ body > div:nth-child(1) {
+   margin: 0%;
+ }
+
+
+ body > div:last-child(){
+  margin-bottom: 0.6%;
+ }
 .overview-wrapper {
   width: 100%;
 }
@@ -87,7 +102,6 @@ body {
 } */
 /* Overriding Bootstrap */
 .card {
-  margin-top: 1%;
   border-radius: 3px;
 }
 
