@@ -1,4 +1,5 @@
 var greenTheme = 'rgba(20, 167, 108, 1)';
+var defaultNumTweets = 100;
 
 $('#handle-input').keyup(function(event){
     var handle = event.target.value;
@@ -40,6 +41,26 @@ function addUserToTable(data) {
                 $('#overview-table-body').html(tableHTML);
 }
 
+$('#add-graph-btn').click(function(event){
+    var index = $('#account-dropdown').value;
+    console.log(index);
+    // $.ajax({
+    //     type: 'GET',
+    //     url: '/account/getTweetInfo',
+    //     data: {'handle':handle},
+    //     success: function(data){
+    //         console.log(data);
+    //         if(data.status == 0) {
+    //             makeCharts(data);
+    //         }
+    //         else if (data.status == -1) $('#handle-msg').html("Account not found");
+    //     },
+    //     error: function(errMsg) {
+    //         console.log(errMsg);
+    //     }
+    // });
+});
+
 function isHandleValid(handle) {
     var specialCharReg =  /^[A-Za-z0-9_]{1,15}$/;
 
@@ -63,10 +84,11 @@ function isHandleValid(handle) {
  }
 
  function updateGraphOptions(data) {
-    var html = $('#account-dropdown').html() + '<a class="dropdown-item">' + data.name + '</a>';
+    var html = $('#account-dropdown').html() + '<option>' + data.name + '</option>';
     $('#account-dropdown').html(html);
  }
 
+ 
 /* FUTURE FUNCTIONS
  function getTweetStream(handle) {
     $.ajax({
