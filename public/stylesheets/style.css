@@ -8,14 +8,16 @@ body {
   max-width: 100%;
 }
 
-/* Applied only to row containing nav bar and body */
-body > div {
-  height: 100%;
-}
+
 
 #title {
+  background-color: var(--grey-dark);
+  padding: 0.5%;
+  padding-left: 1%;
+}
+#title h1 {
   font-size: 3em;
-  margin: 0.2em;
+  color: white;
 }
 
 :root{
@@ -26,9 +28,6 @@ body > div {
   --green: #14A76C;
 }
 
-.navbar {
-  background-color: var(--grey-dark);
-}
 
 .no-margin {
   /* width: 90% */
@@ -66,4 +65,5 @@ body > div {
 /* Overriding Bootstrap */
 .card {
   margin-top: 1%;
+  border-radius: 3px;
 }
