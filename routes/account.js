@@ -21,8 +21,11 @@ router.get('/getBasicInfo', function(req, res ,next){
 
 router.get('/getTweetInfo', function(req, res, next){
     // Input data: { handle:string, count:int}
-    exec('java -jar java/TweetTrack.jar tweetstats ' + req.query.handle + ' ' + req.query.count, function(err, stdout) {
-        if(err) res.json({"status":-1});
+    exec('java -jar java/TweetTrack.jar tweetstats ' + req.query.handle + ' ' + req.query.count, {maxBuffer: 1024 * 500}, function(err, stdout) {
+        if(err) {
+            console.log(err);
+            res.json({"status":-1});
+        }
         else {
             if(stdout) {
                 var components = stdout.split(separator);
