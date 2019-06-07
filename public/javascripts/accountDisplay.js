@@ -44,6 +44,7 @@ function addUserToTable(data) {
 $('#add-graph-btn').click(function(event){
     // Find the index of the selected option
     var index = $('#account-dropdown option:selected').index();
+    var chartType = $("#chart-type-dropdown").val();
 
     // Find the handle of the selected account from array of data
     var handle = accounts[index].handle;
@@ -54,7 +55,9 @@ $('#add-graph-btn').click(function(event){
         data: {'handle':handle, 'count':defaultNumTweets},
         success: function(data){
             if(data.status == 0) {
-                createLikesChart(data);
+                if(chartType == 'Likes') createLikesChart(data);
+                else if(chartType == 'Retweets') createRTsChart(data);
+                
             }
             else if (data.status == -1) console.log("Error");
         },
@@ -64,6 +67,9 @@ $('#add-graph-btn').click(function(event){
     });
 });
 
+function createRTsChart(data) {
+    console.log("RT");
+}
 function isHandleValid(handle) {
     var specialCharReg =  /^[A-Za-z0-9_]{1,15}$/;
 
