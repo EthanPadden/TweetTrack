@@ -101,28 +101,32 @@ function isHandleValid(handle) {
         + '</div>';
 
         $('#graph-options').after(structureHTML);
-        // createTweetChart(data);
+        createLikesChart(data);
     }
-
-    // createTweetChart(data);
  }
-/*
+
  // x axis labels
 //  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
 
- function createTweetChart(data) {
+ function createLikesChart(data) {
     var ctx = $('#likesChart');
-    // console.log(data);
+
+    // Dataset extracted from tweetStream
+    var dataset = [];
+    var labels = [];
     var i;
     for(i in data.tweetStream) {
-        console.log(i);
+        dataset.push(data.tweetStream[i].favourite_count);
+        labels.push(i);
     }
+    console.log(labels);
     var chartData = {
+        labels: labels,
         datasets: [{
             // line label
-            label: '# of Votes',
+            label: '# of Likes',
             // values to be plotted
-            data: [12, 19, 3, 5, 2, 3],
+            data: dataset,
             // line options
             borderWidth: 1,
             borderColor: greenTheme,
@@ -134,11 +138,22 @@ function isHandleValid(handle) {
     var likesChart = new Chart(ctx, {
         type: 'line',
         data: chartData,
-        // options: options
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    display: false //this will remove all the x-axis grid lines
+                }]
+            }
+        }
     });
  }
 
-
+/*
  
  data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
