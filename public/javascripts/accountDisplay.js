@@ -19,8 +19,6 @@ $('#add-account-btn').click(function(event){
                     addUserToTable(data);
                     addGraphOptions();
                     updateGraphOptions(data);
-                    // FUTURE FUNCTION
-                    // getTweetStream(handle);
                 }
                 else if (data.status == -1) $('#handle-msg').html("Account not found");
             },
@@ -93,39 +91,18 @@ function isHandleValid(handle) {
     $('#account-dropdown').html(html);
  }
 
- 
-/* FUTURE FUNCTIONS
- function getTweetStream(handle) {
-    $.ajax({
-        type: 'GET',
-        url: '/account/getTweetInfo',
-        data: {'handle':handle},
-        success: function(data){
-            console.log(data);
-            if(data.status == 0) {
-                makeCharts(data);
-            }
-            else if (data.status == -1) $('#handle-msg').html("Account not found");
-        },
-        error: function(errMsg) {
-            console.log(errMsg);
-        }
-    });
-}
-*/
  function makeCharts(data) {
-     console.log(data);
     // If this is the first chart being created
-    // if ($('#overview-table-body').children().length == 1) {
-    //     var structureHTML = '<div class="row no-margin">'
-    //     + '<div class="col"><canvas id="likesChart"></canvas></div>'
-    //     + '<div class="col" style="background-color: green">B</div>'        
-    //     + '<div class="col" style="background-color: blue">C</div>'
-    //     + '</div>';
+    if ($('#overview-table-body').children().length == 1) {
+        var structureHTML = '<div class="row no-margin">'
+        + '<div class="col"><canvas id="likesChart"></canvas></div>'
+        + '<div class="col" style="background-color: green">B</div>'        
+        + '<div class="col" style="background-color: blue">C</div>'
+        + '</div>';
 
-    //     $('#handle-input-group').after(structureHTML);
-    //     createTweetChart(data);
-    // }
+        $('#graph-options').after(structureHTML);
+        // createTweetChart(data);
+    }
 
     // createTweetChart(data);
  }
