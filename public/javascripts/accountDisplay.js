@@ -1,5 +1,5 @@
 var greenTheme = 'rgba(20, 167, 108, 1)';
-var defaultNumTweets = 100;
+var defaultNumTweets = 30; // If increased too much, it exceeds the max buffer
 var accounts = [];
 
 $('#handle-input').keyup(function(event){
