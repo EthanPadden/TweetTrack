@@ -1,5 +1,6 @@
 var greenTheme = 'rgba(20, 167, 108, 1)';
 var defaultNumTweets = 100;
+var accounts = [];
 
 $('#handle-input').keyup(function(event){
     var handle = event.target.value;
@@ -42,8 +43,12 @@ function addUserToTable(data) {
 }
 
 $('#add-graph-btn').click(function(event){
-    var index = $('#account-dropdown').value;
-    console.log(index);
+    // Find the index of the selected option
+    var index = $('#account-dropdown option:selected').index();
+
+    // Find the handle of the selected account from array of data
+    // TODO NEXT
+    
     // $.ajax({
     //     type: 'GET',
     //     url: '/account/getTweetInfo',
