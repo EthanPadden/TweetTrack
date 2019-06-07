@@ -1,4 +1,5 @@
 var greenTheme = 'rgba(20, 167, 108, 1)';
+var yellowTheme = 'rgba(255, 228, 0, 1)';
 var defaultNumTweets = 30; // If increased too much, it exceeds the max buffer
 var accounts = [];
 
@@ -68,7 +69,48 @@ $('#add-graph-btn').click(function(event){
 });
 
 function createRTsChart(data) {
-    console.log("RT");
+    if($('#RTsChart').hasClass('hidden')) $('#RTsChart').removeClass('hidden');
+    var ctx = $('#RTsChart canvas');
+    
+    // Dataset extracted from tweetStream
+    var dataset = [];
+    var labels = [];
+    var i;
+    for(i in data.tweetStream) {
+        dataset.push(data.tweetStream[i].rt_count);
+        labels.push(i);
+    }
+    var chartData = {
+        labels: labels,
+        datasets: [{
+            // line label
+            label: '# of Retweets',
+            // values to be plotted
+            data: dataset,
+            // line options
+            borderWidth: 1,
+            borderColor: yellowTheme,
+            fill: false,
+            lineTension: 0
+        }]
+    };
+
+    var likesChart = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    display: false //this will remove all the x-axis grid lines
+                }]
+            }
+        }
+    });
 }
 function isHandleValid(handle) {
     var specialCharReg =  /^[A-Za-z0-9_]{1,15}$/;
@@ -101,7 +143,7 @@ function isHandleValid(handle) {
 //  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
 
  function createLikesChart(data) {
-    $('#likesChart').removeClass('hidden');
+    if($('#likesChart').hasClass('hidden')) $('#likesChart').removeClass('hidden');
     var ctx = $('#likesChart canvas');
 
     // Dataset extracted from tweetStream
