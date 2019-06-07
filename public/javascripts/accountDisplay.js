@@ -58,26 +58,9 @@ function isHandleValid(handle) {
  }
 
  function addGraphOptions() {
-    $('#graph-options').removeClass('hidden');
+    if($('#graph-options').hasClass('hidden')) $('#graph-options').removeClass('hidden');
  }
 
- function readTextFile(file)
-{
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                var allText = rawFile.responseText;
-                alert(allText);
-            }
-        }
-    }
-    rawFile.send(null);
-}
 /* FUTURE FUNCTIONS
  function getTweetStream(handle) {
     $.ajax({
