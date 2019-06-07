@@ -46,43 +46,40 @@
 </div>
 
 
-
-
-
-
-{{!-- ============================= --}}
 <div class="row no-margin hidden" id="graph-options">
     <div class="col-1"></div>
     <div class="col-10">
       <div class="card">
         <div class="card-body">
-          <div class="row">
-          <div class="col-3">Add graph...</div>
-          <div class="col-3">
-            <div class="dropdown">
-               <div class="form-group">
-                <label for="sel1">Select list:</label>
-                <select class="form-control" id="account-dropdown">
+
+          <div class="input-group" id="input-graph-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Add graph...</span>
+            </div>
+
+
+                <select class="custom-select" id="account-dropdown">
                   
                 </select>
-              </div> 
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="dropdown">
-              <div class="form-group">
-                <label for="sel1">Select list:</label>
-                <select class="form-control" id="chart-type-dropdown">
+       
+                <select class="custom-select" id="chart-type-dropdown">
                   <option>Likes</option>
                   <option>Retweets</option>
                 </select>
-              </div>
-            </div>
-          </div>
-        
-          <div class="col-3"><button class="btn btn-primary" id="add-graph-btn">+</button></div>
+             
+   <div class="input-group-append">
+<button class="btn btn-primary" id="add-graph-btn">+</button>
+
+   </div>
 
           </div>
+
+
+
+            
+            
+          
+
         </div>
       </div>
     </div>

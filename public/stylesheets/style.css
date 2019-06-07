@@ -30,6 +30,19 @@ body {
   --green: #14A76C;
 }
 
+#input-graph-group {
+  width: 100%;
+}
+#input-graph-group > div{
+  width: 25%;
+}
+
+#input-graph-group span {
+  background-color: white;
+  border: none;
+
+}
+
 #input-handle-group div:nth-child(4){
   width: 60%;
 }
