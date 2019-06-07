@@ -15,6 +15,7 @@ $('#add-account-btn').click(function(event){
             data: {'handle':handle},
             success: function(data){
                 if(data.status == 0) {
+                    accounts.push(data);
                     addUserToTable(data);
                     addGraphOptions();
                     updateGraphOptions(data);
@@ -47,23 +48,22 @@ $('#add-graph-btn').click(function(event){
     var index = $('#account-dropdown option:selected').index();
 
     // Find the handle of the selected account from array of data
-    // TODO NEXT
-    
-    // $.ajax({
-    //     type: 'GET',
-    //     url: '/account/getTweetInfo',
-    //     data: {'handle':handle},
-    //     success: function(data){
-    //         console.log(data);
-    //         if(data.status == 0) {
-    //             makeCharts(data);
-    //         }
-    //         else if (data.status == -1) $('#handle-msg').html("Account not found");
-    //     },
-    //     error: function(errMsg) {
-    //         console.log(errMsg);
-    //     }
-    // });
+    var handle = accounts[index].handle;
+
+    $.ajax({
+        type: 'GET',
+        url: '/account/getTweetInfo',
+        data: {'handle':handle, 'count':defaultNumTweets},
+        success: function(data){
+            if(data.status == 0) {
+                makeCharts(data);
+            }
+            else if (data.status == -1) console.log("Error");
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
 });
 
 function isHandleValid(handle) {
@@ -112,23 +112,24 @@ function isHandleValid(handle) {
         }
     });
 }
-
+*/
  function makeCharts(data) {
+     console.log(data);
     // If this is the first chart being created
-    if ($('#overview-table-body').children().length == 1) {
-        var structureHTML = '<div class="row no-margin">'
-        + '<div class="col"><canvas id="likesChart"></canvas></div>'
-        + '<div class="col" style="background-color: green">B</div>'        
-        + '<div class="col" style="background-color: blue">C</div>'
-        + '</div>';
+    // if ($('#overview-table-body').children().length == 1) {
+    //     var structureHTML = '<div class="row no-margin">'
+    //     + '<div class="col"><canvas id="likesChart"></canvas></div>'
+    //     + '<div class="col" style="background-color: green">B</div>'        
+    //     + '<div class="col" style="background-color: blue">C</div>'
+    //     + '</div>';
 
-        $('#handle-input-group').after(structureHTML);
-        createTweetChart(data);
-    }
+    //     $('#handle-input-group').after(structureHTML);
+    //     createTweetChart(data);
+    // }
 
-    createTweetChart(data);
+    // createTweetChart(data);
  }
-
+/*
  // x axis labels
 //  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
 
