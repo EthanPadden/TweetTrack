@@ -8,7 +8,9 @@ body {
   max-width: 100%;
 }
 
-
+.overview-wrapper {
+  width: 100%;
+}
 
 #title {
   background-color: var(--grey-dark);
