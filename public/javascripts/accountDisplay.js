@@ -14,6 +14,8 @@ $('#add-account-btn').click(function(event){
             success: function(data){
                 if(data.status == 0) {
                     addUserToTable(data);
+                    addGraphOptions();
+                    updateGraphOptions(data);
                     // FUTURE FUNCTION
                     // getTweetStream(handle);
                 }
@@ -36,7 +38,6 @@ function addUserToTable(data) {
                 var tableHTML = $('#overview-table-body').html();
                 tableHTML += tableRow;
                 $('#overview-table-body').html(tableHTML);
-                addGraphOptions();
 }
 
 function isHandleValid(handle) {
@@ -59,6 +60,11 @@ function isHandleValid(handle) {
 
  function addGraphOptions() {
     if($('#graph-options').hasClass('hidden')) $('#graph-options').removeClass('hidden');
+ }
+
+ function updateGraphOptions(data) {
+    var html = $('#account-dropdown').html() + '<a class="dropdown-item">' + data.name + '</a>';
+    $('#account-dropdown').html(html);
  }
 
 /* FUTURE FUNCTIONS
