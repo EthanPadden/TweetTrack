@@ -54,7 +54,7 @@ $('#add-graph-btn').click(function(event){
         data: {'handle':handle, 'count':defaultNumTweets},
         success: function(data){
             if(data.status == 0) {
-                makeCharts(data);
+                createLikesChart(data);
             }
             else if (data.status == -1) console.log("Error");
         },
@@ -91,25 +91,12 @@ function isHandleValid(handle) {
     $('#account-dropdown').html(html);
  }
 
- function makeCharts(data) {
-    // If this is the first chart being created
-    if ($('#overview-table-body').children().length == 1) {
-        var structureHTML = '<div class="row no-margin">'
-        + '<div class="col"><canvas id="likesChart"></canvas></div>'
-        + '<div class="col" style="background-color: green">B</div>'        
-        + '<div class="col" style="background-color: blue">C</div>'
-        + '</div>';
-
-        $('#graph-options').after(structureHTML);
-        createLikesChart(data);
-    }
- }
-
  // x axis labels
 //  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
 
  function createLikesChart(data) {
-    var ctx = $('#likesChart');
+    $('#likesChart').removeClass('hidden');
+    var ctx = $('#likesChart canvas');
 
     // Dataset extracted from tweetStream
     var dataset = [];
@@ -119,7 +106,6 @@ function isHandleValid(handle) {
         dataset.push(data.tweetStream[i].favourite_count);
         labels.push(i);
     }
-    console.log(labels);
     var chartData = {
         labels: labels,
         datasets: [{
