@@ -32,6 +32,76 @@
     Enter Twitter handle to compare account
   </div>
 </div>
+<div class="row no-margin hidden" id="graph-options">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+          <div class="col-3">Add graph...</div>
+          <div class="col-3">
+            <div class="dropdown">
+               <div class="form-group">
+                <label for="sel1">Select list:</label>
+                <select class="form-control" id="account-dropdown">
+                  
+                </select>
+              </div> 
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="dropdown">
+              <div class="form-group">
+                <label for="sel1">Select list:</label>
+                <select class="form-control" id="chart-type-dropdown">
+                  <option>Likes</option>
+                  <option>Retweets</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-3"><button class="btn btn-primary" id="add-graph-btn">+</button></div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-1"></div>
+  </div>
+
+{{!-- CHARTS --}}
+{{!-- Likes --}}
+<div class="row no-margin hidden" id="likesChart">
+  <div class="col-1"></div>
+  <div class="col-10">
+    <div class="card">
+      <div class="card-body">
+        <div class="row"><div class="col-6"><canvas></canvas></div>
+        <div class="col-6">
+          <h5>Options</h5>
+        </div></div>
+        </div>
+    </div>
+  </div>
+  <div class="col-1"></div>
+</div>
+
+{{!-- Retweets --}}
+<div class="row no-margin hidden" id="RTsChart">
+  <div class="col-1"></div>
+  <div class="col-10">
+    <div class="card">
+      <div class="card-body">
+        <div class="row"><div class="col-6"><canvas></canvas></div>
+        <div class="col-6">
+          <h5>Options</h5>
+        </div></div>
+        </div>
+    </div>
+  </div>
+  <div class="col-1"></div>
+</div>
 
 
 
