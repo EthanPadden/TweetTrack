@@ -56,8 +56,8 @@ $('#add-graph-btn').click(function(event){
         data: {'handle':handle, 'count':defaultNumTweets},
         success: function(data){
             if(data.status == 0) {
-                if(chartType == 'Likes') createLikesChart(data);
-                else if(chartType == 'Retweets') createRTsChart(data);
+                if(chartType == 'Likes') createLikesChart(data, handle);
+                else if(chartType == 'Retweets') createRTsChart(data, handle);
                 
             }
             else if (data.status == -1) console.log("Error");
@@ -68,7 +68,7 @@ $('#add-graph-btn').click(function(event){
     });
 });
 
-function createRTsChart(data) {
+function createRTsChart(data, handle) {
     if($('#RTsChart').hasClass('hidden')) $('#RTsChart').removeClass('hidden');
     var ctx = $('#RTsChart canvas');
     
@@ -95,7 +95,7 @@ function createRTsChart(data) {
         }]
     };
 
-    var likesChart = new Chart(ctx, {
+    var RTsChart = new Chart(ctx, {
         type: 'line',
         data: chartData,
         options: {
@@ -111,6 +111,16 @@ function createRTsChart(data) {
             }
         }
     });
+
+    // Get name of tracked user
+    var username;
+    for(i in accounts) if (accounts[i].handle == handle) username = accounts[i].name;
+    $('#RTsChart h4').html("Retweets - " + username);
+
+    var avgRts = findAvg(dataset);
+    $('#avg-rts').html("Average retweets: " + avgRts);
+    var maxRts = findMax(dataset);
+    $('#max-rts').html("Max retweets: " + maxRts);
 }
 function isHandleValid(handle) {
     var specialCharReg =  /^[A-Za-z0-9_]{1,15}$/;
@@ -142,7 +152,7 @@ function isHandleValid(handle) {
  // x axis labels
 //  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
 
- function createLikesChart(data) {
+ function createLikesChart(data, handle) {
     if($('#likesChart').hasClass('hidden')) $('#likesChart').removeClass('hidden');
     var ctx = $('#likesChart canvas');
 
@@ -185,32 +195,34 @@ function isHandleValid(handle) {
             }
         }
     });
+    
+    // Get name of tracked user
+    var username;
+    for(i in accounts) if (accounts[i].handle == handle) username = accounts[i].name;
+    $('#likesChart h4').html("Likes - " + username);
+
+    var avgLikes = findAvg(dataset);
+    $('#avg-likes').html("Average likes: " + avgLikes);
+    var maxLikes = findMax(dataset);
+    $('#max-likes').html("Max likes: " + maxLikes);
  }
 
-/*
- 
- data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }
+ function findAvg(dataset) {
+     var total = 0;
+     var i;
+     for(i in dataset) {
+         total += dataset[i]
+     }
 
-        */
+     return Math.round(total/dataset.length);
+ }
+
+ function findMax(dataset) {
+     var max = 0;
+     var i;
+     for(i in dataset) {
+         if(dataset[i] > max) max = dataset[i];
+      }
+
+      return max;
+ }

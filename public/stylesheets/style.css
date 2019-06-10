@@ -6,16 +6,35 @@ html {
 body {
   height: 100%;
   max-width: 100%;
+  background-color: var(--grey-light)
 }
+ 
+ body > div.row {
+   margin-top: 0.6%;
+    margin-bottom: 0.6%;
 
-/* Applied only to row containing nav bar and body */
-body > div {
-  height: 100%;
+ }
+
+ body > div:nth-child(1) {
+   margin: 0%;
+ }
+
+
+ body > div:last-child(){
+  margin-bottom: 0.6%;
+ }
+.overview-wrapper {
+  width: 100%;
 }
 
 #title {
+  background-color: var(--grey-dark);
+  padding: 0.5%;
+  padding-left: 1%;
+}
+#title h1 {
   font-size: 3em;
-  margin: 0.2em;
+  color: white;
 }
 
 :root{
@@ -26,10 +45,28 @@ body > div {
   --green: #14A76C;
 }
 
-.navbar {
-  background-color: var(--grey-dark);
+#input-graph-group {
+  width: 100%;
+}
+#input-graph-group > div{
+  width: 25%;
 }
 
+#input-graph-group span {
+  background-color: white;
+  border: none;
+
+}
+
+#input-handle-group div:nth-child(4){
+  width: 60%;
+}
+#input-handle-group {
+  padding-left: 2%;
+}
+#input-handle-group button {
+  border-radius: 0  0.25rem 0.25rem 0;
+}
 .no-margin {
   /* width: 90% */
   margin: 0;
@@ -57,4 +94,18 @@ body > div {
 
 .hidden {
   display: none;
+}
+
+/* .main-section {
+  background-color: var(--grey-light);
+  
+} */
+/* Overriding Bootstrap */
+.card {
+  border-radius: 3px;
+}
+
+.input-group-append label {
+  background-color: white;
+  border: none;
 }
