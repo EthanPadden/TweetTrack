@@ -56,8 +56,8 @@ $('#add-graph-btn').click(function(event){
         data: {'handle':handle, 'count':defaultNumTweets},
         success: function(data){
             if(data.status == 0) {
-                if(chartType == 'Likes') createLikesChart(data);
-                else if(chartType == 'Retweets') createRTsChart(data);
+                if(chartType == 'Likes') createLikesChart(data, handle);
+                else if(chartType == 'Retweets') createRTsChart(data, handle);
                 
             }
             else if (data.status == -1) console.log("Error");
@@ -68,7 +68,7 @@ $('#add-graph-btn').click(function(event){
     });
 });
 
-function createRTsChart(data) {
+function createRTsChart(data, handle) {
     if($('#RTsChart').hasClass('hidden')) $('#RTsChart').removeClass('hidden');
     var ctx = $('#RTsChart canvas');
     
@@ -112,6 +112,11 @@ function createRTsChart(data) {
         }
     });
 
+    // Get name of tracked user
+    var username;
+    for(i in accounts) if (accounts[i].handle == handle) username = accounts[i].name;
+    $('#RTsChart h4').html("Retweets - " + username);
+
     var avgRts = findAvg(dataset);
     $('#avg-rts').html("Average retweets: " + avgRts);
     var maxRts = findMax(dataset);
@@ -147,7 +152,7 @@ function isHandleValid(handle) {
  // x axis labels
 //  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
 
- function createLikesChart(data) {
+ function createLikesChart(data, handle) {
     if($('#likesChart').hasClass('hidden')) $('#likesChart').removeClass('hidden');
     var ctx = $('#likesChart canvas');
 
@@ -190,6 +195,11 @@ function isHandleValid(handle) {
             }
         }
     });
+    
+    // Get name of tracked user
+    var username;
+    for(i in accounts) if (accounts[i].handle == handle) username = accounts[i].name;
+    $('#likesChart h4').html("Likes - " + username);
 
     var avgLikes = findAvg(dataset);
     $('#avg-likes').html("Average likes: " + avgLikes);
