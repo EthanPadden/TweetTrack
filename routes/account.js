@@ -5,25 +5,29 @@ var separator = '|||';
 
 router.get('/getBasicInfo', function(req, res ,next){
     // Input data: { handle:string }
-    spawn('java -jar java/TweetTrack.jar overview ' + req.query.handle, function(err, stdout) {
-        if(err) res.json({"status":-1});
-        else {
-            if(stdout) {
-                var components = stdout.split('{');
-                var outputString = '{' + components[components.length-1];
-                var outputJSON = JSON.parse(outputString);
-                outputJSON.status = 0;
-                res.json(outputJSON);
-            }
-        }
+    const child = spawn('java', ['-jar', 'java/TweetTrack.jar', 'overview', req.query.handle]);
+
+    child.stdout.on('data', (stdout) => {
+        var components = stdout.split('{');
+        var outputString = '{' + components[components.length-1];
+        var outputJSON = JSON.parse(outputString);
+        outputJSON.status = 0;
+        res.json(outputJSON);
     });
+
+    child.stderr.on('data', (data) => {
+        res.json({"status":-1});
+    });
+    
+    child.on('error', function(err) {
+        res.json({"status":-1});
+    });     
+    
 });
 
 router.get('/getTweetInfo', function(req, res, next){
-        // Input data: { handle:string, count:int}
-    // var child = spawn('java -jar java/TweetTrack.jar tweetstats ' + req.query.handle + ' ' + req.query.count);
+    // Input data: { handle:string, count:int}
     const child = spawn('java', ['-jar', 'java/TweetTrack.jar', 'tweetstats', req.query.handle, req.query.count]);
-    // var child = spawn('ls');
 
     child.on('exit', function (code, signal, error) {
         console.log(code);
