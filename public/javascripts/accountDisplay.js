@@ -227,3 +227,12 @@ function isHandleValid(handle) {
 
       return max;
  }
+
+ $('#graph-tab').click(function(event){
+    $(event.target).addClass('active');
+    $('#compare-tab').removeClass('active');
+});
+ $('#compare-tab').click(function(event){
+    $(event.target).addClass('active');
+    $('#graph-tab').removeClass('active');
+});
