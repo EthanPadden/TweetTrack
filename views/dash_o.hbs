@@ -1,5 +1,7 @@
+{{!-- TITLE --}}
 <div class="row no-margin" id="title"><h1>TweetTracker</h1></div>
 
+{{!-- TABLE --}}
 <div class="row no-margin">
   <div class="col-1"></div>
   <div class="col-10">
@@ -24,6 +26,7 @@
     </div>  
 </div>
 
+{{!-- HANDLE INPUT --}}
 <div class="row no-margin">
     <div class="input-group" id="input-handle-group">
       <div class="input-group-prepend">
@@ -47,8 +50,7 @@
 
 
 
-
-{{!-- ========================= --}}
+{{!-- NAV BAR --}}
 <div class="row no-margin hidden" id="nav-bar">
     <div class="col-1"></div>
     <div class="col-10">
@@ -69,8 +71,39 @@
     </div>
     <div class="col-1"></div>
   </div>
-{{!-- ============================== --}}
 
+{{!-- COMPARE SELECTION (make hidden) --}} 
+<div class="row no-margin" id="compare-select">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <div class="card">
+        <div class="card-body">
+
+   <div class="input-group" id="input-graph-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Compare accounts...</span>
+            </div>
+
+
+                <select class="custom-select" id="account-dropdown">
+                  
+                </select>
+       
+                <select class="custom-select" id="chart-type-dropdown">
+                  
+                </select>
+    
+
+   </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-1"></div>
+  </div>
+
+{{!-- GRAPH OPTIONS --}}
 <div class="row no-margin hidden" id="graph-options">
     <div class="col-1"></div>
     <div class="col-10">
