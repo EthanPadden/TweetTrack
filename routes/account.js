@@ -18,7 +18,7 @@ router.get('/getBasicInfo', function(req, res ,next){
     child.stderr.on('data', (data) => {
         res.json({"status":-1});
     });
-    
+
     child.on('error', function(err) {
         res.json({"status":-1});
     });     
@@ -29,27 +29,36 @@ router.get('/getTweetInfo', function(req, res, next){
     // Input data: { handle:string, count:int}
     const child = spawn('java', ['-jar', 'java/TweetTrack.jar', 'tweetstats', req.query.handle, req.query.count]);
 
-    child.on('exit', function (code, signal, error) {
-        console.log(code);
-        console.log(signal);
-        console.log(error);
-        // var components = stdout.split(separator);
-        // var tweetData = components[components.length-1];
-        // var tweetJSON = JSON.parse(tweetData);
-        // tweetJSON.status = 0;
-        // res.json(tweetJSON);
+    var limit = req.query.count;
+    
+    var i = 0;
 
-    });
-
+    var outputJSON = {
+        'status':-1,
+        'tweetStream':[]
+    };
     child.stdout.on('data', (data) => {
-        console.log(`child stdout:\n${data}`);
-      });
+        outputJSON.status = 0;
+
+        if(data.indexOf('Tweet: ') == 0){ 
+            var outputString = `${data}`.split('Tweet: ')[1];
+            var tweetJSON = JSON.parse(outputString);
+            outputJSON.tweetStream[i] = tweetJSON;
+            console.log(JSON.stringify(tweetJSON) + '   ' + i);
+            i++;
+        }
+    
+
+        if(i == limit) {
+            res.json(outputJSON);
+            child.kill('SIGINT');
+            console.log("Killed");
+        }
+    });
       
-      child.stderr.on('data', (data) => {
-        console.error(`child stderr:\n${data}`);
-      });
+  
       child.on('error', function(err) {
-        console.log('Error: ' + err);
+        res.json('Error: ' + err);
       });     
     
 });
