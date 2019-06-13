@@ -142,6 +142,7 @@ function isHandleValid(handle) {
 
  function addGraphOptions() {
     if($('#graph-options').hasClass('hidden')) $('#graph-options').removeClass('hidden');
+    if($('#nav-bar').hasClass('hidden')) $('#nav-bar').removeClass('hidden');
  }
 
  function updateGraphOptions(data) {
