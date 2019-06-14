@@ -1,28 +1,24 @@
 var express = require('express');
 var router = express.Router();
 const { spawn } = require('child_process');
-const { exec } = require('child_process');
+const exec = require('child_process').exec;
 var separator = '|||';
 
 router.get('/getBasicInfo', function(req, res ,next){
     // Input data: { handle:string }
-    const child = spawn('java', ['-jar', 'java/TweetTrack.jar', 'overview', req.query.handle]);
-
-    child.stdout.on('data', (stdout) => {
-        var components = stdout.split('{');
-        var outputString = '{' + components[components.length-1];
-        var outputJSON = JSON.parse(outputString);
-        outputJSON.status = 0;
-        res.json(outputJSON);
-    });
-
-    child.stderr.on('data', (data) => {
-        res.json({"status":-1});
-    });
-
-    child.on('error', function(err) {
-        res.json({"status":-1});
-    });     
+   // Input data: { handle:string }
+   exec('java -jar java/TweetTrack.jar overview ' + req.query.handle, function(err, stdout) {
+    if(err) res.json({"status":-1});
+    else {
+        if(stdout) {
+            var components = stdout.split('{');
+            var outputString = '{' + components[components.length-1];
+            var outputJSON = JSON.parse(outputString);
+            outputJSON.status = 0;
+            res.json(outputJSON);
+        }
+    }
+});
     
 });
 
@@ -47,14 +43,12 @@ router.get('/getTweetInfo', function(req, res, next){
                 var outputString = `${data}`.split('Tweet: ')[1];
                 var tweetJSON = JSON.parse(outputString);
                 outputJSON.tweetStream[i] = tweetJSON;
-                console.log(JSON.stringify(tweetJSON) + '   ' + i);
                 i++;
                 child.stdin.write('0\n');
             } else if (data.indexOf('WAITING_SIGNAL') == 0) { // Waiting signal
                 child.stdin.write('0\n');
             } 
         } else {
-     
             child.kill();
         }
         
