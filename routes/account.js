@@ -40,15 +40,21 @@ router.get('/getTweetInfo', function(req, res, next){
     // TRY ALL COMBINATIONS AGAIN
     // Ask for intitial tweet
     // process.stdin.pipe(child.stdin);
+    // child.stdin.pipe(process.stdin);
     // console.log('0');
     // if(i <= limit) {
-    //     child.stdin.setEncoding('utf-8');
+    // process.stdin.setEncoding('utf-8');
+    child.stdin.setEncoding('utf-8');
 
     //     // Try console.log("0"); instead of 0 if doesnt work
-    //     // child.stdin.write("0");
-    //     child.stdin.write('console.log("0");');
+
     //     // console.log('0\n');
     // }
+
+
+
+
+
 
     child.stdout.on('data', (data) => {
         outputJSON.status = 0;
@@ -60,7 +66,11 @@ router.get('/getTweetInfo', function(req, res, next){
             console.log(JSON.stringify(tweetJSON) + '   ' + i);
             i++;
         } else if (data.indexOf('WAITING_SIGNAL') == 0) { // Waiting signal
-            // Waiting for input
+            // console.log("wait");
+            // console.log('0');
+            // child.stdin.write("0");
+            child.stdin.write('0\n');
+            // console.log('0\n');
         } 
 
         if(i == limit) {
