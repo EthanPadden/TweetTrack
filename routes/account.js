@@ -39,4 +39,26 @@ router.get('/getTweetInfo', function(req, res, next){
 
 });
 
+router.get('/getTweetsByTime', function(req, res, next){
+    console.log("Call");
+    // Input data: { handle:string, days:int}
+    exec('java -jar java/TweetTrack.jar tweetbytime ' + req.query.handle + ' ' + req.query.days, function(err, stdout) {
+        if(err) {
+            console.log(err);
+            res.json({"status":-1});
+        }
+        else {
+            if(stdout) {
+                var components = stdout.split(separator);
+                var tweetData = components[components.length-1];
+                var tweetJSON = JSON.parse(tweetData);
+                tweetJSON.status = 0;
+                res.json(tweetJSON);
+            }
+        }
+    });
+
+});
+
+
 module.exports = router;
