@@ -37,54 +37,40 @@ router.get('/getTweetInfo', function(req, res, next){
         'tweetStream':[]
     };
 
-    // TRY ALL COMBINATIONS AGAIN
-    // Ask for intitial tweet
-    // process.stdin.pipe(child.stdin);
-    // child.stdin.pipe(process.stdin);
-    // console.log('0');
-    // if(i <= limit) {
-    // process.stdin.setEncoding('utf-8');
     child.stdin.setEncoding('utf-8');
-
-    //     // Try console.log("0"); instead of 0 if doesnt work
-
-    //     // console.log('0\n');
-    // }
-
-
-
-
-
 
     child.stdout.on('data', (data) => {
         outputJSON.status = 0;
 
-        if(data.indexOf('Tweet: ') == 0){ // Output
-            var outputString = `${data}`.split('Tweet: ')[1];
-            var tweetJSON = JSON.parse(outputString);
-            outputJSON.tweetStream[i] = tweetJSON;
-            console.log(JSON.stringify(tweetJSON) + '   ' + i);
-            i++;
-        } else if (data.indexOf('WAITING_SIGNAL') == 0) { // Waiting signal
-            // console.log("wait");
-            // console.log('0');
-            // child.stdin.write("0");
-            child.stdin.write('0\n');
-            // console.log('0\n');
-        } 
-
-        if(i == limit) {
-            res.json(outputJSON);
-            child.kill('SIGINT');
-            console.log("Killed");
+        if(i < limit) {
+            if(data.indexOf('Tweet: ') == 0){ // Output
+                var outputString = `${data}`.split('Tweet: ')[1];
+                var tweetJSON = JSON.parse(outputString);
+                outputJSON.tweetStream[i] = tweetJSON;
+                console.log(JSON.stringify(tweetJSON) + '   ' + i);
+                i++;
+                child.stdin.write('0\n');
+            } else if (data.indexOf('WAITING_SIGNAL') == 0) { // Waiting signal
+                child.stdin.write('0\n');
+            } 
+        } else {
+     
+            child.kill();
         }
+        
+
+        
     });
       
   
       child.on('error', function(err) {
-        res.json('Error: ' + err);
+        res.err('Error: ' + err);
       });     
 
+      child.on('exit', function(err) {
+            res.json(outputJSON);
+          
+      });     
     
 });
 
