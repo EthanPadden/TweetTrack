@@ -71,6 +71,7 @@ router.get('/getTweetsByTime', function(req, res, next){
         // Input data: { handle:string, numDays:int}
         const child = spawn('java', ['-jar', 'java/TweetTrack.jar', 'tweetstats', req.query.handle, req.query.numDays]);
         var i = 0;
+        
 
         var outputJSON = {
             'status':-1,
@@ -78,30 +79,48 @@ router.get('/getTweetsByTime', function(req, res, next){
         };
 
         child.stdin.setEncoding('utf-8');
+        // Initial
+        child.stdin.write('0\n');
+        child.stdout.pipe(process.stdout);
 
         child.stdout.on('data', (data) => {
             outputJSON.status = 0;
+            console.log("A - " + data);
 
                 if(data.indexOf('Tweet: ') == 0){ // Output
+                    console.log("B");       
+                    if(i == 10)res.json(outputJSON);
                     var outputString = `${data}`.split('Tweet: ')[1];
+                    child.stdout.once('drain', () => {
+                        console.log('The data has been flushed');
+                      });
+                    if(outputString.indexOf("WAITING_SIGNAL") != -1) {
+                        outputString = outputString.split('WAITING_SIGNAL')[0]; }
                     var tweetJSON = JSON.parse(outputString);
                     outputJSON.tweetStream[i] = tweetJSON;
                     i++;
+
+                    console.log("C");                    
                     child.stdin.write('0\n');
                 } else if (data.indexOf('WAITING_SIGNAL') == 0) { // Waiting signal
+                    console.log("D");
+                    child.stdout.once('drain', () => {
+                        console.log('The data has been flushed');
+                      });
+
                     child.stdin.write('0\n');
                 } 
-            
         });
         
-
-        child.on('error', function(err) {
-            res.err('Error: ' + err);
-        });     
+        child.stderr.on('data', (data) => {
+            console.log(`stderr: ${data}`);
+          });
+        // child.stderr.on('error', function(err) {
+        //     res.err('Error: ' + err);
+        // });     
 
         child.on('exit', function(err) {
-                res.json(outputJSON);
-            
+                console.log("KILL " + i);
         });  
 });
 
