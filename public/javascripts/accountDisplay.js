@@ -244,9 +244,12 @@ function hideGraphs() {
     $('#likesChart').addClass('hidden');
     $('#RTsChart').addClass('hidden');
     $('#graph-options').addClass('hidden');
+    $('#engagement-options').removeClass('hidden');
 }
 function showGraphs() {
     $('#graph-options').removeClass('hidden');
+    $('#engagement-options').addClass('hidden');
+
     
 
 if ( $('#likesChart canvas').hasClass('chartjs-render-monitor'))   $('#likesChart').removeClass('hidden');
