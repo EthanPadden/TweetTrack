@@ -142,6 +142,7 @@ function isHandleValid(handle) {
 
  function addGraphOptions() {
     if($('#graph-options').hasClass('hidden')) $('#graph-options').removeClass('hidden');
+    if($('#nav-bar').hasClass('hidden')) $('#nav-bar').removeClass('hidden');
  }
 
  function updateGraphOptions(data) {
@@ -226,3 +227,31 @@ function isHandleValid(handle) {
 
       return max;
  }
+
+ $('#graph-tab').click(function(event){
+    $(event.target).addClass('active');
+    $('#compare-tab').removeClass('active');
+    showGraphs();
+});
+ $('#compare-tab').click(function(event){
+    $(event.target).addClass('active');
+    $('#graph-tab').removeClass('active');
+    hideGraphs();
+
+});
+
+function hideGraphs() {
+    $('#likesChart').addClass('hidden');
+    $('#RTsChart').addClass('hidden');
+    $('#graph-options').addClass('hidden');
+}
+function showGraphs() {
+    $('#graph-options').removeClass('hidden');
+    
+
+if ( $('#likesChart canvas').hasClass('chartjs-render-monitor'))   $('#likesChart').removeClass('hidden');
+if ( $('#RTsChart canvas').hasClass('chartjs-render-monitor'))   $('#RTsChart').removeClass('hidden');
+
+
+}
+

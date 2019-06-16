@@ -1,0 +1,7 @@
+{"id":1140174477923254272,"text":"@nichegamer This can be done. Probably should be.","created_at":"Sun Jun 16 09:29:13 IST 2019","favourite_count":11991,"rt_count":1316,"is_rt":false}
+{"id":1140116087666663425,"text":"@flcnhvy Schopenhauer’s debit","created_at":"Sun Jun 16 05:37:12 IST 2019","favourite_count":1760,"rt_count":44,"is_rt":false}
+{"id":1140114680846749696,"text":"Always credit everyone","created_at":"Sun Jun 16 05:31:36 IST 2019","favourite_count":49261,"rt_count":3485,"is_rt":false}
+{"id":1140099700252504064,"text":"@teslaownersSV @TracksFN Thanks, that’s super nice of you! Much appreciated.","created_at":"Sun Jun 16 04:32:05 IST 2019","favourite_count":1714,"rt_count":31,"is_rt":false}
+{"id":1140097809443540992,"text":"@JtbrigGaming Yes","created_at":"Sun Jun 16 04:24:34 IST 2019","favourite_count":2359,"rt_count":46,"is_rt":false}
+{"id":1140096508932476928,"text":"@hazeyretro I dare them to do it","created_at":"Sun Jun 16 04:19:24 IST 2019","favourite_count":848,"rt_count":74,"is_rt":false}
+{"id":1140096370344206336,"text":"@TracksFN True 🤣🤣","created_at":"Sun Jun 16 04:18:51 IST 2019","favourite_count":3518,"rt_count":61,"is_rt":false}

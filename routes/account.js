@@ -2,10 +2,9 @@ var express = require('express');
 var router = express.Router();
 const { spawn } = require('child_process');
 const exec = require('child_process').exec;
-var separator = '|||';
+var fs = require('fs'); 
 
 router.get('/getBasicInfo', function(req, res ,next){
-    // Input data: { handle:string }
    // Input data: { handle:string }
    exec('java -jar java/TweetTrack.jar overview ' + req.query.handle, function(err, stdout) {
     if(err) res.json({"status":-1});
@@ -24,48 +23,65 @@ router.get('/getBasicInfo', function(req, res ,next){
 
 router.get('/getTweetInfo', function(req, res, next){
     // Input data: { handle:string, count:int}
-    const child = spawn('java', ['-jar', 'java/TweetTrack.jar', 'tweetstats', req.query.handle, req.query.count]);
-    var limit = req.query.count;
-    var i = 0;
-
-    var outputJSON = {
-        'status':-1,
-        'tweetStream':[]
-    };
-
-    child.stdin.setEncoding('utf-8');
-
-    child.stdout.on('data', (data) => {
-        outputJSON.status = 0;
-
-        if(i < limit) {
-            if(data.indexOf('Tweet: ') == 0){ // Output
-                var outputString = `${data}`.split('Tweet: ')[1];
-                var tweetJSON = JSON.parse(outputString);
-                outputJSON.tweetStream[i] = tweetJSON;
-                i++;
-                child.stdin.write('0\n');
-            } else if (data.indexOf('WAITING_SIGNAL') == 0) { // Waiting signal
-                child.stdin.write('0\n');
-            } 
-        } else {
-            child.kill();
-        }
-        
-
-        
+    var javaCall = 'java -jar java/TweetTrack.jar tweetstats ' + req.query.handle + ' ' + req.query.count + ' ' + 'java/statuslist.txt';
+    exec(javaCall, function(err, stdout) {
+        if(stdout)  {
+            setTimeout(function () {
+                fs.readFile('java/statuslist.txt', function(err, data) {
+                    if(`${data}`.length == 0) {
+                        console.log("Data is empty");
+                        res.json({"status":-1});
+                    } else {
+                    var tweetArr = `${data}`.split('\n');
+                    var jsonArr = [];
+                    console.log("LEN: " + tweetArr.length);
+                    for(var i = 0; i < tweetArr.length-1; i++) {
+                        jsonArr[i] = JSON.parse(tweetArr[i]);
+                    }
+                    var outputJSON = {
+                        'status':-1,
+                        'tweetStream':jsonArr
+                    };
+                    
+                    outputJSON.status = 0;
+                    res.json(outputJSON);
+                    }
+                });
+            }, 1000); 
+        } else res.json({'status':-1});
     });
-      
-  
-      child.on('error', function(err) {
-        res.err('Error: ' + err);
-      });     
+});
 
-      child.on('exit', function(err) {
-            res.json(outputJSON);
-          
-      });     
-    
+
+router.get('/getTweetsByTime', function(req, res, next){
+    // Input data: { handle:string, numDays:int}
+    var javaCall = 'java -jar java/TweetTrack.jar tweetbytime ' + req.query.handle + ' ' + req.query.numDays + ' ' + 'java/statuslist.txt';
+    exec(javaCall, function(err, stdout) {
+        if(stdout)  {
+            setTimeout(function () {
+                fs.readFile('java/statuslist.txt', function(err, data) {
+                    if(`${data}`.length == 0) {
+                        console.log("Data is empty");
+                        res.json({"status":-1});
+                    } else {
+                    var tweetArr = `${data}`.split('\n');
+                    var jsonArr = [];
+                    console.log("LEN: " + tweetArr.length);
+                    for(var i = 0; i < tweetArr.length-1; i++) {
+                        jsonArr[i] = JSON.parse(tweetArr[i]);
+                    }
+                    var outputJSON = {
+                        'status':-1,
+                        'tweetStream':jsonArr
+                    };
+                    
+                    outputJSON.status = 0;
+                    res.json(outputJSON);
+                    }
+                });
+            }, 1000); 
+        }
+    });
 });
 
 module.exports = router;
