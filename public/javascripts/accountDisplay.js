@@ -303,12 +303,27 @@ $('#add-metrics-btn').click(function(event){
 function displayEngagementChart(user, data) {
     var engagement = calculateEngagement(data.tweetStream, user.followersCount);
     console.log(engagement);
+    var ctx = $('#engagementChart canvas');
+    var dataset = [engagement, 100-engagement];
+
+    var chartData = {
+        datasets: [{
+            // line label
+            label: 'Engagement',
+            // values to be plotted
+            data: dataset,
+        }]
+    };
+
+    var myDoughnutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: chartData,
+        // options: options
+    });
+    $('#engagementChart').removeClass('hidden');
 }
 
 function calculateEngagement(tweets, f) {
-    // Engagment = (100 / 2ft)(l + r)
-    // l = sum of likes, r = sum of retweets
-
     var l = 0;
     var r = 0;
     var t = tweets.length;
@@ -321,3 +336,44 @@ function calculateEngagement(tweets, f) {
 
     return egmt;
 }
+/*
+
+// Dataset extracted from tweetStream
+var dataset = [];
+var labels = [];
+var i;
+for(i in data.tweetStream) {
+    dataset.push(data.tweetStream[i].favourite_count);
+    labels.push(i);
+}
+var chartData = {
+    labels: labels,
+    datasets: [{
+        // line label
+        label: '# of Likes',
+        // values to be plotted
+        data: dataset,
+        // line options
+        borderWidth: 1,
+        borderColor: greenTheme,
+        fill: false,
+        lineTension: 0
+    }]
+};
+
+var likesChart = new Chart(ctx, {
+    type: 'line',
+    data: chartData,
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                display: false //this will remove all the x-axis grid lines
+            }]
+        }
+    }
+});*/
