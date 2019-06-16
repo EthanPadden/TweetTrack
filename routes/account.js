@@ -23,16 +23,47 @@ router.get('/getBasicInfo', function(req, res ,next){
 
 router.get('/getTweetInfo', function(req, res, next){
     // Input data: { handle:string, count:int}
-    var outputJSON = {
-        'status':-1,
-        'tweetStream':[]
-    };
+    
 
-    exec('java -jar java/TweetTrack.jar tweetstats ' + req.query.handle + ' ' + req.query.count, function(err, stdout) {
-        if(err) res.json({"status":-1});
+    exec('java -jar java/TweetTrack.jar tweetstats ' + req.query.handle + ' ' + req.query.count + ' ' + 'java/statuslist.txt', function(err, stdout) {
+    /* OUTPUT CODES:
+    0 Success
+    -1 Invalid input format
+    1 Failed to get data for handle
+    2 File not found to write data
+    */
+        
+        if(err) {
+
+            console.log(stdout);
+            res.json({"status":err.code});
+        }
         else {
-            if(stdout) {
-                console.log(stdout);
+            if(stdout.indexOf('SUCCESS') != -1) {
+            
+                fs.readFile('java/statuslist.txt', function(err, data) {
+                    if(`${data}`.length == 0) {
+                        console.log("Data is empty");
+                        res.json({"status":-1});
+                    } else {
+                    var tweetArr = `${data}`.split('\n');
+                    var jsonArr = [];
+
+                    for(var i = 0; i < req.query.count; i++) {
+                        jsonArr[i] = JSON.parse(tweetArr[i]);
+                    }
+                    console.log(jsonArr);
+                    var outputJSON = {
+                        'status':-1,
+                        'tweetStream':jsonArr
+                    };
+                    
+                    outputJSON.status = 0;
+                    res.json(outputJSON);}
+                });
+            } else if (stdout.indexOf('FAILURE') != -1) {
+                console.log("CANNOT FIND FILE");
+                res.json({"status":-1});
             }
         }
     })

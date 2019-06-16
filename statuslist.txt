@@ -1,7 +1,7 @@
-{"id":1139962675092320257,"text":"Unlike bees, who are experts in millinery https://t.co/DhbkDqa19B","created_at":"Sat Jun 15 19:27:35 IST 2019","favourite_count":12122,"rt_count":1122,"is_rt":false}
-{"id":1139959037166907393,"text":"Truth is a metaphorical concept with no footwear or clothing of anything kind. Also, baby don’t hurt me haha \nhttps://t.co/AKWsAqa3Ep https://t.co/bLBDQiqBTZ","created_at":"Sat Jun 15 19:13:08 IST 2019","favourite_count":9140,"rt_count":776,"is_rt":false}
-{"id":1139953128856379392,"text":"@BTermanini @sascha_p @TonyWuGZ @Tesla Yes, excessively configurable seats almost always make things worse, rather than better. Too complex & unwieldy.","created_at":"Sat Jun 15 18:49:39 IST 2019","favourite_count":287,"rt_count":7,"is_rt":false}
-{"id":1139951976236507140,"text":"@dohmanbob @ATX_fight_club Cool, that’s the way it should be!","created_at":"Sat Jun 15 18:45:05 IST 2019","favourite_count":222,"rt_count":8,"is_rt":false}
-{"id":1139901321035649024,"text":"@AhAAn20 @TonyWuGZ @Tesla @PolestarCars Why?","created_at":"Sat Jun 15 15:23:47 IST 2019","favourite_count":452,"rt_count":12,"is_rt":false}
-{"id":1139900344618455040,"text":"@AhAAn20 @TonyWuGZ @Tesla @PolestarCars Polestar is a sub-brand of Volvo. The Tesla head of seats & interior engineering used to run this for Volvo before joining Tesla a few years ago.","created_at":"Sat Jun 15 15:19:55 IST 2019","favourite_count":610,"rt_count":15,"is_rt":false}
-{"id":1139899187904991232,"text":"@TonyWuGZ @Tesla The seats are extremely comfortable, while still providing good hip and shoulder side-holding for turns. Best I’ve ever sat in.","created_at":"Sat Jun 15 15:15:19 IST 2019","favourite_count":20214,"rt_count":440,"is_rt":false}
+{"id":1140174477923254272,"text":"@nichegamer This can be done. Probably should be.","created_at":"Sun Jun 16 09:29:13 IST 2019","favourite_count":11991,"rt_count":1316,"is_rt":false}
+{"id":1140116087666663425,"text":"@flcnhvy Schopenhauer’s debit","created_at":"Sun Jun 16 05:37:12 IST 2019","favourite_count":1760,"rt_count":44,"is_rt":false}
+{"id":1140114680846749696,"text":"Always credit everyone","created_at":"Sun Jun 16 05:31:36 IST 2019","favourite_count":49261,"rt_count":3485,"is_rt":false}
+{"id":1140099700252504064,"text":"@teslaownersSV @TracksFN Thanks, that’s super nice of you! Much appreciated.","created_at":"Sun Jun 16 04:32:05 IST 2019","favourite_count":1714,"rt_count":31,"is_rt":false}
+{"id":1140097809443540992,"text":"@JtbrigGaming Yes","created_at":"Sun Jun 16 04:24:34 IST 2019","favourite_count":2359,"rt_count":46,"is_rt":false}
+{"id":1140096508932476928,"text":"@hazeyretro I dare them to do it","created_at":"Sun Jun 16 04:19:24 IST 2019","favourite_count":848,"rt_count":74,"is_rt":false}
+{"id":1140096370344206336,"text":"@TracksFN True 🤣🤣","created_at":"Sun Jun 16 04:18:51 IST 2019","favourite_count":3518,"rt_count":61,"is_rt":false}
