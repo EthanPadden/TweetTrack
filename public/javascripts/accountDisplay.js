@@ -271,7 +271,7 @@ $('#add-metrics-btn').click(function(event){
                 data: {'handle':accounts[0].handle, 'count':span},
                 success: function(data){
                     if(data.status == 0) {
-                       console.log(data);
+                        displayEngagementChart(accounts[0], data);
                     }
                     else if (data.status == -1) alert("Error");
                 },
@@ -299,3 +299,25 @@ $('#add-metrics-btn').click(function(event){
     }
         
 });
+
+function displayEngagementChart(user, data) {
+    var engagement = calculateEngagement(data.tweetStream, user.followersCount);
+    console.log(engagement);
+}
+
+function calculateEngagement(tweets, f) {
+    // Engagment = (100 / 2ft)(l + r)
+    // l = sum of likes, r = sum of retweets
+
+    var l = 0;
+    var r = 0;
+    var t = tweets.length;
+    for(var i in tweets) {
+        l += tweets[i].favourite_count;
+        r += tweets[i].rt_count;
+    }
+
+    var egmt = (100/(f*t))*((l*100)+(r*1000));
+
+    return egmt;
+}
