@@ -258,3 +258,44 @@ if ( $('#RTsChart canvas').hasClass('chartjs-render-monitor'))   $('#RTsChart').
 
 }
 
+$('#add-metrics-btn').click(function(event){
+    var span = $('#span-input').val();
+    var spanType = $("#span-dropdown").val();
+
+    if (isNaN(span)) alert("Number of days/tweets should be a number");
+    else {
+        if (spanType == "Tweets") {
+            $.ajax({
+                type: 'GET',
+                url: '/account/getTweetInfo',
+                data: {'handle':accounts[0].handle, 'count':span},
+                success: function(data){
+                    if(data.status == 0) {
+                       console.log(data);
+                    }
+                    else if (data.status == -1) alert("Error");
+                },
+                error: function(errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+        else if (spanType == "Days") {
+            $.ajax({
+                type: 'GET',
+                url: '/account/getTweetsByTime',
+                data: {'handle':accounts[0].handle, 'numDays':span},
+                success: function(data){
+                    if(data.status == 0) {
+                       console.log(data);
+                    }
+                    else if (data.status == -1) alert("Error");
+                },
+                error: function(errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+    }
+        
+});
