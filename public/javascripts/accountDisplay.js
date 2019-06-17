@@ -272,26 +272,30 @@ $('#add-metrics-btn').click(function(event){
     if (isNaN(span)) alert("Number of days/tweets should be a number");
     else {
         if (spanType == "Tweets") {
-            $.ajax({
-                type: 'GET',
-                url: '/account/getTweetInfo',
-                data: {'handle':accounts[0].handle, 'count':span},
-                success: function(data){
-                    if(data.status == 0) {
-                        displayEngagementChart(accounts[0], data);
+            for(var i in accounts) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/account/getTweetInfo',
+                    data: {'handle':accounts[i].handle, 'count':span},
+                    success: function(data){
+                        if(data.status == 0) {
+                            displayEngagementChart(accounts[i], data, i);
+                        }
+                        else if (data.status == -1) alert("Error");
+                    },
+                    error: function(errMsg) {
+                        console.log(errMsg);
                     }
-                    else if (data.status == -1) alert("Error");
-                },
-                error: function(errMsg) {
-                    console.log(errMsg);
-                }
-            });
+                });
+            }
+            
         }
         else if (spanType == "Days") {
+            for(var i in accounts) {
             $.ajax({
                 type: 'GET',
                 url: '/account/getTweetsByTime',
-                data: {'handle':accounts[0].handle, 'numDays':span},
+                data: {'handle':accounts[i].handle, 'numDays':span},
                 success: function(data){
                     if(data.status == 0) {
                        console.log(data);
@@ -303,14 +307,20 @@ $('#add-metrics-btn').click(function(event){
                 }
             });
         }
+        }
     }
         
 });
 
-function displayEngagementChart(user, data) {
+function displayEngagementChart(user, data, index) {
     var engagement = calculateEngagement(data.tweetStream, user.followersCount);
-    console.log(engagement);
-    var ctx = $('#engagementChart canvas');
+    console.log(user + '\n' + data + '\n' + index);
+    var nthchild = parseInt(index) + 2;
+    var selector = '#engagementChart > div:nth-child(' + nthchild + ') canvas';
+    console.log(selector);
+    var ctx = $(selector);
+
+    console.log(ctx);
     var dataset = [engagement, 100-engagement];
 
     var chartData = {
