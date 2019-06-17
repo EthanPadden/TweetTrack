@@ -20,6 +20,7 @@ $('#add-account-btn').click(function(event){
                     addUserToTable(data);
                     addGraphOptions();
                     updateGraphOptions(data);
+                    if(accounts.length == 2) hideHandleInput();
                 }
                 else if (data.status == -1) $('#handle-msg').html("Account not found");
             },
@@ -30,6 +31,12 @@ $('#add-account-btn').click(function(event){
     } 
 });
 
+function showHandleInput() {
+    
+}
+function hideHandleInput() {
+    $('#input-handle-group').parent().addClass('hidden');
+}
 function addUserToTable(data) {
     var tableRow = '<tr>'
                 + '<th scope="row">' + data.name + '</th>'
@@ -141,7 +148,7 @@ function isHandleValid(handle) {
  }
 
  function addGraphOptions() {
-    if($('#graph-options').hasClass('hidden')) $('#graph-options').removeClass('hidden');
+    if($('#graph-options').hasClass('hidden') && $('#graph-tab').hasClass('active')) $('#graph-options').removeClass('hidden');
     if($('#nav-bar').hasClass('hidden')) $('#nav-bar').removeClass('hidden');
  }
 
@@ -244,9 +251,12 @@ function hideGraphs() {
     $('#likesChart').addClass('hidden');
     $('#RTsChart').addClass('hidden');
     $('#graph-options').addClass('hidden');
+    $('#engagement-options').removeClass('hidden');
 }
 function showGraphs() {
     $('#graph-options').removeClass('hidden');
+    $('#engagement-options').addClass('hidden');
+
     
 
 if ( $('#likesChart canvas').hasClass('chartjs-render-monitor'))   $('#likesChart').removeClass('hidden');
@@ -255,3 +265,125 @@ if ( $('#RTsChart canvas').hasClass('chartjs-render-monitor'))   $('#RTsChart').
 
 }
 
+$('#add-metrics-btn').click(function(event){
+    var span = $('#span-input').val();
+    var spanType = $("#span-dropdown").val();
+
+    if (isNaN(span)) alert("Number of days/tweets should be a number");
+    else if(accounts.length != 2) alert("Please add 2 accounts");
+    else {
+        if (spanType == "Tweets") {
+                $.ajax({
+                    type: 'GET',
+                    url: '/account/getTweetInfo',
+                    data: {'handle':accounts[0].handle, 'count':span},
+                    success: function(data0){
+                        if(data0.status == 0) {
+                            $.ajax({
+                                type: 'GET',
+                                url: '/account/getTweetInfo',
+                                data: {'handle':accounts[1].handle, 'count':span},
+                                success: function(data1){
+                                    if(data1.status == 0) {
+                                        displayEngagementChart(accounts[0], data0, 0);
+                                        displayEngagementChart(accounts[1], data1, 1);
+                                    }
+                                    else if (data.status == -1) alert("Error");
+                                },
+                                error: function(errMsg) {
+                                    console.log(errMsg);
+                                }
+                            });
+                        }
+                        else if (data.status == -1) alert("Error");
+                    },
+                    error: function(errMsg) {
+                        console.log(errMsg);
+                    }
+                });
+            
+        }
+        else if (spanType == "Days") {
+            $.ajax({
+                type: 'GET',
+                url: '/account/getTweetsByTime',
+                data: {'handle':accounts[0].handle, 'numDays':span},
+                success: function(data0){
+                    if(data0.status == 0) {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/account/getTweetsByTime',
+                            data: {'handle':accounts[1].handle, 'numDays':span},
+                            success: function(data1){
+                                if(data1.status == 0) {
+                                    displayEngagementChart(accounts[0], data0, 0);
+                                    displayEngagementChart(accounts[1], data1, 1);
+                                }
+                                else if (data.status == -1) alert("Error");
+                            },
+                            error: function(errMsg) {
+                                console.log(errMsg);
+                            }
+                        });
+                    }
+                    else if (data.status == -1) alert("Error");
+                },
+                error: function(errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+    }
+        
+});
+
+function displayEngagementChart(user, data, index) {
+    console.log("DATA FOR INDEX " + index);
+    console.log(data);
+
+    console.log("USER ENGAGEMENT: "  + user.name);
+    var engagement = calculateEngagement(data.tweetStream, user.followersCount);
+    var nthchild = parseInt(index) + 2;
+    var selector = '#engagementChart > div:nth-child(' + nthchild + ')';
+    var ctx = $(selector + ' canvas');
+
+    var dataset = [engagement, 100-engagement];
+
+    var chartData = {
+        datasets: [{
+            // line label
+            label: 'Engagement',
+            // values to be plotted
+            data: dataset,
+            backgroundColor: [greenTheme, '#ffffff']
+        }]
+    };
+
+    var myDoughnutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: chartData,
+        // options: options
+    });
+    console.log(user);
+    $(selector + ' h4').html(user.name + ':\n' + Math.round(engagement) + '%');
+    if(index == 1) $('#engagementChart').removeClass('hidden');
+}
+
+function calculateEngagement(tweets, f) {
+    var l = 0;
+    var r = 0;
+    var t = tweets.length;
+    for(var i in tweets) {
+        l += tweets[i].favourite_count;
+        r += tweets[i].rt_count;
+    }
+
+    var egmt = (100/(f*t))*((l*100)+(r*1000));
+    console.log("f = " + f);
+    console.log("t = " + t);
+    console.log("l = " + l);
+    console.log("r = " + r);
+    console.log("egmt = " + egmt);
+
+    return egmt;
+}
