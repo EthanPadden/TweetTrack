@@ -273,14 +273,27 @@ $('#add-metrics-btn').click(function(event){
     else if(accounts.length != 2) alert("Please add 2 accounts");
     else {
         if (spanType == "Tweets") {
-            for(var i in accounts) {
                 $.ajax({
                     type: 'GET',
                     url: '/account/getTweetInfo',
-                    data: {'handle':accounts[i].handle, 'count':span},
-                    success: function(data){
-                        if(data.status == 0) {
-                            displayEngagementChart(accounts[i], data, i);
+                    data: {'handle':accounts[0].handle, 'count':span},
+                    success: function(data0){
+                        if(data0.status == 0) {
+                            $.ajax({
+                                type: 'GET',
+                                url: '/account/getTweetInfo',
+                                data: {'handle':accounts[1].handle, 'count':span},
+                                success: function(data1){
+                                    if(data1.status == 0) {
+                                        displayEngagementChart(accounts[0], data0, 0);
+                                        displayEngagementChart(accounts[1], data1, 1);
+                                    }
+                                    else if (data.status == -1) alert("Error");
+                                },
+                                error: function(errMsg) {
+                                    console.log(errMsg);
+                                }
+                            });
                         }
                         else if (data.status == -1) alert("Error");
                     },
@@ -288,7 +301,6 @@ $('#add-metrics-btn').click(function(event){
                         console.log(errMsg);
                     }
                 });
-            }
             
         }
         else if (spanType == "Days") {
@@ -314,6 +326,10 @@ $('#add-metrics-btn').click(function(event){
 });
 
 function displayEngagementChart(user, data, index) {
+    console.log("DATA FOR INDEX " + index);
+    console.log(data);
+
+    console.log("USER ENGAGEMENT: "  + user.name);
     var engagement = calculateEngagement(data.tweetStream, user.followersCount);
     var nthchild = parseInt(index) + 2;
     var selector = '#engagementChart > div:nth-child(' + nthchild + ')';
@@ -338,7 +354,7 @@ function displayEngagementChart(user, data, index) {
     });
     console.log(user);
     $(selector + ' h4').html(user.name + ':\n' + Math.round(engagement) + '%');
-    $('#engagementChart').removeClass('hidden');
+    if(index == 1) $('#engagementChart').removeClass('hidden');
 }
 
 function calculateEngagement(tweets, f) {
@@ -351,6 +367,11 @@ function calculateEngagement(tweets, f) {
     }
 
     var egmt = (100/(f*t))*((l*100)+(r*1000));
+    console.log("f = " + f);
+    console.log("t = " + t);
+    console.log("l = " + l);
+    console.log("r = " + r);
+    console.log("egmt = " + egmt);
 
     return egmt;
 }
