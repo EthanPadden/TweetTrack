@@ -20,6 +20,7 @@ $('#add-account-btn').click(function(event){
                     addUserToTable(data);
                     addGraphOptions();
                     updateGraphOptions(data);
+                    if(accounts.length == 2) hideHandleInput();
                 }
                 else if (data.status == -1) $('#handle-msg').html("Account not found");
             },
@@ -30,6 +31,12 @@ $('#add-account-btn').click(function(event){
     } 
 });
 
+function showHandleInput() {
+    
+}
+function hideHandleInput() {
+    $('#input-handle-group').parent().addClass('hidden');
+}
 function addUserToTable(data) {
     var tableRow = '<tr>'
                 + '<th scope="row">' + data.name + '</th>'
@@ -336,44 +343,3 @@ function calculateEngagement(tweets, f) {
 
     return egmt;
 }
-/*
-
-// Dataset extracted from tweetStream
-var dataset = [];
-var labels = [];
-var i;
-for(i in data.tweetStream) {
-    dataset.push(data.tweetStream[i].favourite_count);
-    labels.push(i);
-}
-var chartData = {
-    labels: labels,
-    datasets: [{
-        // line label
-        label: '# of Likes',
-        // values to be plotted
-        data: dataset,
-        // line options
-        borderWidth: 1,
-        borderColor: greenTheme,
-        fill: false,
-        lineTension: 0
-    }]
-};
-
-var likesChart = new Chart(ctx, {
-    type: 'line',
-    data: chartData,
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }],
-            xAxes: [{
-                display: false //this will remove all the x-axis grid lines
-            }]
-        }
-    }
-});*/
