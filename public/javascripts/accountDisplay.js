@@ -314,13 +314,10 @@ $('#add-metrics-btn').click(function(event){
 
 function displayEngagementChart(user, data, index) {
     var engagement = calculateEngagement(data.tweetStream, user.followersCount);
-    console.log(user + '\n' + data + '\n' + index);
     var nthchild = parseInt(index) + 2;
-    var selector = '#engagementChart > div:nth-child(' + nthchild + ') canvas';
-    console.log(selector);
-    var ctx = $(selector);
+    var selector = '#engagementChart > div:nth-child(' + nthchild + ')';
+    var ctx = $(selector + ' canvas');
 
-    console.log(ctx);
     var dataset = [engagement, 100-engagement];
 
     var chartData = {
@@ -337,6 +334,8 @@ function displayEngagementChart(user, data, index) {
         data: chartData,
         // options: options
     });
+    console.log(user);
+    $(selector + ' h4').html(user.name + ':\n' + Math.round(engagement) + '%');
     $('#engagementChart').removeClass('hidden');
 }
 
