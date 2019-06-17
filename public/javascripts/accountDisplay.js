@@ -326,6 +326,7 @@ function displayEngagementChart(user, data, index) {
             label: 'Engagement',
             // values to be plotted
             data: dataset,
+            backgroundColor: [greenTheme, '#ffffff']
         }]
     };
 
