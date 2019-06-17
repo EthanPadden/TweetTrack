@@ -342,12 +342,59 @@ function displayEngagementChart(user, data, index) {
     console.log(data);
 
     console.log("USER ENGAGEMENT: "  + user.name);
-    var engagement = calculateEngagement(data.tweetStream, user.followersCount);
+    var results = calculateEngagement(data.tweetStream, user.followersCount);
+    var engagement = results.engagement;
     var nthchild = parseInt(index) + 2;
     var selector = '#engagementChart > div:nth-child(' + nthchild + ')';
-    var ctx = $(selector + ' canvas');
+    var ctx = $(selector + ' #engmt-overview');
+    var detailedCtx = $(selector + ' #engmt-details');
 
     var dataset = [engagement, 100-engagement];
+
+    // new Chart(detailedCtx, {
+    //     type: 'pie',
+    //     data: {
+    //       labels: ["Avg Likes","Avg Retweets"],
+    //       datasets: [
+    //         {
+    //           backgroundColor: ['#FFE400', '#FF652F'],
+    //           data: [results['avg-likes'], results['avg-RTs']]
+    //         }
+    //       ]
+    //     },
+    //     options: {
+    //       legend: { display: false },
+    //       title: {
+    //         display: true,
+    //         text: 'Contribution to metric'
+    //       },
+    //       scales: {
+    //     xAxes: [{
+    //         barPercentage: 0.4
+    //     }]
+    // }
+    //     }
+    // });
+    new Chart(detailedCtx, {
+        type: 'pie',
+        data: {
+          labels: ["Avg Likes","Avg Retweets"],
+
+          datasets: [
+            {
+              backgroundColor: ['#FFE400', '#FF652F'],
+              data: [results['avg-likes'], (results['avg-RTs']*10)]
+            }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Contribution to metric'
+          }
+        }
+    });
+    
 
     var chartData = {
         datasets: [{
@@ -358,6 +405,7 @@ function displayEngagementChart(user, data, index) {
             backgroundColor: [greenTheme, '#ffffff']
         }]
     };
+
 
     var myDoughnutChart = new Chart(ctx, {
         type: 'doughnut',
@@ -379,11 +427,15 @@ function calculateEngagement(tweets, f) {
     }
 
     var egmt = (100/(f*t))*((l*100)+(r*1000));
-    console.log("f = " + f);
-    console.log("t = " + t);
-    console.log("l = " + l);
-    console.log("r = " + r);
-    console.log("egmt = " + egmt);
+   
+    var avgL = l/t;
+    var avgR = r/t;
 
-    return egmt;
+    var results = {
+        "avg-likes":avgL,
+        "avg-RTs":avgR,
+        "engagement":egmt
+    }
+    
+    return results;
 }

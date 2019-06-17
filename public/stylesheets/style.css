@@ -116,5 +116,7 @@ body {
 
 #engagementChart > div:nth-child(3) {
   padding-left: 0.5%;
-
+}
+#engagementChart h5 {
+  margin: 3%;
 }
