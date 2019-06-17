@@ -148,7 +148,7 @@ function isHandleValid(handle) {
  }
 
  function addGraphOptions() {
-    if($('#graph-options').hasClass('hidden')) $('#graph-options').removeClass('hidden');
+    if($('#graph-options').hasClass('hidden') && $('#graph-tab').hasClass('active')) $('#graph-options').removeClass('hidden');
     if($('#nav-bar').hasClass('hidden')) $('#nav-bar').removeClass('hidden');
  }
 
@@ -270,6 +270,7 @@ $('#add-metrics-btn').click(function(event){
     var spanType = $("#span-dropdown").val();
 
     if (isNaN(span)) alert("Number of days/tweets should be a number");
+    else if(accounts.length != 2) alert("Please add 2 accounts");
     else {
         if (spanType == "Tweets") {
             for(var i in accounts) {
