@@ -304,14 +304,27 @@ $('#add-metrics-btn').click(function(event){
             
         }
         else if (spanType == "Days") {
-            for(var i in accounts) {
             $.ajax({
                 type: 'GET',
                 url: '/account/getTweetsByTime',
-                data: {'handle':accounts[i].handle, 'numDays':span},
-                success: function(data){
-                    if(data.status == 0) {
-                       console.log(data);
+                data: {'handle':accounts[0].handle, 'numDays':span},
+                success: function(data0){
+                    if(data0.status == 0) {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/account/getTweetsByTime',
+                            data: {'handle':accounts[1].handle, 'numDays':span},
+                            success: function(data1){
+                                if(data1.status == 0) {
+                                    displayEngagementChart(accounts[0], data0, 0);
+                                    displayEngagementChart(accounts[1], data1, 1);
+                                }
+                                else if (data.status == -1) alert("Error");
+                            },
+                            error: function(errMsg) {
+                                console.log(errMsg);
+                            }
+                        });
                     }
                     else if (data.status == -1) alert("Error");
                 },
@@ -319,7 +332,6 @@ $('#add-metrics-btn').click(function(event){
                     console.log(errMsg);
                 }
             });
-        }
         }
     }
         
