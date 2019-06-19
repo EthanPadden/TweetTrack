@@ -84,4 +84,45 @@ router.get('/getTweetsByTime', function(req, res, next){
     });
 });
 
+router.get('/getMentions', function(req, res, next){
+    // Input data: { handle:string, span:int, unit:string}
+    var javaCall = 'java -jar java/TweetTrack.jar mentions ' + req.query.handle + ' ' + req.query.span + ' ' + req.query.unit + ' ' + 'java/mentionslist.txt';
+    exec(javaCall, function(err, stdout) {
+        
+        if(stdout)  {
+        
+
+            setTimeout(function () {
+                fs.readFile('java/mentionslist.txt', function(err, data) {
+                    if(`${data}`.length == 0) {
+                        var msg = "Data is empty";
+                        console.log(msg);
+                        res.json({"status":-1, "message":msg});
+                    } else {
+                    var timeSlices = `${data}`.split('\n');
+                    
+                    var jsonArr = [];
+                    console.log("LEN: " + timeSlices.length);
+                    console.log(`${data}`);
+                    console.log("Error: " + err);
+
+                    for(var i = 0; i < timeSlices.length-1; i++) {
+                        jsonArr[i] = JSON.parse(timeSlices[i]);
+                    }
+                    var outputJSON = {
+                        'status':-1,
+                        'tweetStream':jsonArr
+                    };
+                    
+                    outputJSON.status = 0;
+        console.log(javaCall);
+                    
+                    res.json(outputJSON);
+                    }
+                });
+            }, 1000); 
+        }
+    });
+});
+
 module.exports = router;
