@@ -13,26 +13,24 @@ router.get('/trackUser', function(req, res, next){
     if(track0 == null) console.log("ERROR");
 
     track0.stdout.on('data', (data) => {
-        if(`${data}`.indexOf("INIT_SIGNAL") == 0) console.log("SUCCESS");
+        if(`${data}`.indexOf("INIT_SIGNAL") == 0) res.json({"status":`${data}`});
     });
       
     track0.stderr.on('data', (data) => {
-        console.error(`child stderr:\n${data}`);
+        res.json({"status":-1});
     });
-        // if(stdout)  {
-        //     setTimeout(function () {
-        //         if(stdout.indexOf("Tracker initialized") != -1) {
-        //             console.log("Success");
-        //             res.json({"status":0});
-        //         } else {
-        //             console.log("Error");
-        //             res.json({"status":-1});
-        //         }
-        //     }, 1000); 
-        // } else if (err) {
-        //     console.log("Err: " + err);
-        // }
+
+    track0.stdin.setEncoding('utf-8');
+
 });
 
+router.get('/trackingStatus', function(req, res, next){
+    // Input data: { handle:string }
+    // var javaCall = 'java -jar java/TweetTrack.jar tracker init ' + req.query.handle;
+    track0.stdin.write('status');
+    track0.stdout.on('data', (data) => {
+        res.json({"status":`${data}`});
+    });
 
+});
 module.exports = router;
