@@ -1,6 +1,14 @@
 var express = require('express');
-var track = require('./tracker');
+// var track = require('./tracker');
 var router = express.Router();
+const {fork} = require('child_process');
+const track = fork('routes/tracker.js');
+
+track.on('message', (msg) => {
+  console.log('Message from child', msg);
+});
+
+
 // var fs = require('fs'); 
 // var track0;
 /*
@@ -49,8 +57,9 @@ router.get('/trackingStatus', function(req, res, next){
 module.exports = router;
 */
 router.get('/trackUser', function(req, res, next){
-    track.initTracker(req.query.handle);
+    // track.initTracker(req.query.handle);
     track.send({ hello: 'world' });
+    
 });
 
 
