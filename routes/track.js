@@ -58,7 +58,7 @@ module.exports = router;
 */
 router.get('/trackUser', function(req, res, next){
     // track.initTracker(req.query.handle);
-    track.send({ hello: 'world' });
+    track.send({ cmd: 'init', handle:req.query.handle });
     
 });
 

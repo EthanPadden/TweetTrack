@@ -7,8 +7,13 @@ function proc() {
 }
 
 process.on('message', (msg) => {
-    console.log('Message from parent:', msg.hello);
-    process.send({"back":"at you"});
+    // console.log('Message from parent:', msg.hello);
+    // process.send({"back":"at you"});
+    if(msg.cmd == 'init') {
+        var success = initTracker(msg.handle);
+        if(success == true) process.send({status:'SUCCESS'});
+        else process.send({status:'ERROR'});
+    }
 });
 
 function initTracker(handle) {
@@ -17,8 +22,14 @@ function initTracker(handle) {
 
     tracker = spawn('java', args);
 
-    if(tracker == null) console.log("ERROR");
-    else tracker.stdin.setEncoding('utf-8');
+    if(tracker == null) {
+        console.log("ERROR");
+        return false;
+    }
+    else {
+        tracker.stdin.setEncoding('utf-8');
+        return true;
+    }
 
     tracker.stdout.on('data', (data) => {
     //    console.log('CHOP: ' + `${data}`);
