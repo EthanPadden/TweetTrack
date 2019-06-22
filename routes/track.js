@@ -101,9 +101,7 @@ router.get('/getTweetsByWeek', function(req, res, next){
                             var output = [];
                             for(var i = 0; i < tweetArr.length-1; i++) {
                                 jsonArr[i] = JSON.parse(tweetArr[i]);
-                                output[i] = {
-                                    "id":jsonArr[i].id
-                                };
+                                output[i] = jsonArr[i].id;
                             }
 // Extract details and add to tweet object (id, start_date) - then save to DB
 for(var i in jsonArr) {
@@ -143,9 +141,8 @@ sent = true;
             
         else{
             var output = [];
-            for(var i in tweets) output[i] = {
-                "id":parseInt(tweets[i].tweet_id)
-            };
+            for(var i in tweets) output[i] = parseInt(tweets[i].tweet_id);
+            
             res.json({'status': 0, 'tweets':output});
 
         }

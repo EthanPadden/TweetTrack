@@ -73,3 +73,24 @@
 {"id":1139352355768373248,"test":"Also $2500 tax credit for California & $500 to $800 utility incentive https://t.co/lmD3ZNFR9M","date":"Fri Jun 14 03:02:24 IST 2019"}
 {"id":1139350070464094208,"test":"RT @MrTommyCampbell: @elonmusk Buy a Tesla. You will never be happier with a purchase in your life!","date":"Fri Jun 14 02:53:19 IST 2019"}
 {"id":1139349516304277504,"test":"US tax credit of $3750 drops in half for Tesla on July 1. Order online in a few mins at https://t.co/46TXqRrsdr. Return in 7 days for full refund.","date":"Fri Jun 14 02:51:07 IST 2019"}
+{"id":1139298574489907200,"test":"Tesla Solar Toof Tile V3.0 starting early trials https://t.co/ueqBOovxYM","date":"Thu Jun 13 23:28:41 IST 2019"}
+{"id":1139286306259816449,"test":"@Starlight_Energ @28delayslater @Tesla Exactly","date":"Thu Jun 13 22:39:56 IST 2019"}
+{"id":1139268417288933377,"test":"RT @thegameawards: A racing game for @Tesla you can use the steering wheel with!? 🤯Thank you @elonmusk! #E3Coliseum https://t.co/npzrts78aA","date":"Thu Jun 13 21:28:51 IST 2019"}
+{"id":1139208765691924483,"test":"@pewdiepie (muffled titter) https://t.co/xAOnOzkDg6","date":"Thu Jun 13 17:31:49 IST 2019"}
+{"id":1139191543577731077,"test":"@pewdiepie Haha","date":"Thu Jun 13 16:23:23 IST 2019"}
+{"id":1139191115863580672,"test":"RT @TeslaNY: “I think it's basically financially insane to buy anything except an electric car that is upgradable to autonomy ... It's long…","date":"Thu Jun 13 16:21:41 IST 2019"}
+{"id":1139053949514764288,"test":"@RPMTESLA Would be good to look up electricity rates by location & optimize cost automatically","date":"Thu Jun 13 07:16:38 IST 2019"}
+{"id":1139030512457195522,"test":"@tesla_truth Yeah, they were a little off the mark https://t.co/yqZhvkbdrt","date":"Thu Jun 13 05:43:30 IST 2019"}
+{"id":1139022467526287361,"test":"@Erdayastronaut @SpaceX Fun!","date":"Thu Jun 13 05:11:32 IST 2019"}
+{"id":1138979630516334592,"test":"@cleantechnica Applies to a small number of Bay Area residents, but worth checking out","date":"Thu Jun 13 02:21:19 IST 2019"}
+{"id":1138858999309144064,"test":"🧲 is relativistic side effect of ⚡️","date":"Wed Jun 12 18:21:59 IST 2019"}
+{"id":1138846892169678848,"test":"@Alpsoy66 Strong incentive to make up & promote negative news","date":"Wed Jun 12 17:33:52 IST 2019"}
+{"id":1138832250819080192,"test":"RT @tesletter: @elonmusk In 1.5 years of owning my car the only money I've spent was on doing a tire rotation","date":"Wed Jun 12 16:35:41 IST 2019"}
+{"id":1138831678883766272,"test":"True, cost of operating a Tesla is much lower than other cars https://t.co/75HuaOMp8Y","date":"Wed Jun 12 16:33:25 IST 2019"}
+{"id":1138827924583280650,"test":"RT @SpaceX: Successful deployment of RCM-1 confirmed https://t.co/r7nv42pu06","date":"Wed Jun 12 16:18:30 IST 2019"}
+{"id":1138827760107790336,"test":"Landing in the fog https://t.co/7S0xrzivvr","date":"Wed Jun 12 16:17:51 IST 2019"}
+{"id":1138827248088182784,"test":"RT @SpaceX: Liftoff! https://t.co/aIY0gJVoVY","date":"Wed Jun 12 16:15:48 IST 2019"}
+{"id":1138530109630160903,"test":"@RationalEtienne @BillGates 🤣","date":"Tue Jun 11 20:35:05 IST 2019"}
+{"id":1138526085853958146,"test":"@BillGates Fear (and memes) get clicks","date":"Tue Jun 11 20:19:06 IST 2019"}
+{"id":1138484636651147264,"test":"RT @SpaceX: Falcon 9 and RADARSAT Constellation Mission have rolled out to SLC-4E. Tomorrow’s 13-minute launch window opens at 7:17 a.m. PD…","date":"Tue Jun 11 17:34:24 IST 2019"}
+{"id":1138317952145534976,"test":"@arenpageler Storm Watch was active for hundreds of Powerwall customers this weekend as a result of @NWS Red Flag Fire Warnings in California, and we will continue to activate it whenever there advance awareness of a potential power outage or physical danger","date":"Tue Jun 11 06:32:03 IST 2019"}
