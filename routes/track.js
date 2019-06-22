@@ -73,10 +73,11 @@ router.get('/trackUser', function(req, res, next){
 // STEP 1
 router.get('/getTweetsByWeek', function(req, res, next){
     // Status: 0 - found in DB, 1 - not found in DB, success write to DB, 2 - file read unsuccessful
-    var startDate = new Date(req.query.start_date);
+    var startDate = req.query.start_date;
     var sent = false;
     Tweets.find({week:startDate}, function (err, tweets) {
-        if (err){
+        if (err || tweets.length == 0){
+            console.log("Could not find: " + err);
             // STEP 2
 
             var args =  ['-jar', 'java/TweetTrack.jar', 'tweetbydate', req.query.handle, req.query.start_date, req.query.end_date, 'dates.txt'];
@@ -105,8 +106,10 @@ for(var i in jsonArr) {
     var tweet = new Tweets();
     var status = 0;
 
-    tweet.tweet_id = jsonArr[i].id;
-    tweet.week = jsonArr[i].start_date;
+    tweet.tweet_id = parseInt(jsonArr[i].id);
+    tweet.week = startDate;
+    console.log("JSON: " + jsonArr[i].start_date);
+    console.log("DB Obj: " + tweet);
 
     tweet.save(function(err, tweet) {
         if (err){
