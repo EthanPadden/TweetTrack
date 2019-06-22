@@ -4,6 +4,7 @@ var router = express.Router();
 const {spawn} = require('child_process');
 // const track = fork('routes/tracker.js');
 var Tweets = require('../models/weeks');
+var fs = require('fs'); 
 
 // track.on('message', (msg) => {
 //   console.log('Message from child', msg);
@@ -70,6 +71,7 @@ router.get('/trackUser', function(req, res, next){
 
 // STEP 1
 router.get('/getTweetsByWeek', function(req, res, next){
+    // Status: 0 - found in DB, 1 - not found in DB, success write to DB, 2 - file read unsuccessful
     var startDate = new Date(req.query.start_date);
     var sent = false;
     Tweets.find({week:startDate}, function (err, tweets) {
@@ -84,6 +86,41 @@ router.get('/getTweetsByWeek', function(req, res, next){
             child.stdout.on('data', (data) => {
                    console.log(`${data}`);
                    if(!sent) {
+
+                        // STEP 3
+                        // For every row read from file - convert to JSON
+                        fs.readFile('dates.txt', function(err, data) {
+                            if(`${data}`.length == 0) {
+                                console.log("Data is empty");
+                                res.json({"status":2});
+                            } else {
+                            var tweetArr = `${data}`.split('\n');
+                            var jsonArr = [];
+                            for(var i = 0; i < tweetArr.length-1; i++) {
+                                jsonArr[i] = JSON.parse(tweetArr[i]);
+                            }
+
+                        
+                            }
+                        });
+                        // Extract details and add to tweet object (id, start_date) - then save to DB
+                        for(var i in jsonArr) {
+                            var tweet = new Tweets();
+
+                            tweet.tweet_id = jsonArr[i].id;
+                            tweet.week = jsonArr[i].start_date;
+
+                            tweet.save(function(err, tweet) {
+                                if (err){
+                                    res.json ({status:3});
+                                    break;
+                                }
+                               
+                            });
+                        }
+
+                        // NOT TESTED
+
                         res.json({"status":0});
                         sent = true;
                    }
