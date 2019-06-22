@@ -75,7 +75,8 @@ router.get('/getTweetsByWeek', function(req, res, next){
     Tweets.find({week:startDate}, function (err, tweets) {
         if (err){
             // STEP 2
-            var args =  ['-jar', 'java/TweetTrack.jar', 'tweetbydate', req.query.handle, req.query.start_date, req.query.end_date];
+
+            var args =  ['-jar', 'java/TweetTrack.jar', 'tweetbydate', req.query.handle, req.query.start_date, req.query.end_date, 'dates.txt'];
 
             var child = spawn('java', args);
             if(child == null) console.log("ERROR: Could not spawn child process");
