@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-// require('./util');
+require('./util');
 
 var tweetsSchema = new Schema({
     tweet_id: {type:Number},
