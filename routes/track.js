@@ -98,8 +98,12 @@ router.get('/getTweetsByWeek', function(req, res, next){
                             } else {
                             var tweetArr = `${data}`.split('\n');
                             var jsonArr = [];
+                            var output = [];
                             for(var i = 0; i < tweetArr.length-1; i++) {
                                 jsonArr[i] = JSON.parse(tweetArr[i]);
+                                output[i] = {
+                                    "id":jsonArr[i].id
+                                };
                             }
 // Extract details and add to tweet object (id, start_date) - then save to DB
 for(var i in jsonArr) {
@@ -121,7 +125,7 @@ for(var i in jsonArr) {
 
 // NOT TESTED
 
-res.json({"status":status});
+res.json({"status":status, "tweets":output});
 sent = true;
                         
                             }
@@ -137,8 +141,14 @@ sent = true;
             
         }
             
-        else
-            res.json({'status': 0, 'tweets':tweets});
+        else{
+            var output = [];
+            for(var i in tweets) output[i] = {
+                "id":parseInt(tweets[i].tweet_id)
+            };
+            res.json({'status': 0, 'tweets':output});
+
+        }
     });
    
 });
