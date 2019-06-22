@@ -1,7 +1,7 @@
 var express = require('express');
 // var track = require('./tracker');
 var router = express.Router();
-const {fork} = require('child_process');
+const {spawn} = require('child_process');
 // const track = fork('routes/tracker.js');
 var Tweets = require('../models/weeks');
 
@@ -67,16 +67,34 @@ router.get('/trackUser', function(req, res, next){
 // res.json({'status': -1});
 // else
 // res.json({'status': 0, 'tweets':tweets});
+
 // STEP 1
-
-
-
 router.get('/getTweetsByWeek', function(req, res, next){
     var startDate = new Date(req.query.start_date);
-    
+    var sent = false;
     Tweets.find({week:startDate}, function (err, tweets) {
-        if (err)
-            res.json({'status': -1});
+        if (err){
+            // STEP 2
+            var args =  ['-jar', 'java/TweetTrack.jar', 'tweetbydate', req.query.handle, req.query.start_date, req.query.end_date];
+
+            var child = spawn('java', args);
+            if(child == null) console.log("ERROR: Could not spawn child process");
+
+            child.stdout.on('data', (data) => {
+                   console.log(`${data}`);
+                   if(!sent) {
+                        res.json({"status":0});
+                        sent = true;
+                   }
+            
+            });
+                  
+            child.stderr.on('data', (data) => {
+                   console.log(`${data}`);
+                });
+            
+        }
+            
         else
             res.json({'status': 0, 'tweets':tweets});
     });
