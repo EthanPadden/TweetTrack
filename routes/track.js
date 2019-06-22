@@ -100,30 +100,30 @@ router.get('/getTweetsByWeek', function(req, res, next){
                             for(var i = 0; i < tweetArr.length-1; i++) {
                                 jsonArr[i] = JSON.parse(tweetArr[i]);
                             }
+// Extract details and add to tweet object (id, start_date) - then save to DB
+for(var i in jsonArr) {
+    var tweet = new Tweets();
+    var status = 0;
 
+    tweet.tweet_id = jsonArr[i].id;
+    tweet.week = jsonArr[i].start_date;
+
+    tweet.save(function(err, tweet) {
+        if (err){
+            success = 3;
+        
+        }
+    });
+}
+
+// NOT TESTED
+
+res.json({"status":status});
+sent = true;
                         
                             }
                         });
-                        // Extract details and add to tweet object (id, start_date) - then save to DB
-                        for(var i in jsonArr) {
-                            var tweet = new Tweets();
-
-                            tweet.tweet_id = jsonArr[i].id;
-                            tweet.week = jsonArr[i].start_date;
-
-                            tweet.save(function(err, tweet) {
-                                if (err){
-                                    res.json ({status:3});
-                                    break;
-                                }
-                               
-                            });
-                        }
-
-                        // NOT TESTED
-
-                        res.json({"status":0});
-                        sent = true;
+                        
                    }
             
             });
