@@ -10,6 +10,8 @@ $('#track-tab').click(function (event) {
     var d = new Date()
 
     var dates = getMonday(d)
+    console.log(dates);
+    
    
     // if(window.accounts.length < 2) alert("You must add 2 accounts to track");
     // else if (window.accounts.length == 2) {
@@ -61,6 +63,10 @@ function getMonday(d)
     var nextMonday = prevMonday;
     nextMonday.setDate(prevMonday
       .getDate() + 7);
+
+      // If next Monday is in the future
+      var today = new Date();
+      if(nextMonday.getTime() > today.getTime()) nextMonday = today;
 
       var d = nextMonday.getDate().toString()
       if (d.length == 1) d = '0' + d
