@@ -70,6 +70,7 @@ router.get('/trackUser', function (req, res, next) {
 
 // STEP 1
 router.get('/getTweetsByWeek', function (req, res, next) {
+  console.log("CALL: " + req.query.start_date)
   // Status: 0 - found in DB, 1 - not found in DB, success write to DB, 2 - file read unsuccessful
   var startDate = req.query.start_date
   var sent = false
@@ -84,7 +85,7 @@ router.get('/getTweetsByWeek', function (req, res, next) {
       if (child == null) console.log('ERROR: Could not spawn child process')
 
       child.stdout.on('data', (data) => {
-        console.log(`${data}`)
+        console.log("OUT: " + `${data}`)
         if (!sent) {
 
           // STEP 3
@@ -125,9 +126,10 @@ router.get('/getTweetsByWeek', function (req, res, next) {
       })
 
       child.stderr.on('data', (data) => {
-        console.log(`${data}`)
+        console.log("ERR: " + `${data}`)
       })
     } else {
+      
       var output = []
       for (var i in tweets) output[i] = tweets[i].tweet_id
 

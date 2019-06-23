@@ -57,7 +57,9 @@ router.get('/getTweetsByTime', function(req, res, next){
     // Input data: { handle:string, numDays:int}
     var javaCall = 'java -jar java/TweetTrack.jar tweetbytime ' + req.query.handle + ' ' + req.query.numDays + ' ' + 'java/statuslist.txt';
     exec(javaCall, function(err, stdout) {
+        
         if(stdout)  {
+            console.log("OUT: " + stdout);
             setTimeout(function () {
                 fs.readFile('java/statuslist.txt', function(err, data) {
                     if(`${data}`.length == 0) {
@@ -80,6 +82,8 @@ router.get('/getTweetsByTime', function(req, res, next){
                     }
                 });
             }, 1000); 
+        } else if (err) {
+            console.log("ERROR: " + err);
         }
     });
 });

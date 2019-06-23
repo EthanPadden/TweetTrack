@@ -19,12 +19,14 @@ $('#track-tab').click(function (event) {
           type: 'GET',
           url: '/track/getTweetsByWeek',
           data: {'handle':accounts[0].handle, 'start_date':dates[0], 'end_date':dates[1]},
-          success: function(data){
+          success: function(data0){
+            console.log(data0)
             $.ajax({
               type: 'GET',
               url: '/track/getTweetsByWeek',
               data: {'handle':accounts[1].handle, 'start_date':dates[0], 'end_date':dates[1]},
-              success: function(data){
+              success: function(data1){
+            console.log(data1)
                   
                   started = true
     
