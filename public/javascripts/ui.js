@@ -20,7 +20,6 @@ $('#track-tab').click(function (event) {
   $('#graph-tab').removeClass('active')
   $('#compare-tab').removeClass('active')
   $('#engagement-options').addClass('hidden')
-  $('#tracker').removeClass('hidden')
   hideGraphs()
 })
 

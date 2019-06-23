@@ -26,10 +26,10 @@ $('#track-tab').click(function (event) {
               url: '/track/getTweetsByWeek',
               data: {'handle':accounts[1].handle, 'start_date':dates[0], 'end_date':dates[1]},
               success: function(data1){
-            console.log(data1)
-                  
+              console.log(data1)
                   started = true
-    
+                  var data = [data0, data1]
+                  displayTrackingInfo(dates, data)
               },
               error: function(errMsg) {
                   console.log(errMsg);
@@ -46,6 +46,11 @@ $('#track-tab').click(function (event) {
   }
 })
 
+
+function displayTrackingInfo(dates, data) {
+    $('#tracker h4').html('Week of ' + dates[0] + ' to ' + dates[1])
+    $('#tracker').removeClass('hidden')
+}
 // function getPreviousMonday () {
 //   var date = new Date()
 //   var day = date.getDay()
