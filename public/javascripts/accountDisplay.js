@@ -20,6 +20,7 @@ $('#add-account-btn').click(function(event){
                     addUserToTable(data);
                     addGraphOptions();
                     updateGraphOptions(data);
+                    window.accounts = accounts;
                     if(accounts.length == 2) hideHandleInput();
                 }
                 else if (data.status == -1) $('#handle-msg').html("Account not found");
