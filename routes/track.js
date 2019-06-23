@@ -88,40 +88,37 @@ router.get('/getTweetsByWeek', function (req, res, next) {
         if (!sent) {
 
           // STEP 3
-          // For every row read from file - convert to JSON
+          // For every row read from file - save to DB
           fs.readFile('dates.txt', function (err, data) {
             if (`${data}`.length == 0) {
               console.log('Data is empty')
               res.json({'status': 2})
+              sent = true
             } else {
               var tweetArr = `${data}`.split('\n')
-              var jsonArr = []
+              console.log(tweetArr)
+              var status = 0
               var output = []
-              for (var i = 0; i < tweetArr.length - 1; i++) {
-                jsonArr[i] = JSON.parse(tweetArr[i])
-                output[i] = jsonArr[i].id
-              }
+
+              // CONVERT STRING TO INT CHECK DB FOR INT OR STRING STORAGE
+
               // Extract details and add to tweet object (id, start_date) - then save to DB
-              for (var i in jsonArr) {
+              for (var i in tweetArr) {
                 var tweet = new Tweets()
-                var status = 0
-
-                tweet.tweet_id = parseInt(jsonArr[i].id)
+                tweet.tweet_id = tweetArr[i]
                 tweet.week = startDate
-                console.log('JSON: ' + jsonArr[i].start_date)
-                console.log('DB Obj: ' + tweet)
-
+                output[i] = tweetArr[i]
                 tweet.save(function (err, tweet) {
                   if (err) {
-                    success = 3
+                    status = 3
                   }
                 })
               }
 
               // NOT TESTED
+              sent = true
 
               res.json({'status': status, 'tweets': output})
-              sent = true
             }
           })
         }
@@ -132,7 +129,7 @@ router.get('/getTweetsByWeek', function (req, res, next) {
       })
     } else {
       var output = []
-      for (var i in tweets) output[i] = parseInt(tweets[i].tweet_id)
+      for (var i in tweets) output[i] = tweets[i].tweet_id
 
       res.json({'status': 0, 'tweets': output})
     }
