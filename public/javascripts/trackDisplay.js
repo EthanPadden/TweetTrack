@@ -13,20 +13,20 @@ $('#track-tab').click(function (event) {
     console.log(dates);
     
    
-    // if(window.accounts.length < 2) alert("You must add 2 accounts to track");
-    // else if (window.accounts.length == 2) {
-    //     $.ajax({
-    //       type: 'GET',
-    //       url: '/track/getTweetsByWeek',
-    //       data: {'handle':accounts[0].handle, 'start_date':prevMonday, 'end_date':end_date},
-    //       success: function(data){
-    //           console.log(data)
-    //       },
-    //       error: function(errMsg) {
-    //           console.log(errMsg);
-    //       }
-    //   });
-    // }
+    if(window.accounts.length < 2) alert("You must add 2 accounts to track");
+    else if (window.accounts.length == 2) {
+        $.ajax({
+          type: 'GET',
+          url: '/track/getTweetsByWeek',
+          data: {'handle':accounts[0].handle, 'start_date':prevMonday, 'end_date':end_date},
+          success: function(data){
+              console.log(data)
+          },
+          error: function(errMsg) {
+              console.log(errMsg);
+          }
+      });
+    }
   
   }
 })
