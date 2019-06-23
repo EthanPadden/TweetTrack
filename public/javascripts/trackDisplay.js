@@ -6,21 +6,34 @@ Make ajax request for that date
 var started = false
 $('#track-tab').click(function (event) {
   if (!started) {
-    started = true
-    var d = new Date()
-
-    var dates = getMonday(d)
-    console.log(dates);
+   
     
    
     if(window.accounts.length < 2) alert("You must add 2 accounts to track");
     else if (window.accounts.length == 2) {
+      var d = new Date()
+
+      var dates = getMonday(d)
+      console.log(dates);
         $.ajax({
           type: 'GET',
           url: '/track/getTweetsByWeek',
-          data: {'handle':accounts[0].handle, 'start_date':prevMonday, 'end_date':end_date},
+          data: {'handle':accounts[0].handle, 'start_date':dates[0], 'end_date':dates[1]},
           success: function(data){
-              console.log(data)
+            $.ajax({
+              type: 'GET',
+              url: '/track/getTweetsByWeek',
+              data: {'handle':accounts[1].handle, 'start_date':dates[0], 'end_date':dates[1]},
+              success: function(data){
+                  
+                  started = true
+    
+              },
+              error: function(errMsg) {
+                  console.log(errMsg);
+              }
+          });
+
           },
           error: function(errMsg) {
               console.log(errMsg);
