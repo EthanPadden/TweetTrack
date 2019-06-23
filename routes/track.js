@@ -2,6 +2,7 @@ var express = require('express')
 // var track = require('./tracker')
 var router = express.Router()
 const {spawn} = require('child_process')
+const {exec} = require('child_process')
 // const track = fork('routes/tracker.js')
 var Tweets = require('../models/weeks')
 var fs = require('fs')
@@ -70,7 +71,7 @@ router.get('/trackUser', function (req, res, next) {
 
 // STEP 1
 router.get('/getTweetsByWeek', function (req, res, next) {
-  console.log("CALL: " + req.query.start_date)
+  console.log('CALL: ' + req.query.start_date)
   // Status: 0 - found in DB, 1 - not found in DB, success write to DB, 2 - file read unsuccessful
   var handle = req.query.handle
   var startDate = req.query.start_date
@@ -86,7 +87,7 @@ router.get('/getTweetsByWeek', function (req, res, next) {
       if (child == null) console.log('ERROR: Could not spawn child process')
 
       child.stdout.on('data', (data) => {
-        console.log("OUT: " + `${data}`)
+        console.log('OUT: ' + `${data}`)
         if (!sent) {
 
           // STEP 3
@@ -98,7 +99,7 @@ router.get('/getTweetsByWeek', function (req, res, next) {
               sent = true
             } else {
               var tweetArr = `${data}`.split('\n')
-              console.log(tweetArr)
+              // console.log(tweetArr)
               var status = 0
               var output = []
 
@@ -114,26 +115,44 @@ router.get('/getTweetsByWeek', function (req, res, next) {
                 tweet.save(function (err, tweet) {
                   if (err) {
                     status = 3
-                  } else if(tweet) {
-                    console.log(tweet)
+                  } else if (tweet) {
+                    // console.log(tweet)
                   }
                 })
               }
 
+              // Get the tweet stats for these ids
+              var stats
+              var javaCall = 'java -jar java/TweetTrack.jar tweetbyid dates.txt'
+              console.log("ABOUT TO CALL")
+              exec(javaCall, function (err, stdout) {
+                console.log("CALL")
+                if (stdout.indexOf('SUCCESS') == 0) {
+
+                console.log(stdout)
+
+                  var statsJSON = JSON.parse('{' + stdout.split('{'))
+                  
+                } else if(err){
+              console.log(err)
+                  
+                  status = 4
+                  stats = {'Error': 'Failed to get information for IDs'}
+                }
+              })
               // NOT TESTED
               sent = true
 
-              res.json({'status': status, 'tweets': output})
+              res.json({'status': status, 'tweets': stats})
             }
           })
         }
       })
 
       child.stderr.on('data', (data) => {
-        console.log("ERR: " + `${data}`)
+        console.log('ERR: ' + `${data}`)
       })
     } else {
-      
       var output = []
       for (var i in tweets) output[i] = tweets[i].tweet_id
 
@@ -141,9 +160,5 @@ router.get('/getTweetsByWeek', function (req, res, next) {
     }
   })
 })
-
-// track.on('message', (msg) => {
-//     console.log('Message from child', msg)
-//   })
 
 module.exports = router
