@@ -4,6 +4,7 @@ require('./util')
 
 var tweetsSchema = new Schema({
   tweet_id: {type: String},
+  handle: {type: String},
   week: {type: String} // Weeks are identified by start date (Monday)
 })
 

@@ -72,9 +72,10 @@ router.get('/trackUser', function (req, res, next) {
 router.get('/getTweetsByWeek', function (req, res, next) {
   console.log("CALL: " + req.query.start_date)
   // Status: 0 - found in DB, 1 - not found in DB, success write to DB, 2 - file read unsuccessful
+  var handle = req.query.handle
   var startDate = req.query.start_date
   var sent = false
-  Tweets.find({week: startDate}, function (err, tweets) {
+  Tweets.find({week: startDate, handle: handle}, function (err, tweets) {
     if (err || tweets.length == 0) {
       console.log('Could not find: ' + err)
       // STEP 2
@@ -108,10 +109,13 @@ router.get('/getTweetsByWeek', function (req, res, next) {
                 var tweet = new Tweets()
                 tweet.tweet_id = tweetArr[i]
                 tweet.week = startDate
+                tweet.handle = handle
                 output[i] = tweetArr[i]
                 tweet.save(function (err, tweet) {
                   if (err) {
                     status = 3
+                  } else if(tweet) {
+                    console.log(tweet)
                   }
                 })
               }
