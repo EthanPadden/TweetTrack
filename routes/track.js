@@ -57,14 +57,18 @@ router.get('/trackingStatus', function(req, res, next){
 module.exports = router;
 */
 router.get('/trackUser', function(req, res, next){
-    // track.initTracker(req.query.handle);
+    // {handle:String}
+    
     track.send({ cmd: 'init', handle:req.query.handle });
     
 });
 
+router.get('/checkStatus', function(req, res, next){
+    // {handle:String}
+    
+    track.send({ cmd: 'status', handle:req.query.handle });
+    
+});
 
-// track.on('message', (msg) => {
-//     console.log('Message from child', msg);
-//   });
 
 module.exports = router;
