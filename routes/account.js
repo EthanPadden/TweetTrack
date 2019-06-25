@@ -229,10 +229,23 @@ router.get('/getTweetsByWeek', function (req, res, next) {
           console.log('ERR: ' + `${data}`)
         })
       } else {
-        var output = []
-        for (var i in tweets) output[i] = tweets[i].tweet_id
+        // if (information for that handle and week is in the DB (stored by start_date)):
+        // Extract the information
+        // Calculate relevant stats
+        var avgLikes = 0;
+        var avgRTs = 0;
+        for (var i in tweets) {
+            avgLikes += tweets.favourite_count;
+            avgRTs += tweets.rt_count;
+        }
+
+        avgLikes /= tweets.length;
+        avgRTs /= tweets.length;
+        
+        // FUTURE: Java processes contents of tweets here
+        // Return relevant information as JSON
   
-        res.json({'status': 0, 'tweets': output})
+        res.json({'status': 0, 'avg_likes':avgLikes, 'avg_rts':avgRTs})
       }
     })
   })
