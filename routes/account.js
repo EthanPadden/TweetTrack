@@ -129,11 +129,26 @@ router.get('/getMentions', function(req, res, next){
     });
 });
 
+router.get('/getTweetsByWeek', function (req, res, next) {    
+    /*  APPROACH:
+        if (information for that handle and week is in the DB (stored by start_date)):
+            Extract the information
+            Calculate relevant stats
+            FUTURE: Java processes contents of tweets here
+            Return relevant information as JSON
+        else:
+            Call Java to request the information from the API - writes to text file
+            On completion - read file contents and store in variable
+            Write from variables to DB
+            Calculate relevant stats from variables
+            FUTURE: Java processes contents of tweets here
+            Return relevant information as JSON
 
-// STEP 1
-router.get('/getTweetsByWeek', function (req, res, next) {
-    console.log('CALL: ' + req.query.start_date)
-    // Status: 0 - found in DB, 1 - not found in DB, success write to DB, 2 - file read unsuccessful
+        STATUSES: 
+        0 - information found in DB
+        1 - information not found in DB, but retrieved from API successfully
+        -1 - information not found in DB, also could not be retrieved from API
+    */
     var handle = req.query.handle
     var startDate = req.query.start_date
     var sent = false
