@@ -147,82 +147,86 @@ router.get('/getTweetsByWeek', function (req, res, next) {
         STATUSES: 
         0 - information found in DB
         1 - information not found in DB, but retrieved from API successfully
-        -1 - information not found in DB, also could not be retrieved from API
+        -1 - information not found in DB, also could not be retrieved from API (Java problem)
+        -2 - information not found in DB, retrieved from API, but could not be stored in DB
     */
     var handle = req.query.handle
     var startDate = req.query.start_date
     var sent = false
     Tweets.find({week: startDate, handle: handle}, function (err, tweets) {
       if (err || tweets.length == 0) {
-        console.log('Could not find: ' + err)
-        // STEP 2
-  
-        var args = ['-jar', 'java/TweetTrack.jar', 'tweetbydate', req.query.handle, req.query.start_date, req.query.end_date, 'dates.txt']
+        // else:
+        // Call Java to request the information from the API - writes to text file
+        var args = ['-jar', 'java/TweetTrack.jar', 'tweetbydate', req.query.handle, req.query.start_date, req.query.end_date, 'temp.txt']
   
         var child = spawn('java', args)
         if (child == null) console.log('ERROR: Could not spawn child process')
   
-        child.stdout.on('data', (data) => {
-          console.log('OUT: ' + `${data}`)
-          if (!sent) {
-  
-            // STEP 3
-            // For every row read from file - save to DB
-            fs.readFile('dates.txt', function (err, data) {
-              if (`${data}`.length == 0) {
-                console.log('Data is empty')
-                res.json({'status': 2})
-                sent = true
-              } else {
-                var tweetArr = `${data}`.split('\n')
-                // console.log(tweetArr)
-                var status = 0
-                var output = []
-  
-                // CONVERT STRING TO INT CHECK DB FOR INT OR STRING STORAGE
-  
-                // Extract details and add to tweet object (id, start_date) - then save to DB
-                for (var i in tweetArr) {
-                  var tweet = new Tweets()
-                  tweet.tweet_id = tweetArr[i]
-                  tweet.week = startDate
-                  tweet.handle = handle
-                  output[i] = tweetArr[i]
-                  tweet.save(function (err, tweet) {
-                    if (err) {
-                      status = 3
-                    } else if (tweet) {
-                      // console.log(tweet)
-                    }
-                  })
-                }
-  
-                // Get the tweet stats for these ids
-                var stats
-                var javaCall = 'java -jar java/TweetTrack.jar tweetbyid dates.txt'
-                console.log("ABOUT TO CALL")
-                exec(javaCall, function (err, stdout) {
-                  console.log("CALL")
-                  if (stdout.indexOf('SUCCESS') == 0) {
-  
-                  console.log(stdout)
-  
-                    var statsJSON = JSON.parse('{' + stdout.split('{'))
-                    
-                  } else if(err){
-                console.log(err)
-                    
-                    status = 4
-                    stats = {'Error': 'Failed to get information for IDs'}
+        child.stdout.on('data', (childData) => {
+            // On completion - read file contents and store in variable
+            if(`${childData}`.indexOf('SUCCESS') != -1) {
+                if (!sent) {
+                    fs.readFile('temp.txt', function (err, data) {
+                      if (`${data}`.length == 0) {
+                        console.log('Data is empty')
+                        res.json({'status': -1})
+                        sent = true
+                      } else {
+                        var tweetArr = `${data}`.split('\n')
+                        var status = 0
+
+                    // Write from variables to DB
+                        // Calculate relevant stats from variables
+                        var totalLikes = 0
+                        var totalRTs = 0
+                        var numTweets = tweetArr.length
+
+                        for (var i in tweetArr) {
+                            
+                            var tweetJSON = JSON.parse(tweetArr[i])
+                          var tweet = new Tweets()
+
+                          tweet.tweet_id = tweetJSON.id
+                          tweet.text = tweetJSON.text
+                          tweet.created_at = tweetJSON.created_at
+                          tweet.favourite_count = tweetJSON.favourite_count
+                          tweet.rt_count = tweetJSON.rt_count
+                          tweet.is_rt = tweetJSON.is_rt
+                          
+                          tweet.week = startDate
+                          tweet.handle = handle
+
+                          totalLikes += tweetJSON.favourite_count
+                          totalRTs += tweetJSON.rt_count
+
+                          tweet.save(function (err, tweet) {
+                            if (err) {
+                              status = -2
+                            } else if (tweet) {
+                              // console.log(tweet)
+                            }
+                          })
+                        }
+
+                        var avgLikes = totalLikes/numTweets
+                        var avgRTs = totalRTs/numTweets
+          
+                        var stats = {
+                            'avg_likes':avgLikes,
+                            'avg_rts':avgRTs,
+                            'tweet_count':numTweets
+                        }
+
+                        // FUTURE: Java processes contents of tweets here
+
+                        // Return relevant information as JSON
+                        sent = true
+                        res.json({'status': status, 'stats': stats})
+                      }
+                    })
                   }
-                })
-                // NOT TESTED
-                sent = true
-  
-                res.json({'status': status, 'tweets': stats})
-              }
-            })
-          }
+            }
+          
         })
   
         child.stderr.on('data', (data) => {
