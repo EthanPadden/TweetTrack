@@ -3,6 +3,8 @@ var router = express.Router();
 const { spawn } = require('child_process');
 const exec = require('child_process').exec;
 var fs = require('fs'); 
+var Tweets = require('../models/weeks');
+
 
 router.get('/getBasicInfo', function(req, res ,next){
    // Input data: { handle:string }
@@ -130,6 +132,9 @@ router.get('/getMentions', function(req, res, next){
 });
 
 router.get('/getTweetsByWeek', function (req, res, next) {    
+    // Input data: { handle:string, start_date:String, end_date:String}
+
+
     /*  APPROACH:
         if (information for that handle and week is in the DB (stored by start_date)):
             Extract the information
@@ -173,7 +178,7 @@ router.get('/getTweetsByWeek', function (req, res, next) {
                         sent = true
                       } else {
                         var tweetArr = `${data}`.split('\n')
-                        var status = 0
+                        var status = 1
 
                     // Write from variables to DB
                         // Calculate relevant stats from variables
@@ -182,7 +187,7 @@ router.get('/getTweetsByWeek', function (req, res, next) {
                         var numTweets = tweetArr.length
 
                         for (var i in tweetArr) {
-                            
+                            if(tweetArr[i].length <1) break
                             var tweetJSON = JSON.parse(tweetArr[i])
                           var tweet = new Tweets()
 
@@ -191,7 +196,7 @@ router.get('/getTweetsByWeek', function (req, res, next) {
                           tweet.created_at = tweetJSON.created_at
                           tweet.favourite_count = tweetJSON.favourite_count
                           tweet.rt_count = tweetJSON.rt_count
-                          tweet.is_rt = tweetJSON.is_rt
+                          tweet.is_rt = Number(tweetJSON.is_rt)
                           
                           tweet.week = startDate
                           tweet.handle = handle
@@ -208,8 +213,8 @@ router.get('/getTweetsByWeek', function (req, res, next) {
                           })
                         }
 
-                        var avgLikes = totalLikes/numTweets
-                        var avgRTs = totalRTs/numTweets
+                        var avgLikes = Math.round(totalLikes/numTweets)
+                        var avgRTs = Math.round(totalRTs/numTweets)
           
                         var stats = {
                             'avg_likes':avgLikes,
@@ -236,20 +241,27 @@ router.get('/getTweetsByWeek', function (req, res, next) {
         // if (information for that handle and week is in the DB (stored by start_date)):
         // Extract the information
         // Calculate relevant stats
-        var avgLikes = 0;
-        var avgRTs = 0;
-        for (var i in tweets) {
-            avgLikes += tweets.favourite_count;
-            avgRTs += tweets.rt_count;
-        }
 
-        avgLikes /= tweets.length;
-        avgRTs /= tweets.length;
+        var totalLikes = 0;
+        var totalRTs = 0;
+        for (var i in tweets) {
+            totalLikes += tweets[i].favourite_count;
+            totalRTs += tweets[i].rt_count;
+        }
         
+        var numTweets = tweets.length
+        var avgLikes = Math.round(totalLikes/numTweets)
+        var avgRTs = Math.round(totalRTs/numTweets)
+
+        var stats = {
+            'avg_likes':avgLikes,
+            'avg_rts':avgRTs,
+            'tweet_count':numTweets
+        }
         // FUTURE: Java processes contents of tweets here
         // Return relevant information as JSON
   
-        res.json({'status': 0, 'avg_likes':avgLikes, 'avg_rts':avgRTs})
+        res.json({'status': 0, 'stats':stats})
       }
     })
   })

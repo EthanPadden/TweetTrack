@@ -38,13 +38,13 @@ function initTracker(handle) {
 
 }
 
-tracker.stdout.on('data', (data) => {
-       console.log('CHOP: ' + `${data}`);
-    });
+// tracker.stdout.on('data', (data) => {
+//        console.log('CHOP: ' + `${data}`);
+//     });
       
-    tracker.stderr.on('data', (data) => {
-       console.log('CHERR: ' + `${data}`);
-    });
+//     tracker.stderr.on('data', (data) => {
+//        console.log('CHERR: ' + `${data}`);
+//     });
 
 function checkTracker(handle) {
     console.log("CH checking tracker " + handle + "...");
