@@ -1,66 +1,32 @@
 const {spawn} = require('child_process');
-var trackerInitialized = false;
-var tracker;
-// For testing
-function proc() {
-    console.log("Spawn");
-}
+var fs = require('fs')
 
-process.on('message', (msg) => {
-    // console.log('Message from parent:', msg.hello);
-    // process.send({"back":"at you"});
-    if(msg.cmd == 'init') {
-        var success = initTracker(msg.handle);
-        if(success == true) process.send({status:'SUCCESS'});
-        else process.send({status:'ERROR'});
-    } else if(msg.cmd == 'status') {
-        var output = checkTracker(msg.handle);
-        if(success == true) process.send({status:'SUCCESS'});
-        else process.send({status:'ERROR'});
-    }
+// NEW APPROACH:
+var TwitterStream = require('twitter-stream-api')
+
+var keys = {
+    consumer_key : "0dkUzbvy3BTiIIuarFLhnuFA4",
+    consumer_secret : "pJfzuLldWM9zxAsiFZa263MwuYUAXLDeb9Rfd1vHd6W6X9Gztt",
+    token : "3021951411-EXi896AHCHUuDpi450RvGVoPhfMQkzxbd1H10E1",
+    token_secret : "OZCHOyIp1ryVK6GYrCuYxBlz6nlavrQgELkGP3uJxFP5E"
+};
+ 
+var Twitter = new TwitterStream(keys, false);
+Twitter.stream('statuses/filter', {
+    track: '@elonmusk'
 });
 
-function initTracker(handle) {
-    console.log("CH attempting to start tracking " + handle + "...");
-    var args =  ['-jar', 'java/TweetTrack.jar', 'tracker', 'init', handle];
+Twitter.on('data', function (obj) {
+    fs.writeFile("mentions.txt", data, (err) => {
+        if (err) console.log(err);
+    });
+});
 
-    tracker = spawn('java', args);
+// Conditions:
+// Screen name is not elonmusk
+// Not a retweet
 
-    if(tracker == null) {
-        console.log("ERROR");
-        return false;
-    }
-    else {
-        tracker.stdin.setEncoding('utf-8');
-        return true;
-    }
-
-
-}
-
-// tracker.stdout.on('data', (data) => {
-//        console.log('CHOP: ' + `${data}`);
-//     });
-      
-//     tracker.stderr.on('data', (data) => {
-//        console.log('CHERR: ' + `${data}`);
-//     });
-
-function checkTracker(handle) {
-    console.log("CH checking tracker " + handle + "...");
-    var args =  ['-jar', 'java/TweetTrack.jar', 'tracker', 'status', handle];
-
-    tracker = spawn('java', args);
-
-    if(tracker == null) {
-        console.log("ERROR");
-        return false;
-    }
-    else  {
-        tracker.stdin.setEncoding('utf-8');
-        
-        return true;
-    }
-}
+// Alternatively: Pipe the data directly and process after
+// Twitter.pipe(fs.createWriteStream('tweets.json'));
 
 module.exports.initTracker = initTracker;
