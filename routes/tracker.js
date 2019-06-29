@@ -28,5 +28,8 @@ Twitter.on('data', function (obj) {
 
 // Alternatively: Pipe the data directly and process after
 // Twitter.pipe(fs.createWriteStream('tweets.json'));
+function initTracker() {
+    console.log("Initiated")
+}
 
 module.exports.initTracker = initTracker;

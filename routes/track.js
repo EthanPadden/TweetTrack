@@ -15,13 +15,18 @@ router.get('/trackUser', function(req, res, next){
       track = spawn('java', ['-jar', 'java/TweetTrack.jar', 'tracker', 'init', 'elonmusk', 'mentions.txt'], { detached: true, stdio:'ignore' })
 //  java -jar java/TweetTrack.jar tracker init elonmusk mentions.txt
 
+      
+
       track.unref(); // Stops parent from waiting for tracker to exit
      
       while(true) {
         if (track != null) break
       }
-
-
+      var pid = track._handle.pid
+      fs.appendFile("proc.txt", pid, (err) => {
+        if (err) console.log(err);
+      });
+      
       res.json({'tracker':0})
     // // Step 6
     // track.on('message', (msg) => {
@@ -79,7 +84,8 @@ function killProcesses(PIDs, i) {
     return
   } else {
     exec('kill -9 ' + PIDs[i], function (err, stdout) {
-      if(err) {
+      console.log("Call")
+      if(err || stdout) {
         status = -2
         return
       } else {
