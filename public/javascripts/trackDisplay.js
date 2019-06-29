@@ -22,6 +22,7 @@ $('#add-tracker-btn').click(function(event) {
         success: function(data) {
             if (data.status == 0) {
                updateTrackingStatus(index)
+               displayTracker(index)
             } else if (data.status == -1) console.log("Error");
         },
         error: function(errMsg) {
@@ -38,11 +39,10 @@ function updateTrackingStatus(i) {
     $(cell).removeClass('not-tracking')
     $(cell).addClass('tracking')
     $(cell).html('Tracking')
-    
 }
 
-function displayTrackingInfo(dates, data) {
-    $('#tracker h4').html('Week of ' + dates[0] + ' to ' + dates[1])
+function displayTracker(i) {
+    $('#tracker h4').html('Tracking ' + window.accounts[i].name + '...')
     $('#tracker').removeClass('hidden')
 }
 // function getPreviousMonday () {
