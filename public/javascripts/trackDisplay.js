@@ -44,7 +44,13 @@ function updateTrackingStatus(i, cmd) {
     var tableRow = $('#overview-table-body > tr:nth-child(' + n + ')')
     var cell = tableRow[0].cells[4].children[0]
 
-    if(cmd == 1) {
+    if(cmd == 0) {
+        $(cell).removeClass('tracking')
+        $(cell).removeClass('stopping')
+        $(cell).addClass('not-tracking')
+        $(cell).html('Not tracking')
+        $('#tracker #status').html('Status: <span class="badge badge-secondary not-tracking">Stopped</span>')
+    } else if(cmd == 1) {
         $(cell).removeClass('not-tracking')
         $(cell).removeClass('stopping')
         $(cell).addClass('tracking')
@@ -69,6 +75,17 @@ function displayTracker(i) {
 
 $('#stop-track-btn').click(function() {
     updateTrackingStatus(trackerIndex, 2)
+    $.ajax({
+        type: 'GET',
+        url: '/track/killTracker',
+        data: { 'handle': window.accounts[trackerIndex].handle },
+        success: function(data) {
+            updateTrackingStatus(trackerIndex, 0)
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
 })
 // function getPreviousMonday () {
 //   var date = new Date()
