@@ -124,3 +124,13 @@ body {
 #tracker div.card-body > div {
   padding: 0 5% 0 5%;
 }
+
+.tracking {
+  background-color: var(--green)
+}
+.not-tracking {
+  background-color: var(--red)
+}
+.stopping {
+  background-color: var(--yellow)
+}

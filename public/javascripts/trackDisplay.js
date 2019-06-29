@@ -3,54 +3,90 @@ Get todays date
 Get day of week => get mondays date
 Make ajax request for that date
 */
+var trackerIndex = -1;
+
 var started = false
-$('#track-tab').click(function (event) {
-  if (!started) {
-   
-    
-   
-    if(window.accounts.length < 2) alert("You must add 2 accounts to track");
-    else if (window.accounts.length == 2) {
-      var d = new Date()
-
-      var dates = getMonday(d)
-      console.log(dates);
-        $.ajax({
-          type: 'GET',
-          url: '/track/getTweetsByWeek',
-          data: {'handle':accounts[0].handle, 'start_date':dates[0], 'end_date':dates[1]},
-          success: function(data0){
-            console.log(data0)
-            $.ajax({
-              type: 'GET',
-              url: '/track/getTweetsByWeek',
-              data: {'handle':accounts[1].handle, 'start_date':dates[0], 'end_date':dates[1]},
-              success: function(data1){
-              console.log(data1)
-                  started = true
-                  var data = [data0, data1]
-                  displayTrackingInfo(dates, data)
-              },
-              error: function(errMsg) {
-                  console.log(errMsg);
-              }
-          });
-
-          },
-          error: function(errMsg) {
-              console.log(errMsg);
-          }
-      });
-    }
-  
-  }
+$('#track-tab').click(function(event) {
+    // Display current trackers
 })
 
+$('#add-tracker-btn').click(function(event) {
+    // Find the index of the selected option
+    var index = $('#account-dropdown-track option:selected').index();
 
-function displayTrackingInfo(dates, data) {
-    $('#tracker h4').html('Week of ' + dates[0] + ' to ' + dates[1])
+    // Find the handle of the selected account from array of data
+    var handle = window.accounts[index].handle;
+
+    $.ajax({
+        type: 'GET',
+        url: '/track/trackUser',
+        data: { 'handle': handle },
+        success: function(data) {
+            if (data.status == 0) {
+                trackerIndex = index;
+               updateTrackingStatus(index, 1)
+               displayTracker(index)
+            } else if (data.status == -1) console.log("Error");
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
+});
+
+function updateTrackingStatus(i, cmd) {
+    // 0 - not tracking
+    // 1 - tracking
+    // 2 - stopping
+
+    // Keep the accounts array moving the same as the table
+    var n = i + 1
+    var tableRow = $('#overview-table-body > tr:nth-child(' + n + ')')
+    var cell = tableRow[0].cells[4].children[0]
+
+    if(cmd == 0) {
+        $(cell).removeClass('tracking')
+        $(cell).removeClass('stopping')
+        $(cell).addClass('not-tracking')
+        $(cell).html('Not tracking')
+        $('#tracker #status').html('Status: <span class="badge badge-secondary not-tracking">Stopped</span>')
+    } else if(cmd == 1) {
+        $(cell).removeClass('not-tracking')
+        $(cell).removeClass('stopping')
+        $(cell).addClass('tracking')
+        $(cell).html('Tracking')
+        $('#tracker #status').html('Status: <span class="badge badge-secondary tracking">Active</span>')
+    } else if (cmd == 2) {
+        $(cell).removeClass('not-tracking')
+        $(cell).removeClass('tracking')
+        $(cell).addClass('stopping')
+        $(cell).html('Stopping')
+        $('#tracker #status').html('Status: <span class="badge badge-secondary stopping">Stopping</span>')
+    }
+    
+}
+
+function displayTracker(i) {
+    $('#tracker h4').html('Tracking ' + window.accounts[i].name + '...')
+    var startDate = new Date().toDateString();
+    $('#tracker #start-date').html('Started: ' +startDate)
     $('#tracker').removeClass('hidden')
 }
+
+$('#stop-track-btn').click(function() {
+    updateTrackingStatus(trackerIndex, 2)
+    $.ajax({
+        type: 'GET',
+        url: '/track/killTracker',
+        data: { 'handle': window.accounts[trackerIndex].handle },
+        success: function(data) {
+            updateTrackingStatus(trackerIndex, 0)
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
+})
 // function getPreviousMonday () {
 //   var date = new Date()
 //   var day = date.getDay()
@@ -70,28 +106,27 @@ function displayTrackingInfo(dates, data) {
 //   return d + '/' + m + '/' + date.getFullYear()
 // }
 
-function getMonday(d)
-{
-    var prevMonday =  new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() - 6) // -7+1
+function getMonday(d) {
+    var prevMonday = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() - 6) // -7+1
     var d = prevMonday.getDate().toString()
     if (d.length == 1) d = '0' + d
-    var m = (prevMonday.getMonth()+1).toString()
+    var m = (prevMonday.getMonth() + 1).toString()
     if (m.length == 1) m = '0' + m
 
     var startDate = d + '/' + m + '/' + prevMonday.getFullYear().toString()
-    
+
     var nextMonday = prevMonday;
     nextMonday.setDate(prevMonday
-      .getDate() + 7);
+        .getDate() + 7);
 
-      // If next Monday is in the future
-      var today = new Date();
-      if(nextMonday.getTime() > today.getTime()) nextMonday = today;
+    // If next Monday is in the future
+    var today = new Date();
+    if (nextMonday.getTime() > today.getTime()) nextMonday = today;
 
-      var d = nextMonday.getDate().toString()
-      if (d.length == 1) d = '0' + d
-      var m = (nextMonday.getMonth()+1).toString()
-      if (m.length == 1) m = '0' + m
-      var endDate = d + '/' + m + '/' + nextMonday.getFullYear().toString()
-      return [startDate, endDate];
-} 
+    var d = nextMonday.getDate().toString()
+    if (d.length == 1) d = '0' + d
+    var m = (nextMonday.getMonth() + 1).toString()
+    if (m.length == 1) m = '0' + m
+    var endDate = d + '/' + m + '/' + nextMonday.getFullYear().toString()
+    return [startDate, endDate];
+}

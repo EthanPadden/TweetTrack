@@ -1,44 +1,44 @@
 
 {{!-- GRAPH OPTIONS --}}
 <div class="row no-margin hidden" id="graph-options">
-    <div class="col-1"></div>
-    <div class="col-10">
-      <div class="card">
-        <div class="card-body">
+  <div class="col-1"></div>
+  <div class="col-10">
+    <div class="card">
+      <div class="card-body">
 
-          <div class="input-group" id="input-graph-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Add graph...</span>
-            </div>
-
-
-                <select class="custom-select" id="account-dropdown">
-                  
-                </select>
-       
-                <select class="custom-select" id="chart-type-dropdown">
-                  <option>Likes</option>
-                  <option>Retweets</option>
-                </select>
-             
-   <div class="input-group-append">
-<button class="btn btn-primary" id="add-graph-btn">+</button>
-
-   </div>
-
+        <div class="input-group" id="input-graph-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Add graph...</span>
           </div>
 
 
+          <select class="custom-select" id="account-dropdown-graph">
 
-            
-            
-          
+          </select>
+
+          <select class="custom-select" id="chart-type-dropdown">
+            <option>Likes</option>
+            <option>Retweets</option>
+          </select>
+
+          <div class="input-group-append">
+            <button class="btn btn-primary" id="add-graph-btn">+</button>
+
+          </div>
 
         </div>
+
+
+
+
+
+
+
       </div>
     </div>
-    <div class="col-1"></div>
   </div>
+  <div class="col-1"></div>
+</div>
 
 {{!-- CHARTS --}}
 {{!-- Likes --}}
@@ -48,13 +48,13 @@
     <div class="card">
       <div class="card-body">
         <div class="row"><div class="col-6"><canvas></canvas></div>
-        <div class="col-6">
-          <h4>Likes</h4>
-          <p id="avg-likes"></p>
-          <p id="max-likes"></p>
+          <div class="col-6">
+            <h4>Likes</h4>
+            <p id="avg-likes"></p>
+            <p id="max-likes"></p>
 
-        </div></div>
-        </div>
+          </div></div>
+      </div>
     </div>
   </div>
   <div class="col-1"></div>
@@ -67,12 +67,12 @@
     <div class="card">
       <div class="card-body">
         <div class="row"><div class="col-6"><canvas></canvas></div>
-        <div class="col-6">
-          <h4>Retweets</h4>
-          <p id="avg-rts"></p>
-          <p id="max-rts"></p>
-        </div></div>
-        </div>
+          <div class="col-6">
+            <h4>Retweets</h4>
+            <p id="avg-rts"></p>
+            <p id="max-rts"></p>
+          </div></div>
+      </div>
     </div>
   </div>
   <div class="col-1"></div>
@@ -85,29 +85,29 @@
     <div class="card">
       <div class="card-body">
         <div class="input-group" id="input-metric-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Measure engagement over last...</span>
-            </div>
+          <div class="input-group-prepend">
+            <span class="input-group-text">Measure engagement over last...</span>
+          </div>
 
 
-                <input type="text" class="form-control" id="span-input">
+          <input type="text" class="form-control" id="span-input">
 
-       
-                <select class="custom-select" id="span-dropdown">
-                  <option>Days</option>
-                  <option>Tweets</option>
-                </select>
-             
-   <div class="input-group-append">
-<button class="btn btn-primary" id="add-metrics-btn">+</button>
-   </div>
 
+          <select class="custom-select" id="span-dropdown">
+            <option>Days</option>
+            <option>Tweets</option>
+          </select>
+
+          <div class="input-group-append">
+            <button class="btn btn-primary" id="add-metrics-btn">+</button>
           </div>
 
         </div>
+
+      </div>
     </div>
   </div>
-  
+
   <div class="col-1"></div>
 </div>
 
@@ -118,46 +118,80 @@
     <div class="card">
       <div class="card-body">
         <div class="row"><div class="col-6"><canvas id="engmt-overview"></canvas></div>
-        <div class="col-6">
-          <h4></h4>
-     
-        </div></div>
-
+          <div class="col-6">
+            <h4></h4>
+          </div></div>
         <div class="row">
           <h5>Details:</h5>
           <canvas id="engmt-details"></canvas>
         </div>
-        </div>
+      </div>
     </div>
   </div>
   <div class="col-5">
     <div class="card">
       <div class="card-body">
         <div class="row"><div class="col-6"><canvas id="engmt-overview"></canvas></div>
-        <div class="col-6">
-          <h4></h4>
-     
-        </div></div>
-
+          <div class="col-6">
+            <h4></h4>
+          </div></div>
         <div class="row">
           <h5>Details:</h5>
           <canvas id="engmt-details"></canvas>
         </div>
-        </div>
+      </div>
     </div>
   </div>
   <div class="col-1"></div>
 </div>
 
-{{!-- Tracking --}}
-<div class="row no-margin hidden" id="tracker">
+
+{{!-- TRACKING OPTIONS --}}
+<div class="row no-margin hidden" id="tracking-options">
   <div class="col-1"></div>
   <div class="col-10">
     <div class="card">
       <div class="card-body">
-        <div class="row"><h4>Week of {start_date} to {end_date}</h4></div>
+        <div class="input-group" id="input-track-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Add/show tracker for...</span>
+          </div>
+          <select class="custom-select" id="account-dropdown-track">
+          </select>
+          <div class="input-group-append">
+            <button class="btn btn-primary" id="add-tracker-btn">+</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  
+  <div class="col-1"></div>
+</div>
+
+{{!-- TRACKER --}}
+<div class="row no-margin hidden" id="tracker">
+
+  <div class="col-1"></div>
+  <div class="col-10">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10"><h4>Tracker - </h4></div>
+          <div class="col-2"><button type="button" class="btn btn-danger" id="stop-track-btn">Stop</button></div>
+
+</div>
+
+
+        <div class="row">
+          <div class="col-4" id="start-date">Started: </div>
+
+          <div class="col-3" id="status">Status: </div>
+
+          <div class="col-5">Showing engagement since: </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="col-1"></div>
 </div>
