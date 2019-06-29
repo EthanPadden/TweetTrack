@@ -3,6 +3,8 @@ Get todays date
 Get day of week => get mondays date
 Make ajax request for that date
 */
+var trackerIndex = -1;
+
 var started = false
 $('#track-tab').click(function(event) {
     // Display current trackers
@@ -21,7 +23,8 @@ $('#add-tracker-btn').click(function(event) {
         data: { 'handle': handle },
         success: function(data) {
             if (data.status == 0) {
-               updateTrackingStatus(index)
+                trackerIndex = index;
+               updateTrackingStatus(index, 1)
                displayTracker(index)
             } else if (data.status == -1) console.log("Error");
         },
@@ -31,14 +34,28 @@ $('#add-tracker-btn').click(function(event) {
     });
 });
 
-function updateTrackingStatus(i) {
+function updateTrackingStatus(i, cmd) {
+    // 0 - not tracking
+    // 1 - tracking
+    // 2 - stopping
+
     // Keep the accounts array moving the same as the table
     var n = i + 1
     var tableRow = $('#overview-table-body > tr:nth-child(' + n + ')')
     var cell = tableRow[0].cells[4].children[0]
-    $(cell).removeClass('not-tracking')
-    $(cell).addClass('tracking')
-    $(cell).html('Tracking')
+
+    if(cmd == 1) {
+        $(cell).removeClass('not-tracking')
+        $(cell).removeClass('stopping')
+        $(cell).addClass('tracking')
+        $(cell).html('Tracking')
+    } else if (cmd == 2) {
+        $(cell).removeClass('not-tracking')
+        $(cell).removeClass('tracking')
+        $(cell).addClass('stopping')
+        $(cell).html('Stopping')
+    }
+    
 }
 
 function displayTracker(i) {
@@ -49,8 +66,8 @@ function displayTracker(i) {
     $('#tracker').removeClass('hidden')
 }
 
-$('stop-track-btn').click(function() {
-    
+$('#stop-track-btn').click(function() {
+    updateTrackingStatus(trackerIndex, 2)
 })
 // function getPreviousMonday () {
 //   var date = new Date()

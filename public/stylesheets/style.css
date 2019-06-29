@@ -131,3 +131,6 @@ body {
 .not-tracking {
   background-color: var(--red)
 }
+.stopping {
+  background-color: var(--yellow)
+}
