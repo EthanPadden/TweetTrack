@@ -49,11 +49,13 @@ function updateTrackingStatus(i, cmd) {
         $(cell).removeClass('stopping')
         $(cell).addClass('tracking')
         $(cell).html('Tracking')
+        $('#tracker #status').html('Status: <span class="badge badge-secondary tracking">Active</span>')
     } else if (cmd == 2) {
         $(cell).removeClass('not-tracking')
         $(cell).removeClass('tracking')
         $(cell).addClass('stopping')
         $(cell).html('Stopping')
+        $('#tracker #status').html('Status: <span class="badge badge-secondary stopping">Stopping</span>')
     }
     
 }
@@ -62,7 +64,6 @@ function displayTracker(i) {
     $('#tracker h4').html('Tracking ' + window.accounts[i].name + '...')
     var startDate = new Date().toDateString();
     $('#tracker #start-date').html('Started: ' +startDate)
-    $('#tracker #status').html('Status: <span class="badge badge-secondary tracking">Active</span>')
     $('#tracker').removeClass('hidden')
 }
 
