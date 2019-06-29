@@ -6,7 +6,7 @@ var Tweets = require('../models/weeks')
 var fs = require('fs')
 const {fork} = require('child_process');
 var track;
-var killProcessTime = 2000;
+var killProcessTime = 3000;
 
 
 router.get('/trackUser', function(req, res, next){
@@ -44,16 +44,22 @@ router.get('/killTracker', function(req, res, next) {
 
   fs.readFile('proc.txt', function(err, data) {
       var processes = `${data}`.split('\n')
+      var dataStr = ""
       for(var i in processes) {
         if(processes[i].indexOf(handle) != -1) {
           var pid = processes[i].split(',')[0]
           toKill.push(pid)
+          processes.splice(i, 1)
+        } else dataStr += processes[i] + '\n'
+      }
+
+      fs.writeFile("proc.txt", dataStr, (err) => {
+        if (err) console.log(err);
+        else for(var i in toKill) {
+          exec('kill -9 ' + parseInt(toKill[i]))
         }
-      }
-      console.log(toKill)
-      for(var i in toKill) {
-        exec('kill -9 ' + parseInt(toKill[i]))
-      }
+      });
+      
   })
   setTimeout(function() {
     res.json({'trackers_killed': toKill.length})
