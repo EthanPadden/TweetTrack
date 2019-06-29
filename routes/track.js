@@ -6,7 +6,7 @@ var Tweets = require('../models/weeks')
 var fs = require('fs')
 const {fork} = require('child_process');
 var track;
-
+var killProcessTime = 2000;
 
 
 router.get('/trackUser', function(req, res, next){
@@ -23,10 +23,11 @@ router.get('/trackUser', function(req, res, next){
         if (track != null) break
       }
       var pid = track._handle.pid
-      fs.appendFile("proc.txt", pid, (err) => {
+      var handle = req.query.handle
+      fs.appendFile("proc.txt", pid + ',' + handle + '\n', (err) => {
         if (err) console.log(err);
       });
-      
+
       res.json({'tracker':0})
     // // Step 6
     // track.on('message', (msg) => {
@@ -35,67 +36,42 @@ router.get('/trackUser', function(req, res, next){
 });
 var killedProcesses;
 var status;
+
 router.get('/killTracker', function(req, res, next) {
-  exec('ps -x', (err, stdout, stderr) => {
-    if (err) {
-      console.error(`exec error: ${err}`);
-      return;
-    }
-  
-    var processes = `${stdout}`.split('\n')
+  var handle = req.query.handle
+  var toKill = []
 
-    var procToKill = []
-    for(var i in processes) if(processes[i].indexOf('java') != -1 && processes[i].indexOf(req.query.handle) != -1) procToKill.push(processes[i])
-    
-    
-    if(procToKill.length > 0) {
-      var PIDs = []
-      for(var i in procToKill) PIDs.push(procToKill[i].split(' ')[0])
 
-      // GETTING HERE
-      console.log("PID: " + PIDs)
-
-      status = 1;
-
-      killedProcesses = []
-      killProcesses(PIDs, 0)
-
-      // STATUS:
-      // 0 - success
-      // -2 - failure
-      // 1 - running
-
-      while(status = 1){}
-
-      if(status == 0) res.json({'status':status, 'killed_processes':killedProcesses}) 
-      else if(status == -2) res.json({'status':status})
-      else console.log('status: ' + status)
-
-    } else {
-      console.log("No processes found")
-      res.json({'status':-1})
-    }
-  });
-})
-
-function killProcesses(PIDs, i) {
-  if(i >= killProcesses.length) {
-    status = 0
-    return
-  } else {
-    exec('kill -9 ' + PIDs[i], function (err, stdout) {
-      console.log("Call")
-      if(err || stdout) {
-        status = -2
-        return
-      } else {
-        killedProcesses.push(PIDs[i])
-        killProcesses(PIDs, i+1)
+  fs.readFile('proc.txt', function(err, data) {
+      var processes = `${data}`.split('\n')
+      for(var i in processes) {
+        if(processes[i].indexOf(handle) != -1) {
+          var pid = processes[i].split(',')[0]
+          toKill.push(pid)
+        }
       }
-    })
-  }
-  
-}
+      console.log(toKill)
+      for(var i in toKill) {
+        exec('kill -9 ' + parseInt(toKill[i]))
+      }
+  })
+  setTimeout(function() {
+    res.json({'trackers_killed': toKill.length})
+  }, killProcessTime)
+  // i = 0;
+  // var killProc = spawn('kill', ['-9', parseInt(toKill[i])], { detached: false, stdio:'ignore' })
+
+  // var args = 'kill -9 ' + parseInt(toKill[0])
+  // killProc.on('exit', function (code, signal) {
+  //   console.log('child process exited with ' +
+  //               `code ${code} and signal ${signal}`);
+  // });
+
+  /*
+  // TODO - remove the ids from the file
+
+    */
+})
 
 router.get('/checkStatus', function(req, res, next){
     // {handle:String}
