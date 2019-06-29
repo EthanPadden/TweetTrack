@@ -43,8 +43,15 @@ function updateTrackingStatus(i) {
 
 function displayTracker(i) {
     $('#tracker h4').html('Tracking ' + window.accounts[i].name + '...')
+    var startDate = new Date().toDateString();
+    $('#tracker #start-date').html('Started: ' +startDate)
+    $('#tracker #status').html('Status: <span class="badge badge-secondary tracking">Active</span>')
     $('#tracker').removeClass('hidden')
 }
+
+$('stop-track-btn').click(function() {
+    
+})
 // function getPreviousMonday () {
 //   var date = new Date()
 //   var day = date.getDay()
