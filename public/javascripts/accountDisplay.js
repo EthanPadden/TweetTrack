@@ -19,7 +19,7 @@ $('#add-account-btn').click(function(event){
                     accounts.push(data);
                     addUserToTable(data);
                     addGraphOptions();
-                    updateGraphOptions(data);
+                    updateOptions(data);
                     window.accounts = accounts;
                     if(accounts.length == 2) hideHandleInput();
                 }
@@ -39,12 +39,13 @@ function hideHandleInput() {
     $('#input-handle-group').parent().addClass('hidden');
 }
 function addUserToTable(data) {
+    var indexOfUser = accounts.indexOf(data)
     var tableRow = '<tr>'
                 + '<th scope="row">' + data.name + '</th>'
                 + '<td>@' + data.handle + '</td>'
                 + '<td>' + data.tweetCount + '</td>'
                 + '<td>' + data.followersCount + '</td>'
-                + '<td><span class="badge badge-secondary not-tracking">Not tracking</span><span class="badge badge-secondary setup-btn">Set up</span></td>'
+                + '<td><span class="badge badge-secondary not-tracking">Not tracking</span></td>'
                 + '</tr>';
                 var tableHTML = $('#overview-table-body').html();
                 tableHTML += tableRow;
@@ -53,7 +54,7 @@ function addUserToTable(data) {
 
 $('#add-graph-btn').click(function(event){
     // Find the index of the selected option
-    var index = $('#account-dropdown option:selected').index();
+    var index = $('#account-dropdown-graph option:selected').index();
     var chartType = $("#chart-type-dropdown").val();
 
     // Find the handle of the selected account from array of data
@@ -154,9 +155,11 @@ function isHandleValid(handle) {
     if($('#nav-bar').hasClass('hidden')) $('#nav-bar').removeClass('hidden');
  }
 
- function updateGraphOptions(data) {
-    var html = $('#account-dropdown').html() + '<option>' + data.name + '</option>';
-    $('#account-dropdown').html(html);
+ function updateOptions(data) {
+    var html = $('#account-dropdown-graph').html() + '<option>' + data.name + '</option>';
+    $('#account-dropdown-graph').html(html);
+    var html = $('#account-dropdown-track').html() + '<option>' + data.name + '</option>';
+    $('#account-dropdown-track').html(html);
  }
 
  // x axis labels

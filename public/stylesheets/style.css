@@ -131,7 +131,3 @@ body {
 .not-tracking {
   background-color: var(--red)
 }
-.setup-btn {
-  background-color: #007bff;
-  margin-left: 1%;
-}

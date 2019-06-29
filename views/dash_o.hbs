@@ -12,7 +12,7 @@
             </div>
 
 
-                <select class="custom-select" id="account-dropdown">
+                <select class="custom-select" id="account-dropdown-graph">
                   
                 </select>
        
@@ -149,15 +149,40 @@
   <div class="col-1"></div>
 </div>
 
-{{!-- Tracking --}}
-<div class="row no-margin hidden" id="tracker">
-  <div class="col-1"></div>
-  <div class="col-10">
-    <div class="card">
-      <div class="card-body">
-        <div class="row"><h4>Week of {start_date} to {end_date}</h4></div>
+
+{{!-- TRACKING OPTIONS --}}
+<div class="row no-margin hidden" id="tracking-options">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <div class="card">
+        <div class="card-body">
+
+          <div class="input-group" id="input-track-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Add tracker for...</span>
+            </div>
+
+
+                <select class="custom-select" id="account-dropdown-track">
+                  
+                </select>
+       
+             
+   <div class="input-group-append">
+<button class="btn btn-primary" id="add-tracker-btn">+</button>
+
+   </div>
+
+          </div>
+
+
+
+            
+            
+          
+
+        </div>
+      </div>
     </div>
+    <div class="col-1"></div>
   </div>
-  
-  <div class="col-1"></div>
-</div>

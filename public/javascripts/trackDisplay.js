@@ -8,6 +8,30 @@ $('#track-tab').click(function (event) {
   // Display current trackers
 })
 
+$('#add-tracker-btn').click(function(event){
+  // Find the index of the selected option
+  var index = $('#account-dropdown-track option:selected').index();
+
+  // Find the handle of the selected account from array of data
+  var handle = window.accounts[index].handle;
+
+  // $.ajax({
+  //     type: 'GET',
+  //     url: '/account/getTweetInfo',
+  //     data: {'handle':handle, 'count':defaultNumTweets},
+  //     success: function(data){
+  //         if(data.status == 0) {
+  //             if(chartType == 'Likes') createLikesChart(data, handle);
+  //             else if(chartType == 'Retweets') createRTsChart(data, handle);
+              
+  //         }
+  //         else if (data.status == -1) console.log("Error");
+  //     },
+  //     error: function(errMsg) {
+  //         console.log(errMsg);
+  //     }
+  // });
+});
 
 function displayTrackingInfo(dates, data) {
     $('#tracker h4').html('Week of ' + dates[0] + ' to ' + dates[1])
