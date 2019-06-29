@@ -11,7 +11,7 @@ var killProcessTime = 3000
 router.get('/trackUser', function (req, res, next) {
   // {handle:String}
   var handle = req.query.handle
-  track = spawn('java', ['-jar', 'java/TweetTrack.jar', 'tracker', 'init', handle, 'mentions.txt'], { detached: true, stdio: 'ignore' })
+  track = spawn('java', ['-jar', 'java/TweetTrack.jar', 'tracker', 'init', handle], { detached: true, stdio: 'ignore' })
   track.unref() // Stops parent from waiting for tracker to exit
 
   while (true) if (track != null) break
@@ -47,22 +47,11 @@ router.get('/killTracker', function (req, res, next) {
       }
     })
   })
+
   setTimeout(function () {
     res.json({ 'trackers_killed': toKill.length })
   }, killProcessTime)
-  // i = 0
-  // var killProc = spawn('kill', ['-9', parseInt(toKill[i])], { detached: false, stdio:'ignore' })
 
-  // var args = 'kill -9 ' + parseInt(toKill[0])
-  // killProc.on('exit', function (code, signal) {
-  //   console.log('child process exited with ' +
-  //               `code ${code} and signal ${signal}`)
-  // })
-
-/*
-// TODO - remove the ids from the file
-
-  */
 })
 
 router.get('/checkStatus', function (req, res, next) {
