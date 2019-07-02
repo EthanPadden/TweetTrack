@@ -3,7 +3,7 @@ var router = express.Router();
 const { spawn } = require('child_process');
 const exec = require('child_process').exec;
 var fs = require('fs'); 
-var Tweets = require('../models/weeks');
+// var Tweets = require('../models/weeks');
 
 
 router.get('/getBasicInfo', function(req, res ,next){
