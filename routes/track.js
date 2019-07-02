@@ -70,8 +70,18 @@ router.get('/killTracker', function (req, res, next) {
         exec('kill -9 ' + parseInt(pid))
       }
         setTimeout(function () {
-    res.json({ 'trackers_killed': trackers.length })
-  }, killProcessTime)
+          var allOk = true
+          for(var i in trackers) {
+            Trackers.deleteMany({_id:trackers[i]._id}, function(err, trackers){
+              if(err)
+                  allOk = false
+          });
+
+          }
+          if(allOk) 
+            res.json({ 'trackers_killed': trackers.length })
+          else res.json({'status':'error_db_remove'})
+        }, killProcessTime)
     } else {
       res.json({'status':'tracker_not_found'})
     }
