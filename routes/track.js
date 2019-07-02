@@ -46,7 +46,7 @@ router.get('/trackUser', function (req, res, next) {
                   tracker.save(function(err, tracker) {
                     if (err)
                         throw err;
-                        res.json({'status':'tracker_set'})
+                        res.json({'status':0})
                 });
             }
         });
@@ -61,7 +61,7 @@ router.get('/trackUser', function (req, res, next) {
 }, idPrintTime)})
 
 router.get('/killTracker', function (req, res, next) {
-
+  console.log("Request to kill trackers for " + req.query.handle)
   Trackers.find({handle:req.query.handle}, function(err, trackers){
     if(err) res.send(err)
     else if(trackers) {
