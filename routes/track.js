@@ -104,6 +104,30 @@ router.get('/killTracker', function (req, res, next) {
   })
 
   
+  router.get('/getStats', function (req, res, next) {
+    // Currently based on the assumption that there will only be one tracker per handle
+    /** APPROACH:
+     * Check if there is a tracker running for a particular user
+     * If there isnt, respond with the last stats gathered and a status 1
+     * If there is, respond with the current stats and a status 0
+     */
+
+    console.log("Request to get stats from tracker for " + req.query.handle)
+    Trackers.findOne({handle:req.query.handle}, function(err, tracker){
+      if(err) res.send(err)
+      else if(tracker) {
+        calculateStats()
+      } else {
+        res.json({'status':1})
+      }
+    })
+  })
+
+  function calculateStats(tracker) {
+    console.log('Gathering statistics...')
+    // Construct a JSON object by searching for stats in the DB
+  }
+
 
   // fs.readFile('proc.txt', function (err, data) {
   //   var processes = `${data}`.split('\n')
