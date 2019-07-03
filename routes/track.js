@@ -14,11 +14,16 @@ router.get('/trackUser', function (req, res, next) {
   // {handle:String}
   var handle = req.query.handle
 
-  var track = spawn('java', ['-jar', 'java/TweetTrack.jar', 'tracker', handle], { detached: true })
+  var track = spawn('java', ['-jar', 'java/TweetTrack.jar', 'tracker', handle], { detached: true, stdio: ['pipe','pipe','pipe'] })
   track.unref() // Stops parent from waiting for tracker to exit
 
+  console.log('1 - ' + (track == null))
   while (true) if (track != null) break // Wait for process to start
+  track.stdout.pipe(process.stdout)
+  console.log('2 - ' + (track == null))
+  
 
+  // console.log(track)
   // APPROACH:
   // Java starts tracker
   // JS waits for a short period of time
@@ -27,27 +32,38 @@ router.get('/trackUser', function (req, res, next) {
   // JS clears file fs.truncate('/path/to/file', 0, function(){console.log('done')})
 
   setTimeout(function() {
-  	 var pid = track._handle.pid
+  console.log('3 - ' + (track == null))
+
+    // console.log(track)
+  	 var pid = track.pid
 
      fs.readFile('trackerid.txt', function (err, data) {
       var data = `${data}`;
-  
+        console.log('A')
       if(data.indexOf('ID') == -1) {
         res.json({'status' : 'error'})
       } else {
+        console.log('B')
+
         var trackerID = data.split(':')[1];
         // var trackerIDObj = ObjectID(trackerID)
         var idToSch = trackerID.split('\n')[0]
         Trackers.findOne({_id:idToSch}, function (err,tracker) {
+        console.log('C')
+
             if (err)
                 res.send(err);
             else if(tracker) {
+              console.log('D')
                   tracker.pid = pid;
                   tracker.save(function(err, tracker) {
                     if (err)
                         throw err;
+                    console.log('E')
                         res.json({'status':0})
                 });
+            } else {
+              console.log('err')
             }
         });
       }
