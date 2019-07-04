@@ -103,7 +103,7 @@ router.get('/killTracker', function (req, res, next) {
     }
   })
 
-  
+})
   router.get('/getStats', function (req, res, next) {
     // Currently based on the assumption that there will only be one tracker per handle
     /** APPROACH:
@@ -116,15 +116,16 @@ router.get('/killTracker', function (req, res, next) {
     Trackers.findOne({handle:req.query.handle}, function(err, tracker){
       if(err) res.send(err)
       else if(tracker) {
-        calculateStats()
+        calculateStats(tracker._id)
       } else {
         res.json({'status':1})
       }
     })
   })
 
-  function calculateStats(tracker) {
-    console.log('Gathering statistics...')
+  function calculateStats(idObj) {
+    var idStr = String(idObj)
+    console.log('Gathering statistics...' + idStr)
     // Construct a JSON object by searching for stats in the DB
   }
 
@@ -153,7 +154,6 @@ router.get('/killTracker', function (req, res, next) {
   //   res.json({ 'trackers_killed': toKill.length })
   // }, killProcessTime)
 
-})
 
 router.get('/checkStatus', function (req, res, next) {
   // {handle:String}
