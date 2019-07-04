@@ -4,6 +4,7 @@ const spawn = require('child_process').spawn
 const { exec } = require('child_process')
 // var Tweets = require('../models/weeks')
 var Trackers = require('../models/trackers')
+var Tweets = require('../models/tweets')
 var fs = require('fs')
 const { fork } = require('child_process')
 var killProcessTime = 3000
@@ -116,16 +117,36 @@ router.get('/killTracker', function (req, res, next) {
     Trackers.findOne({handle:req.query.handle}, function(err, tracker){
       if(err) res.send(err)
       else if(tracker) {
-        calculateStats(tracker._id)
-      } else {
-        res.json({'status':1})
+        if(!tracker._id) res.json({'status':2})
+        calculateStats(String(tracker._id), res, null, 0)
+       
       }
     })
   })
 
-  function calculateStats(idObj) {
-    var idStr = String(idObj)
-    console.log('Gathering statistics...' + idStr)
+  function calculateStats(id, res, stats, sch) {
+    console.log('Gathering statistics...' + id)
+
+    Tweets.find({tracker_id:id}, function(err, tweets){
+      if(err) res.send(err)
+      else {
+        var likesCount = 0
+        var rtCount = 0
+        for(var i in tweets) {
+          likesCount += tweets[i].favourite_count
+          rtCount += tweets[i].rt_count
+        }
+
+        stats = {
+          'tweet_count':tweets.length,
+          'likes_count':likesCount,
+          'rt_count':rtCount
+        }
+      
+        res.json({'stats':stats})
+
+      } 
+    })
     // Construct a JSON object by searching for stats in the DB
   }
 
