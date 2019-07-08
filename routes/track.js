@@ -120,7 +120,6 @@ router.get('/killTracker', function (req, res, next) {
       else if(tracker) {
         if(!tracker._id) res.json({'status':2})
         calculateStats(String(tracker._id), res, null, 0)
-       
       }
     })
   })
