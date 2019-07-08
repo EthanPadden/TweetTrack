@@ -1,5 +1,3 @@
-import { stat } from "fs";
-
 function calculateEngagement(tweets, f) {
     // Recheck so that the engagement is calculated using the avgs not the totals
     var l = 0;
