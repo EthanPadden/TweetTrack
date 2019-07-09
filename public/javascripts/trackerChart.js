@@ -1,3 +1,4 @@
+
 //Sample
 
 function trackerEngmtChart(stats, handle) {
@@ -59,5 +60,7 @@ function constructChart(stats, followers) {
 }
 
 function displayStats(stats) {
-    
+    $('#tracker #avg-likes').html('Average likes: ' + stats.avg_likes)
+    $('#tracker #avg-rts').html('Average retweets: ' + stats.avg_rts)
+    $('#tracker #mentions').html('Mentions: ' + stats.mentions)
 }
