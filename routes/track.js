@@ -21,7 +21,7 @@ router.get('/trackUser', function (req, res, next) {
 
   console.log('1 - ' + (track == null))
   while (true) if (track != null) break // Wait for process to start
-  track.stdout.pipe(process.stdout)
+  // track.stdout.pipe(process.stdout)
   console.log('2 - ' + (track == null))
   
 
