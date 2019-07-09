@@ -2,6 +2,7 @@
 //Sample
 
 function trackerEngmtChart(stats, handle) {
+    // console.log(stats)
     // Get the followers count of the handle:
     $.ajax({
         type: 'GET',
@@ -9,7 +10,7 @@ function trackerEngmtChart(stats, handle) {
         data: {'handle':handle},
         success: function(data){
             if(data.status == 0) {
-                constructChart(stats, data.followersCount)
+                constructChart(stats, data.followersCount, handle)
             }
             else if (data.status == -1) alert('Account not found for tracking')
         },
@@ -19,15 +20,18 @@ function trackerEngmtChart(stats, handle) {
     });
 }
 
-function constructChart(stats, followers) {
+function constructChart(stats, followers, handle) {
+    // console.log(stats)
     var results = calculateEngagementFromStats(stats, followers)
+    
     var engagement = results.engagement
     var mentions = stats.mentions_count
 
-    console.log("RES: " + results.avg_rts)
-    console.log("STATS: " + stats)
+    console.log(results)
+    // console.log(stats)
 
-    var ctx = $('#tracker #engmt-chart')
+    var selector = '#tracker-section #tracker-' + handle + ' #engmt-chart'
+    var ctx = $(selector)
 
     // var dataset = [engagement, 100-engagement];
 
@@ -59,8 +63,9 @@ function constructChart(stats, followers) {
     displayStats(calculatedStats)
 }
 
-function displayStats(stats) {
-    $('#tracker #avg-likes').html('Average likes: ' + stats.avg_likes)
-    $('#tracker #avg-rts').html('Average retweets: ' + stats.avg_rts)
-    $('#tracker #mentions').html('Mentions: ' + stats.mentions)
+function displayStats(stats, handle) {
+    var selector = '#tracker-section #tracker-' + handle
+    $(selector + ' #avg-likes').html('Average likes: ' + stats.avg_likes)
+    $(selector + ' #avg-rts').html('Average retweets: ' + stats.avg_rts)
+    $(selector + ' #mentions').html('Mentions: ' + stats.mentions)
 }

@@ -6,13 +6,14 @@ function getRunningTrackers() {
         url: '/track/runningTrackers',
         success: function(data) {
             if (data.status == 0) {
-               console.log(data)
+            //    console.log(data)
                for(var i in data.trackers) {
-                   addAccount(data.trackers[i].handle, true)
-
-               constructTracker(data.trackers[i].handle)
-                   
+                   var handle = data.trackers[i].handle
+                   addAccount(handle, true)
+                    constructTracker(handle)
+                   updateStats(handle)
                }
+
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },
@@ -22,16 +23,16 @@ function getRunningTrackers() {
     });
 }
 
-function updateStats() {
-    // This will, in future, take an array of trackers/handles and update each one
+function updateStats(handle) {
     $.ajax({
         type: 'GET',
         url: '/track/getStats',
         data: { 'handle': handle },
         success: function(data) {
             if (data.status == 0) {
-               console.log(data)
-               updateTrackerDisplay(data.stats)
+            //    console.log("STATS RETURNED " + handle)
+                // console.log(data)
+               updateTrackerDisplay(data.stats, handle)
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },
@@ -41,7 +42,8 @@ function updateStats() {
     });
 }
 
-function updateTrackerDisplay(stats) {
-    $('#tracker #last-updated').html('Last updated: ' + new Date().toString().split(' GMT')[0])
-    trackerEngmtChart(stats, testHandle)
+function updateTrackerDisplay(stats, handle) {
+    var selector = '#tracker-section #tracker-' + handle + ' #last-updated'
+    $(selector).html('Last updated: ' + new Date().toString().split(' GMT')[0])
+    trackerEngmtChart(stats, handle)
 }
