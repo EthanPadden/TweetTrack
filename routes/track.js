@@ -160,30 +160,6 @@ router.get('/killTracker', function (req, res, next) {
   }
 
 
-  // fs.readFile('proc.txt', function (err, data) {
-  //   var processes = `${data}`.split('\n')
-  //   var dataStr = ''
-  //   for (var i in processes) {
-  //     if (processes[i].indexOf(handle) != -1) {
-  //       var pid = processes[i].split(',')[0]
-  //       toKill.push(pid)
-  //       processes.splice(i, 1)
-  //     } else dataStr += processes[i] + '\n'
-  //   }
-
-  //   fs.writeFile('proc.txt', dataStr, (err) => {
-  //     if (err) console.log(err)
-  //     else
-  //       for (var i in toKill) {
-  //         exec('kill -9 ' + parseInt(toKill[i]))
-  //     }
-  //   })
-  // })
-
-  // setTimeout(function () {
-  //   res.json({ 'trackers_killed': toKill.length })
-  // }, killProcessTime)
-
 
 router.get('/checkStatus', function (req, res, next) {
   // {handle:String}
@@ -201,6 +177,25 @@ router.get('/checkStatus', function (req, res, next) {
       }
     })
   }, 6000)
+})
+
+router.get('/runningTrackers', function (req, res, next) {
+  Trackers.find(function(err, trackers){
+    if(err) res.send(err)
+    else if(trackers) {
+      trackerInfo = []
+      for(var i in trackers) {
+        t = {
+          'handle':trackers[i].handle,
+          'start_date':trackers[i].start_date
+        }
+        trackerInfo.push(t)
+      }
+      res.json({'status':0, 'trackers':trackerInfo})
+    } else {
+      res.json({'status':'tracker_not_found'})
+    }
+  })
 })
 
 process.on('exit', function () {
