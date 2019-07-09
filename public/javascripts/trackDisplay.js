@@ -39,13 +39,13 @@ function updateTrackingStatus(i, cmd) {
     // 0 - not tracking
     // 1 - tracking
     // 2 - stopping
-    console.log("Update: " + i + " to " + cmd)
+    // console.log("Update: " + i + " to " + cmd)
 
     // Keep the accounts array moving the same as the table
     var n = i + 1
     var tableRow = $('#overview-table-body > tr:nth-child(' + n + ')')
     var cell = tableRow[0].cells[4].children[0]
-    console.log(cell)
+    // console.log(cell)
 
     if(cmd == 0) {
         $(cell).removeClass('tracking')
