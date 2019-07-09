@@ -1,14 +1,20 @@
-// $(document).ready(updateStats);
-var testStats = {
+$(document).ready(getRunningTrackers)
 
-        'tweet_count':10,
-        'likes_count':567,
-        'rt_count':324,
-        'mentions_count':1435
+function getRunningTrackers() {
+    $.ajax({
+        type: 'GET',
+        url: '/track/runningTrackers',
+        success: function(data) {
+            if (data.status == 0) {
+               console.log(data)
+            } else if(data.status) console.log("Error: status " + data.status);
+            else console.log("Error: no status available");
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
 }
-
-var testHandle = 'elonmusk'
-$(document).ready(updateTrackerDisplay(testStats));
 
 function updateStats() {
     // This will, in future, take an array of trackers/handles and update each one
