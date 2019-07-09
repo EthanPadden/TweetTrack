@@ -3,6 +3,7 @@ Get todays date
 Get day of week => get mondays date
 Make ajax request for that date
 */
+
 var trackerIndex = -1;
 
 var started = false

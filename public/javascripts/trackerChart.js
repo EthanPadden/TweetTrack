@@ -18,9 +18,6 @@ function trackerEngmtChart(stats, handle) {
     });
 
     
-    // var results = calculateEngagement(data.tweetStream, user.followersCount);
-    // var engagement = results.engagement;
-    // var nthchild = parseInt(index) + 2;
     // var selector = '#engagementChart > div:nth-child(' + nthchild + ')';
     // var ctx = $(selector + ' #engmt-overview');
     // var detailedCtx = $(selector + ' #engmt-details');
@@ -69,5 +66,33 @@ function trackerEngmtChart(stats, handle) {
 }
 
 function constructChart(stats, followers) {
-    
+    var results = calculateEngagementFromStats(stats, followers)
+    var engagement = results.engagement
+    var mentions = stats.mentions
+
+    var ctx = $('#tracker #engmt-chart')
+
+    // var dataset = [engagement, 100-engagement];
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+        labels: ["Avg Likes","Avg Retweets", "Mentions"],
+
+        datasets: [
+            {
+            backgroundColor: ['#FFE400', '#FF652F', '#14A76C'],
+            data: [(100*results['avg_likes']), (results['avg_RTs']*1000), mentions]
+            }
+        ]
+        },
+        options: {
+        title: {
+            display: true,
+            text: 'Contribution to metric'
+        }
+        }
+    });
+
+        
 }
