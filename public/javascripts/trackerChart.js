@@ -16,59 +16,15 @@ function trackerEngmtChart(stats, handle) {
             console.log(errMsg);
         }
     });
-
-    
-    // var selector = '#engagementChart > div:nth-child(' + nthchild + ')';
-    // var ctx = $(selector + ' #engmt-overview');
-    // var detailedCtx = $(selector + ' #engmt-details');
-
-    // var dataset = [engagement, 100-engagement];
-    // new Chart(detailedCtx, {
-    //     type: 'pie',
-    //     data: {
-    //       labels: ["Avg Likes","Avg Retweets"],
-
-    //       datasets: [
-    //         {
-    //           backgroundColor: ['#FFE400', '#FF652F'],
-    //           data: [results['avg-likes'], (results['avg-RTs']*10)]
-    //         }
-    //       ]
-    //     },
-    //     options: {
-    //       title: {
-    //         display: true,
-    //         text: 'Contribution to metric'
-    //       }
-    //     }
-    // });
-    
-
-    // var chartData = {
-    //     datasets: [{
-    //         // line label
-    //         label: 'Engagement',
-    //         // values to be plotted
-    //         data: dataset,
-    //         backgroundColor: [greenTheme, '#ffffff']
-    //     }]
-    // };
-
-
-    // var myDoughnutChart = new Chart(ctx, {
-    //     type: 'doughnut',
-    //     data: chartData,
-    //     // options: options
-    // });
-    // console.log(user);
-    // $(selector + ' h4').html(user.name + ':\n' + Math.round(engagement) + '%');
-    // if(index == 1) $('#engagementChart').removeClass('hidden');
 }
 
 function constructChart(stats, followers) {
     var results = calculateEngagementFromStats(stats, followers)
     var engagement = results.engagement
-    var mentions = stats.mentions
+    var mentions = stats.mentions_count
+
+    console.log("RES: " + results.avg_rts)
+    console.log("STATS: " + stats)
 
     var ctx = $('#tracker #engmt-chart')
 
@@ -82,7 +38,7 @@ function constructChart(stats, followers) {
         datasets: [
             {
             backgroundColor: ['#FFE400', '#FF652F', '#14A76C'],
-            data: [(100*results['avg_likes']), (results['avg_RTs']*1000), mentions]
+            data: [(100*results['avg_likes']), (results['avg_rts']*1000), mentions]
             }
         ]
         },
@@ -94,5 +50,14 @@ function constructChart(stats, followers) {
         }
     });
 
-        
+    calculatedStats = {
+        'avg_likes':results.avg_likes,
+        'avg_rts':results.avg_likes,
+        'mentions':mentions
+    }
+    displayStats(calculatedStats)
+}
+
+function displayStats(stats) {
+    
 }
