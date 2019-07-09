@@ -7,6 +7,7 @@ function getRunningTrackers() {
         success: function(data) {
             if (data.status == 0) {
                console.log(data)
+               constructTracker('elonmusk')
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },
