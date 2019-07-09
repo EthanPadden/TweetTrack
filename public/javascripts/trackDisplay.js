@@ -166,7 +166,7 @@ function getMonday(d) {
   </div>
   <div class="col-1"></div>*/
 function constructTracker(handle) {
-    var html = '<div class="col"><div class="row no-margin tracker" id="tracker-' + handle + '">'
+    var html = '<div class="row no-margin tracker" id="tracker-' + handle + '">'
     + '<div class="col-1"></div>'
     + '<div class="col-10">'
     + '<div class="card">'
@@ -190,10 +190,10 @@ function constructTracker(handle) {
            + '<div id="avg-rts">Average Retweets: </div>'
             +'<div id="mentions">Mentions: </div>'
          + '</div></div></div></div></div>'
-+  '<div class="col-1"></div></div></div>'
++  '<div class="col-1"></div></div>'
 
     var currentHtml = 
-    $('#tracker-section').html()
+    $('#tracker-section > div.col').html()
 
-    $('#tracker-section').html(currentHtml + html)
+    $('#tracker-section > div.col').html(currentHtml + html)
 }
