@@ -7,28 +7,32 @@ $('#handle-input').keyup(function(event){
     var handle = event.target.value;
     isHandleValid(handle);
 });
+
+function addAccount(handle) {
+    $.ajax({
+        type: 'GET',
+        url: '/account/getBasicInfo',
+        data: {'handle':handle},
+        success: function(data){
+            if(data.status == 0) {
+                accounts.push(data);
+                addUserToTable(data);
+                addGraphOptions();
+                updateOptions(data);
+                window.accounts = accounts;
+                if(accounts.length == 2) hideHandleInput();
+            }
+            else if (data.status == -1) $('#handle-msg').html("Account not found");
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
+}
 $('#add-account-btn').click(function(event){
     var handle = $('#handle-input').val();
     if (isHandleValid(handle)) {
-        $.ajax({
-            type: 'GET',
-            url: '/account/getBasicInfo',
-            data: {'handle':handle},
-            success: function(data){
-                if(data.status == 0) {
-                    accounts.push(data);
-                    addUserToTable(data);
-                    addGraphOptions();
-                    updateOptions(data);
-                    window.accounts = accounts;
-                    if(accounts.length == 2) hideHandleInput();
-                }
-                else if (data.status == -1) $('#handle-msg').html("Account not found");
-            },
-            error: function(errMsg) {
-                console.log(errMsg);
-            }
-        });
+        addAccount(handle)
     } 
 });
 
