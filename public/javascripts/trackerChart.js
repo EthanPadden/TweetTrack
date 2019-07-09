@@ -21,7 +21,7 @@ function trackerEngmtChart(stats, handle) {
 }
 
 function constructChart(stats, followers, handle) {
-    // console.log(stats)
+    // console.log(handle)
     var results = calculateEngagementFromStats(stats, followers)
     
     var engagement = results.engagement
@@ -60,11 +60,12 @@ function constructChart(stats, followers, handle) {
         'avg_rts':results.avg_likes,
         'mentions':mentions
     }
-    displayStats(calculatedStats)
+    displayStats(calculatedStats, handle)
 }
 
 function displayStats(stats, handle) {
     var selector = '#tracker-section #tracker-' + handle
+    console.log(selector)
     $(selector + ' #avg-likes').html('Average likes: ' + stats.avg_likes)
     $(selector + ' #avg-rts').html('Average retweets: ' + stats.avg_rts)
     $(selector + ' #mentions').html('Mentions: ' + stats.mentions)
