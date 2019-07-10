@@ -3,6 +3,7 @@ Get todays date
 Get day of week => get mondays date
 Make ajax request for that date
 */
+
 var trackerIndex = -1;
 
 var started = false
@@ -38,13 +39,13 @@ function updateTrackingStatus(i, cmd) {
     // 0 - not tracking
     // 1 - tracking
     // 2 - stopping
-    console.log("Update: " + i + " to " + cmd)
+    // console.log("Update: " + i + " to " + cmd)
 
     // Keep the accounts array moving the same as the table
     var n = i + 1
     var tableRow = $('#overview-table-body > tr:nth-child(' + n + ')')
     var cell = tableRow[0].cells[4].children[0]
-    console.log(cell)
+    // console.log(cell)
 
     if(cmd == 0) {
         $(cell).removeClass('tracking')
@@ -131,4 +132,80 @@ function getMonday(d) {
     if (m.length == 1) m = '0' + m
     var endDate = d + '/' + m + '/' + nextMonday.getFullYear().toString()
     return [startDate, endDate];
+}
+
+/*<div class="col-1"></div>
+  <div class="col-10">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10"><h4>Tracker - </h4></div>
+          <div class="col-2"><button type="button" class="btn btn-danger" id="stop-track-btn">Stop</button></div>
+
+</div>
+
+
+        <div class="row">
+          <div class="col-4" id="start-date">Started: </div>
+
+          <div class="col-3" id="status">Status: </div>
+
+          <div class="col-5" id="last-updated">Last updated: </div>
+
+        </div>
+        <div class="row">
+          <div class="col-6"><canvas id="engmt-chart"></canvas></div>
+          <div class="col-6">
+            <div id="avg-likes">Average Likes: </div>
+            <div id="avg-rts">Average Retweets: </div>
+            <div id="mentions">Mentions: </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-1"></div>*/
+function constructTracker(handle) {
+    var html = '<div class="row no-margin tracker" id="tracker-' + handle + '">'
+    + '<div class="col-1"></div>'
+    + '<div class="col-10">'
+    + '<div class="card">'
+    + '<div class="card-body">'
+    + '<div class="row">'
+    + '<div class="col-10"><h4 id="name">Tracker - </h4></div>'
+    + '<div class="col-2"><button type="button" class="btn btn-danger" id="stop-track-btn">Stop</button></div>'
+    + '</div>'
+     +   '<div class="row">'
+      +    '<div class="col-4" id="start-date">Started: </div>'
+
+       +   '<div class="col-3" id="status">Status: </div>'
+
+        +  '<div class="col-5" id="last-updated">Last updated: </div>'
+
+        +'</div>'
+        +'<div class="row">'
+        + '<div class="col-6"><canvas id="engmt-chart"></canvas></div>'
+         + '<div class="col-6">'
+          +  '<div id="avg-likes">Average Likes: </div>'
+           + '<div id="avg-rts">Average Retweets: </div>'
+            +'<div id="mentions">Mentions: </div>'
+         + '</div></div></div></div></div>'
++  '<div class="col-1"></div></div>'
+
+    var currentHtml = 
+    $('#tracker-section > div.col').html()
+
+    $('#tracker-section > div.col').html(currentHtml + html)
+}
+
+function displayTrackerDetails(tracker) {
+    var selector = '#tracker-section #tracker-' + tracker.handle
+   
+    $(selector + ' #start-date').html('Started: ' + tracker.start_date.split(' IST')[0])    
+    $(selector + ' #status').html('Status: tracking')  
+    
+    
+    var i = accounts.map(function(e) { return e.handle; }).indexOf(tracker.handle);
+    var name = accounts[i].name
+    $(selector + ' #name').html('Tracker - ' + name)
 }

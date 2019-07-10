@@ -7,28 +7,35 @@ $('#handle-input').keyup(function(event){
     var handle = event.target.value;
     isHandleValid(handle);
 });
+
+function addAccount(h, isTracking) {
+    $.ajax({
+        type: 'GET',
+        url: '/account/getBasicInfo',
+        data: {'handle':h},
+        success: function(data){
+            if(data.status == 0) {
+                accounts.push(data);
+                addUserToTable(data);
+                addGraphOptions();
+                updateOptions(data);
+                window.accounts = accounts;
+                if(accounts.length == 2) hideHandleInput();
+                var i = accounts.map(function(e) { return e.handle; }).indexOf(data.handle);
+                if(isTracking) updateTrackingStatus(i, 1)
+            }
+            else if (data.status == -1) $('#handle-msg').html("Account not found");
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
+}
+
 $('#add-account-btn').click(function(event){
     var handle = $('#handle-input').val();
     if (isHandleValid(handle)) {
-        $.ajax({
-            type: 'GET',
-            url: '/account/getBasicInfo',
-            data: {'handle':handle},
-            success: function(data){
-                if(data.status == 0) {
-                    accounts.push(data);
-                    addUserToTable(data);
-                    addGraphOptions();
-                    updateOptions(data);
-                    window.accounts = accounts;
-                    if(accounts.length == 2) hideHandleInput();
-                }
-                else if (data.status == -1) $('#handle-msg').html("Account not found");
-            },
-            error: function(errMsg) {
-                console.log(errMsg);
-            }
-        });
+        addAccount(handle, false)
     } 
 });
 
@@ -391,27 +398,4 @@ function displayEngagementChart(user, data, index) {
     console.log(user);
     $(selector + ' h4').html(user.name + ':\n' + Math.round(engagement) + '%');
     if(index == 1) $('#engagementChart').removeClass('hidden');
-}
-
-function calculateEngagement(tweets, f) {
-    var l = 0;
-    var r = 0;
-    var t = tweets.length;
-    for(var i in tweets) {
-        l += tweets[i].favourite_count;
-        r += tweets[i].rt_count;
-    }
-
-    var egmt = (100/(f*t))*((l*100)+(r*1000));
-   
-    var avgL = l/t;
-    var avgR = r/t;
-
-    var results = {
-        "avg-likes":avgL,
-        "avg-RTs":avgR,
-        "engagement":egmt
-    }
-    
-    return results;
 }

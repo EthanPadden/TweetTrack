@@ -169,6 +169,10 @@
 </div>
 
 {{!-- TRACKER --}}
+<div class="row no-margin hidden" id="tracker-section">
+  <div class="col"></div>
+</div>
+
 <div class="row no-margin hidden" id="tracker">
 
   <div class="col-1"></div>
@@ -187,8 +191,16 @@
 
           <div class="col-3" id="status">Status: </div>
 
-          <div class="col-5">Showing engagement since: </div>
+          <div class="col-5" id="last-updated">Last updated: </div>
 
+        </div>
+        <div class="row">
+          <div class="col-6"><canvas id="engmt-chart"></canvas></div>
+          <div class="col-6">
+            <div id="avg-likes">Average Likes: </div>
+            <div id="avg-rts">Average Retweets: </div>
+            <div id="mentions">Mentions: </div>
+          </div>
         </div>
       </div>
     </div>

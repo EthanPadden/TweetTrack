@@ -121,8 +121,12 @@ body {
   margin: 3%;
 }
 
-#tracker div.card-body > div {
+.tracker div.card-body > div {
   padding: 0 5% 0 5%;
+}
+
+.tracker {
+  padding-bottom: 0.6% 
 }
 
 .tracking {
@@ -133,4 +137,8 @@ body {
 }
 .stopping {
   background-color: var(--yellow)
+}
+
+#tracker-section > div {
+  padding: 0%
 }

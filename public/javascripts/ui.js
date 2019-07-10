@@ -2,7 +2,7 @@ $('#graph-tab').click(function (event) {
   $(event.target).addClass('active')
   $('#compare-tab').removeClass('active')
   $('#track-tab').removeClass('active')
-  $('#tracker').addClass('hidden')
+  $('#tracker-section').addClass('hidden')
   $('#tracking-options').addClass('hidden')
   showGraphs()
 })
@@ -13,7 +13,7 @@ $('#compare-tab').click(function (event) {
   $('#track-tab').removeClass('active')
   $('#engagement-options').removeClass('hidden')
   $('#tracking-options').addClass('hidden')
-  $('#tracker').addClass('hidden')
+  $('#tracker-section').addClass('hidden')
   hideGraphs()
 })
 
@@ -24,6 +24,7 @@ $('#track-tab').click(function (event) {
   $('#engagement-options').addClass('hidden')
   $('#engagementChart').addClass('hidden')
   $('#tracking-options').removeClass('hidden')
+  $('#tracker-section').removeClass('hidden')
   hideGraphs()
 })
 
