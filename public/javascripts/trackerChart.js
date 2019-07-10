@@ -27,7 +27,7 @@ function constructChart(stats, followers, handle) {
     var engagement = results.engagement
     var mentions = stats.mentions_count
 
-    console.log(results)
+    // console.log(results)
     // console.log(stats)
 
     var selector = '#tracker-section #tracker-' + handle + ' #engmt-chart'
@@ -65,7 +65,7 @@ function constructChart(stats, followers, handle) {
 
 function displayStats(stats, handle) {
     var selector = '#tracker-section #tracker-' + handle
-    console.log(selector)
+    // console.log(selector)
     $(selector + ' #avg-likes').html('Average likes: ' + stats.avg_likes)
     $(selector + ' #avg-rts').html('Average retweets: ' + stats.avg_rts)
     $(selector + ' #mentions').html('Mentions: ' + stats.mentions)

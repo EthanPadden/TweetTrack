@@ -14,6 +14,10 @@ function getRunningTrackers() {
                    updateStats(handle)
                }
 
+               processReturnedTrackers(data.trackers, 0)
+
+               
+
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },
@@ -21,6 +25,15 @@ function getRunningTrackers() {
             console.log(errMsg);
         }
     });
+}
+
+function processReturnedTrackers(trackers, i) {
+    if(i >= trackers.length) return
+    setTimeout(function(){
+        console.log(trackers[i])
+        displayTrackerDetails(trackers[i])
+        processReturnedTrackers(trackers, ++i)
+ }, 2000)
 }
 
 function updateStats(handle) {
