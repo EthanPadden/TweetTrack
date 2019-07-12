@@ -247,8 +247,11 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
 
   // Get mentions 3 hrs before
   // Get mentions 3 hrs after
+
   
-  
+  var isoDateStr = mongodbDateToISO(createdAt)
+  console.log(isoDateStr)
+
   
 
   // Mentions.find({tracker_id:id, })
@@ -260,5 +263,27 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
   }
   
 }
+
+var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ]
+
+function mongodbDateToISO(dateStr) {
+  // ISO format = YYYY-MM-DDTHH:MM:SS
+  // Thu Jul 11 00:27:16 IST 2019
+  var parts = dateStr.split(' ')
+
+  var d = parts[2]
+  var dStr = ("0" + d).slice(-2);
+
+  var m = months.indexOf(parts[1])
+  var mStr = ("0" + m).slice(-2);
+
+
+  var y = parts[5]
+  var t = parts[3]
+
+  var isoFormat = y + '-' + mStr + '-' + dStr + 'T' + t
+  return isoFormat
+}
+
 
 module.exports = router
