@@ -1,5 +1,5 @@
-// window.location.href = "http://stackoverflow.com";
 $("body").on('click', '#tracker-link-btn', function(){
-    // do handling here.
-    console.log("click")
+    var handle = $('#tracker-link-btn')[0].getAttribute('handle')
+    window.trackHandle = handle
+    window.location.href = "/tracker";
  });
