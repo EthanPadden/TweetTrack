@@ -76,19 +76,37 @@ function displayTracker(i) {
     $('#tracker').removeClass('hidden')
 }
 
-$('#stop-track-btn').click(function() {
-    updateTrackingStatus(trackerIndex, 2)
-    $.ajax({
-        type: 'GET',
-        url: '/track/killTracker',
-        data: { 'handle': window.accounts[trackerIndex].handle },
-        success: function(data) {
-            updateTrackingStatus(trackerIndex, 0)
-        },
-        error: function(errMsg) {
-            console.log(errMsg);
+$('#tracker #stop-track-btn').click(function() {
+    console.log("Click")
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this imaginary file!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("Poof! Your imaginary file has been deleted!", {
+            icon: "success",
+          });
+        } else {
+          swal("Your imaginary file is safe!");
         }
-    });
+      });
+
+    // updateTrackingStatus(trackerIndex, 2)
+    // $.ajax({
+    //     type: 'GET',
+    //     url: '/track/killTracker',
+    //     data: { 'handle': window.accounts[trackerIndex].handle },
+    //     success: function(data) {
+    //         updateTrackingStatus(trackerIndex, 0)
+    //     },
+    //     error: function(errMsg) {
+    //         console.log(errMsg);
+    //     }
+    // });
 })
 // function getPreviousMonday () {
 //   var date = new Date()

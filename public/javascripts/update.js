@@ -33,7 +33,7 @@ function processReturnedTrackers(trackers, i) {
         console.log(trackers[i])
         displayTrackerDetails(trackers[i])
         processReturnedTrackers(trackers, ++i)
- }, 2000)
+ }, 3000)
 }
 
 function updateStats(handle) {
