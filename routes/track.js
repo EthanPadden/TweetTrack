@@ -220,11 +220,10 @@ function getTweets(id, res) {
   Tweets.find({tracker_id:id},function(err, tweets){
     if(err) res.send(err)
     else if(tweets) {
-      var stats = {
-        'tweets':tweets
+      stats = {
+        'tweetEngmtMetrics':null
       }
-
-      getMentions(id, res, stats)
+      calculateStatsPerTweet(id, res, tweets, 0, stats)
 
     } else {
       res.json({'status':'tweets_not_found'})
@@ -232,19 +231,34 @@ function getTweets(id, res) {
   })
 }
 
-function getMentions(id, res, stats) {
-  Mentions.find({tracker_id:id},function(err, mentions){
-    if(err) res.send(err)
-    else if(mentions) {
-      for(var i in mentions) {
-        console.log(mentions[i])
-      }
+function calculateStatsPerTweet(id, res, tweets, i, stats) {
+  if(i >= tweets.length) res.json({'status':0, 'stats':stats}) // Base case
+  else {
+  // Get likes + retweets
+  var favouriteCount = tweets[i].favourite_count
+  var rtCount = tweets[i].rt_count
 
-      res.json({'status':0})
-    } else {
-      res.json({'status':'tweets_not_found'})
-    }
-  })
-} 
+  // Get created at
+  var createdAt = tweets[i].created_at
+
+  // Get relevant content info
+  var text = tweets[i].text
+  var isRt = tweets[i].is_rt
+
+  // Get mentions 3 hrs before
+  // Get mentions 3 hrs after
+  
+  
+  
+
+  // Mentions.find({tracker_id:id, })
+  // Calculate avgs per hour
+  // Calculate engagement
+  // Construct Metric obj and append to stats obj
+
+    
+  }
+  
+}
 
 module.exports = router
