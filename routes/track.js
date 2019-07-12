@@ -220,8 +220,24 @@ function getTweets(id, res) {
   Tweets.find({tracker_id:id},function(err, tweets){
     if(err) res.send(err)
     else if(tweets) {
-      for(var i in tweets) {
-        console.log(tweets[i])
+      var stats = {
+        'tweets':tweets
+      }
+
+      getMentions(id, res, stats)
+
+    } else {
+      res.json({'status':'tweets_not_found'})
+    }
+  })
+}
+
+function getMentions(id, res, stats) {
+  Mentions.find({tracker_id:id},function(err, mentions){
+    if(err) res.send(err)
+    else if(mentions) {
+      for(var i in mentions) {
+        console.log(mentions[i])
       }
 
       res.json({'status':0})
@@ -229,6 +245,6 @@ function getTweets(id, res) {
       res.json({'status':'tweets_not_found'})
     }
   })
-}
+} 
 
 module.exports = router
