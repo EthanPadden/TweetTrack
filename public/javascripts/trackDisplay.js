@@ -134,37 +134,6 @@ function getMonday(d) {
     return [startDate, endDate];
 }
 
-/*<div class="col-1"></div>
-  <div class="col-10">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-10"><h4>Tracker - </h4></div>
-          <div class="col-2"><button type="button" class="btn btn-danger" id="stop-track-btn">Stop</button></div>
-
-</div>
-
-
-        <div class="row">
-          <div class="col-4" id="start-date">Started: </div>
-
-          <div class="col-3" id="status">Status: </div>
-
-          <div class="col-5" id="last-updated">Last updated: </div>
-
-        </div>
-        <div class="row">
-          <div class="col-6"><canvas id="engmt-chart"></canvas></div>
-          <div class="col-6">
-            <div id="avg-likes">Average Likes: </div>
-            <div id="avg-rts">Average Retweets: </div>
-            <div id="mentions">Mentions: </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-1"></div>*/
 function constructTracker(handle) {
     var html = '<div class="row no-margin tracker" id="tracker-' + handle + '">'
     + '<div class="col-1"></div>'

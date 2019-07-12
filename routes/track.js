@@ -202,4 +202,33 @@ process.on('exit', function () {
   if (tracker != null) tracker.send('end')
 })
 
+router.get('/trackerData', function (req, res, next) {
+  // Input: {handle:String}
+
+  Trackers.findOne({handle:req.query.handle},function(err, tracker){
+    if(err) res.send(err)
+    else if(tracker) {
+        var id = tracker._id.toString()
+        getTweets(id, res)
+    } else {
+      res.json({'status':'tracker_not_found'})
+    }
+  })
+})
+
+function getTweets(id, res) {
+  Tweets.find({tracker_id:id},function(err, tweets){
+    if(err) res.send(err)
+    else if(tweets) {
+      for(var i in tweets) {
+        console.log(tweets[i])
+      }
+
+      res.json({'status':0})
+    } else {
+      res.json({'status':'tweets_not_found'})
+    }
+  })
+}
+
 module.exports = router
