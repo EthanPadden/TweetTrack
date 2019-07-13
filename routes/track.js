@@ -172,6 +172,7 @@ router.get('/getTweets', function (req, res, next) {
           'favourite_count':tweets[i].favourite_count,
           'rt_count':tweets[i].rt_count,
           'is_rt':tweets[i].is_rt,
+          '_id':tweets[i]._id
         })
       }
       res.json({'status':0, 'tweets':tweetRes})
@@ -236,34 +237,36 @@ router.get('/trackerData', function (req, res, next) {
   })
 })
 
-function getTweets(id, res) {
-  Tweets.find({tracker_id:id},function(err, tweets){
+router.get('/tweetEngmt', function (req, res, next) {
+  Tweets.findOne({_id:req.query._id},function(err, tweet){
     if(err) res.send(err)
-    else if(tweets) {
-      stats = {
-        'tweetEngmtMetrics':null
-      }
-      calculateStatsPerTweet(id, res, tweets, 0, stats)
-
+    else if(tweet) {
+      // res.json({'status':0, 'tweet':tweet})
+      calculateMentionStats(tweet.handle, res, tweet)
     } else {
-      res.json({'status':'tweets_not_found'})
+      res.json({'status':'tweet_not_found'})
     }
   })
-}
+})
 
-function calculateStatsPerTweet(id, res, tweets, i, stats) {
-  if(i >= tweets.length) res.json({'status':0, 'stats':stats}) // Base case
-  else {
-  // Get likes + retweets
-  var favouriteCount = tweets[i].favourite_count
-  var rtCount = tweets[i].rt_count
+// function getTweets(id, res) {
+//   Tweets.find({tracker_id:id},function(err, tweets){
+//     if(err) res.send(err)
+//     else if(tweets) {
+//       stats = {
+//         'tweetEngmtMetrics':null
+//       }
+//       calculateMentionStats(id, res, tweets, 0, stats)
 
+//     } else {
+//       res.json({'status':'tweets_not_found'})
+//     }
+//   })
+// }
+
+function calculateMentionStats(h, res, tweet) {
   // Get created at
-  var createdAt = tweets[i].created_at
-
-  // Get relevant content info
-  var text = tweets[i].text
-  var isRt = tweets[i].is_rt
+  var createdAt = tweet.created_at
 
   // Get mentions 3 hrs before
   // Get mentions 3 hrs after
@@ -275,7 +278,7 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
     var beforeMentions = 0
     var afterMentions = 0
 
-  Mentions.find({tracker_id:id}, function (err, mentions) {
+  Mentions.find({handle:h}, function (err, mentions) {
     if(err) res.send(err)
     else if(mentions) {
         for(var i in mentions) {
@@ -283,9 +286,16 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
           var mentionDate = new Date(gmtMentionDate)
           if(mentionDate >= range.before && mentionDate <= range.tweetDate) beforeMentions++
           if(mentionDate > range.tweetDate && mentionDate <= range.after) afterMentions++
+          returnData = {
+            'before_mentions':beforeMentions,
+            'after_mentions':afterMentions
+          }
         }
+        res.json({'status':0, 'tweet':tweet, 'mentions_stats': returnData})
+
     } else {
       res.json({'status':'mentions_not_found'})
+      return null
     }
   })
 
@@ -301,7 +311,7 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
   //   }
   // })
     
-  }
+  
   
 }
 
