@@ -52,6 +52,21 @@ $("body").on('click', '#tracker-link-btn', function(){
 function calculateEngagement(i) {
     if(i >= $('#tweet-table-body').children().length) return
     else {
-        
+        var id = $('#tweet-table-body').children()[0].id
+        $.ajax({
+            type: 'GET',
+            url: '/track/tweetEngmt',
+            data: {'_id':id},
+            success: function(data){
+                if(data.status == 0) {
+                    console.log(data)
+                    // calculateEngagement(0)
+                }
+                else if (data.status == -1) console.log("Error");
+            },
+            error: function(errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 }
