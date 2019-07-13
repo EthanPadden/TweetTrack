@@ -26,7 +26,7 @@ $("body").on('click', '#tracker-link-btn', function(){
                     addTweetToTable(data.tweets[i])
                 }
 
-                calculateEngagement(0)
+                gatherEngmtStats(0)
             }
             else if (data.status == -1) console.log("Error");
         },
@@ -49,17 +49,20 @@ $("body").on('click', '#tracker-link-btn', function(){
                 $('#tweet-table-body').html(tableHTML);
 }
 
-function calculateEngagement(i) {
+function gatherEngmtStats(i) {
     if(i >= $('#tweet-table-body').children().length) return
     else {
-        var id = $('#tweet-table-body').children()[0].id
+        var id = $('#tweet-table-body').children()[i].id
         $.ajax({
             type: 'GET',
             url: '/track/tweetEngmt',
             data: {'_id':id},
             success: function(data){
                 if(data.status == 0) {
-                    console.log(data)
+                    var engmt = calcGatheredStats(data)
+                    var row = $('#tweet-table-body').children()[i]
+                    var cell = $(row).children()[4]
+                    $(cell).html(engmt)
                     // calculateEngagement(0)
                 }
                 else if (data.status == -1) console.log("Error");
@@ -69,4 +72,35 @@ function calculateEngagement(i) {
             }
         });
     }
+}
+
+// {
+//     "status": 0,
+//     "tweet": {
+//       "_id": "5d267459c19495b26e8de32b",
+//       "handle": "elonmusk",
+//       "tracker_id": "5d25b16dc19495b26e8dde5a",
+//       "tweet_id": "1149097786991767552",
+//       "created_at": "Thu Jul 11 00:27:16 IST 2019",
+//       "text": "RT @cleantechnica: Tesla Model 3 Awarded 2019 Car Of The Year By UK’s Auto Express — Reflections On UK Media Coverage https://t.co/atijYV4R…",
+//       "favourite_count": 0,
+//       "rt_count": 0,
+//       "is_rt": 1
+//     },
+//     "mentions_stats": {
+//       "before_mentions": 267,
+//       "after_mentions": 1040
+//     }
+//   }
+
+  var wL = 1
+  var wR = 10
+  var lM = 20
+function calcGatheredStats(data) {
+    var likes = data.tweet.favourite_count
+    var rts = data.tweet.rt_count
+    var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions
+    
+    var engmt = (wL * likes) + (wR * rts) + (lM * mentionRatio)
+    return Math.round(engmt)
 }
