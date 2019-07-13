@@ -248,17 +248,31 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
   // Get mentions 3 hrs before
   // Get mentions 3 hrs after
 
+
+  console.log(createdAt)
+  var tweetDateObj = toDateObj(createdAt)
+  console.log(tweetDateObj)
+  // var isoDateStr = mongodbDateToISO(createdAt)
+  // console.log(isoDateStr)
+  // var tweetDate = Date.parse(isoDateStr)
+  // console.log(tweetDate)
+  // calculateRangeDates(tweetDate)
   
-  var isoDateStr = mongodbDateToISO(createdAt)
-  console.log(isoDateStr)
 
   
-
   // Mentions.find({tracker_id:id, })
   // Calculate avgs per hour
   // Calculate engagement
   // Construct Metric obj and append to stats obj
-
+  // Mentions.find({handle:req.query.handle},function(err, tracker){
+  //   if(err) res.send(err)
+  //   else if(tracker) {
+  //       var id = tracker._id.toString()
+  //       getTweets(id, res)
+  //   } else {
+  //     res.json({'status':'tracker_not_found'})
+  //   }
+  // })
     
   }
   
@@ -266,7 +280,7 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
 
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ]
 
-function mongodbDateToISO(dateStr) {
+function toDateObj(dateStr) {
   // ISO format = YYYY-MM-DDTHH:MM:SS
   // Thu Jul 11 00:27:16 IST 2019
   var parts = dateStr.split(' ')
@@ -280,10 +294,29 @@ function mongodbDateToISO(dateStr) {
 
   var y = parts[5]
   var t = parts[3]
+  var tParts = t.split(':')
+  var h = tParts[0]
+  var min = tParts[1]
+  var s = tParts[2]
 
-  var isoFormat = y + '-' + mStr + '-' + dStr + 'T' + t
-  return isoFormat
+  console.log(y + ' ' + m + ' ' + d + ' ' + h + ' ' + min + ' ' + s)
+  var date = new Date(y,m,d,h,min,s)
+  date.setUTCDate(d)
+  date.setUTCHours(h)
+  // var isoFormat = y + '-' + mStr + '-' + dStr + 'T' + t
+  return date
 }
 
+function calculateRangeDates(tweetDate) {
+  var date = new Date(tweetDate)
+  console.log(date)
+}
+
+// parse a date in yyyy-mm-dd format
+function parseDate(input) {
+  var parts = input.split('-');
+  // new Date(year, month [, day [, hours[, minutes[, seconds[, ms]]]]])
+  return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
+}
 
 module.exports = router
