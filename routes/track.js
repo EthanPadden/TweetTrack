@@ -159,7 +159,27 @@ router.get('/killTracker', function (req, res, next) {
     
   }
 
-
+router.get('/getTweets', function (req, res, next) {
+  Tweets.find({handle:req.query.handle},function(err, tweets){
+    if(err) res.send(err)
+    else if(tweets) {
+      var tweetRes = []
+      for(var i in tweets) {
+        tweetRes.push({
+          'tweet_id':tweets[i].tweet_id,
+          'created_at':tweets[i].created_at,
+          'text':tweets[i].text,
+          'favourite_count':tweets[i].favourite_count,
+          'rt_count':tweets[i].rt_count,
+          'is_rt':tweets[i].is_rt,
+        })
+      }
+      res.json({'status':0, 'tweets':tweetRes})
+    } else {
+      res.json({'status':'tweets_not_found'})
+    }
+  })
+})
 
 router.get('/checkStatus', function (req, res, next) {
   // {handle:String}
