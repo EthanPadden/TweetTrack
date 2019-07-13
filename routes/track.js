@@ -247,15 +247,27 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
 
   // Get mentions 3 hrs before
   // Get mentions 3 hrs after
-
-
   var gmtStr = toGmtStr(createdAt)
-
   var range = calculateRangeDates(gmtStr)
-  console.log(range)
 
+//  { birth: { $gt: new Date('1940-01-01'), $lt: new Date('1960-01-01') }
   
-  // Mentions.find({tracker_id:id, })
+    var beforeMentions = 0
+    var afterMentions = 0
+
+  Mentions.find({tracker_id:id}, function (err, mentions) {
+    if(err) res.send(err)
+    else if(mentions) {
+        for(var i in mentions) {
+          var gmtMentionDate = toGmtStr(mentions[i].created_at)
+          var mentionDate = new Date(gmtMentionDate)
+          if(mentionDate >= range.before && mentionDate <= range.tweetDate) beforeMentions++
+          if(mentionDate > range.tweetDate && mentionDate <= range.after) afterMentions++
+        }
+    } else {
+      res.json({'status':'mentions_not_found'})
+    }
+  })
   // Calculate avgs per hour
   // Calculate engagement
   // Construct Metric obj and append to stats obj
