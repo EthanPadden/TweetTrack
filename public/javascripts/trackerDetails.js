@@ -50,20 +50,25 @@ $("body").on('click', '#tracker-link-btn', function(){
 }
 
 function gatherEngmtStats(i) {
-    if(i >= $('#tweet-table-body').children().length) return
+    if(i >= $('#tweet-table-body').children().length) {
+        console.log("Base case")
+        return
+    }
     else {
         var id = $('#tweet-table-body').children()[i].id
+        console.log("Requesting " + id)
         $.ajax({
             type: 'GET',
             url: '/track/tweetEngmt',
             data: {'_id':id},
             success: function(data){
+                console.log("SUCCESS - " + id)
                 if(data.status == 0) {
                     var engmt = calcGatheredStats(data)
                     var row = $('#tweet-table-body').children()[i]
                     var cell = $(row).children()[4]
                     $(cell).html(engmt)
-                    // calculateEngagement(0)
+                    gatherEngmtStats(++i)
                 }
                 else if (data.status == -1) console.log("Error");
             },
