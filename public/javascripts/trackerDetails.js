@@ -114,6 +114,35 @@ function generateBarGraph() {
     }
     console.log(engmts)
     console.log(hasLinks)
+
+    var ctx = $('#analysis-section canvas')
+
+    var green = '#14A76C'
+    var red = '#FF652F'
+
+    var colours = []
+    for(var i in hasLinks) {
+        if(hasLinks[i] == 1) colours[i] = green
+        else colours[i] = red
+    }
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['a','a','a','a','a','a','a','a','a','a',],
+          datasets: [
+            {
+              label: "Engagement score",
+              backgroundColor: colours,
+              data: engmts
+            }
+          ]
+        },
+        options: {
+          legend: { display: false }
+
+        }
+    });
 }
 {/* <tr id="5d267459c19495b26e8de32b">
     <td>RT @cleantechnica: Tesla Model 3 Awarded...</td>
