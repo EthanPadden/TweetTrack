@@ -249,15 +249,10 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
   // Get mentions 3 hrs after
 
 
-  console.log(createdAt)
   var tweetDateObj = toDateObj(createdAt)
   console.log(tweetDateObj)
-  // var isoDateStr = mongodbDateToISO(createdAt)
-  // console.log(isoDateStr)
-  // var tweetDate = Date.parse(isoDateStr)
-  // console.log(tweetDate)
-  // calculateRangeDates(tweetDate)
-  
+  // var range = calculateRangeDates(tweetDateObj)
+  // console.log(range)
 
   
   // Mentions.find({tracker_id:id, })
@@ -278,38 +273,50 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
   
 }
 
-var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ]
+// var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ]
 
 function toDateObj(dateStr) {
-  // ISO format = YYYY-MM-DDTHH:MM:SS
+  // Does not matter if GMT or IST - just calculating before and after
   // Thu Jul 11 00:27:16 IST 2019
+  // 04 Dec 1995 00:12:00 GMT
   var parts = dateStr.split(' ')
 
-  var d = parts[2]
-  var dStr = ("0" + d).slice(-2);
+  var d = parts[2] // Always has a 0 before single digit
 
-  var m = months.indexOf(parts[1])
-  var mStr = ("0" + m).slice(-2);
-
+  // var m = months.indexOf(parts[1])
+  // var mStr = ("0" + m).slice(-2);
+  var m = parts[1]
 
   var y = parts[5]
-  var t = parts[3]
-  var tParts = t.split(':')
-  var h = tParts[0]
-  var min = tParts[1]
-  var s = tParts[2]
 
-  console.log(y + ' ' + m + ' ' + d + ' ' + h + ' ' + min + ' ' + s)
-  var date = new Date(y,m,d,h,min,s)
-  date.setUTCDate(d)
-  date.setUTCHours(h)
+  var t = parts[3]
+  // var tParts = t.split(':')
+  // var h = tParts[0]
+  // var min = tParts[1]
+  // var s = tParts[2]
+  var gmtStr = d + ' ' + m + ' ' + y + ' ' + t + ' GMT'
+  console.log(gmtStr)
+  var date = new Date(gmtStr)
+
+  // console.log(y + ' ' + m + ' ' + d + ' ' + h + ' ' + min + ' ' + s)
+  // var date = new Date(y,m,d,h,min,s)
+  // date.setUTCDate(d)
+  // date.setUTCHours(h)
   // var isoFormat = y + '-' + mStr + '-' + dStr + 'T' + t
   return date
 }
 
 function calculateRangeDates(tweetDate) {
-  var date = new Date(tweetDate)
-  console.log(date)
+  var before = tweetDate
+  console.log(tweetDate.getUTCHours() -3)
+  before.setHours(-3)
+  var after = tweetDate
+  before.setHours(tweetDate.getHours() + 3)
+
+  return {
+    'before':before,
+    'after':after
+  }
 }
 
 // parse a date in yyyy-mm-dd format
