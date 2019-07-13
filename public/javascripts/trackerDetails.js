@@ -37,8 +37,10 @@ $("body").on('click', '#tracker-link-btn', function(){
  }
 
  function addTweetToTable(data) {
+   
     var tableRow = '<tr id="' + data._id + '">'
                 + '<td>' + data.text.slice(0,40) + '...</td>'
+                // + '<td>' + data.text + '...</td>'
                 + '<td>' + data.created_at.split(' IST')[0] + '</td>'
                 + '<td>' + data.favourite_count + '</td>'
                 + '<td>' + data.rt_count + '</td>'
@@ -56,13 +58,11 @@ function gatherEngmtStats(i) {
     }
     else {
         var id = $('#tweet-table-body').children()[i].id
-        console.log("Requesting " + id)
         $.ajax({
             type: 'GET',
             url: '/track/tweetEngmt',
             data: {'_id':id},
             success: function(data){
-                console.log("SUCCESS - " + id)
                 if(data.status == 0) {
                     var engmt = calcGatheredStats(data)
                     var row = $('#tweet-table-body').children()[i]
@@ -79,29 +79,18 @@ function gatherEngmtStats(i) {
     }
 }
 
-// {
-//     "status": 0,
-//     "tweet": {
-//       "_id": "5d267459c19495b26e8de32b",
-//       "handle": "elonmusk",
-//       "tracker_id": "5d25b16dc19495b26e8dde5a",
-//       "tweet_id": "1149097786991767552",
-//       "created_at": "Thu Jul 11 00:27:16 IST 2019",
-//       "text": "RT @cleantechnica: Tesla Model 3 Awarded 2019 Car Of The Year By UK’s Auto Express — Reflections On UK Media Coverage https://t.co/atijYV4R…",
-//       "favourite_count": 0,
-//       "rt_count": 0,
-//       "is_rt": 1
-//     },
-//     "mentions_stats": {
-//       "before_mentions": 267,
-//       "after_mentions": 1040
-//     }
-//   }
 
   var wL = 1
   var wR = 10
   var lM = 20
+  var done = false
 function calcGatheredStats(data) {
+    if(texts.length < 10)
+    texts.push(data.tweet.text)
+    else if(!done) {
+        generateBarGraph()
+        done = true
+    }
     var likes = data.tweet.favourite_count
     var rts = data.tweet.rt_count
     var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions
@@ -109,3 +98,27 @@ function calcGatheredStats(data) {
     var engmt = (wL * likes) + (wR * rts) + (lM * mentionRatio)
     return Math.round(engmt)
 }
+
+var texts = []
+function generateBarGraph() {
+    var rows = $('#tweet-table-body').children()
+    var engmts = []
+    var hasLinks = []
+    console.log(texts)
+    for(var i in texts) {
+        var children = $(rows[i]).children()
+        
+        engmts.push(parseInt($(children[4]).html()))
+        if(texts[i].indexOf('http') == -1) hasLinks[i] = 0
+        else hasLinks[i] = 1
+    }
+    console.log(engmts)
+    console.log(hasLinks)
+}
+{/* <tr id="5d267459c19495b26e8de32b">
+    <td>RT @cleantechnica: Tesla Model 3 Awarded...</td>
+    <td>Thu Jul 11 00:27:16</td>
+    <td>0</td>
+    <td>0</td>
+    <td>78</td>
+</tr> */}
