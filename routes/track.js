@@ -249,10 +249,10 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
   // Get mentions 3 hrs after
 
 
-  var tweetDateObj = toDateObj(createdAt)
-  console.log(tweetDateObj)
-  // var range = calculateRangeDates(tweetDateObj)
-  // console.log(range)
+  var gmtStr = toGmtStr(createdAt)
+
+  var range = calculateRangeDates(gmtStr)
+  console.log(range)
 
   
   // Mentions.find({tracker_id:id, })
@@ -275,7 +275,7 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
 
 // var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ]
 
-function toDateObj(dateStr) {
+function toGmtStr(dateStr) {
   // Does not matter if GMT or IST - just calculating before and after
   // Thu Jul 11 00:27:16 IST 2019
   // 04 Dec 1995 00:12:00 GMT
@@ -295,25 +295,24 @@ function toDateObj(dateStr) {
   // var min = tParts[1]
   // var s = tParts[2]
   var gmtStr = d + ' ' + m + ' ' + y + ' ' + t + ' GMT'
-  console.log(gmtStr)
-  var date = new Date(gmtStr)
 
   // console.log(y + ' ' + m + ' ' + d + ' ' + h + ' ' + min + ' ' + s)
   // var date = new Date(y,m,d,h,min,s)
   // date.setUTCDate(d)
   // date.setUTCHours(h)
   // var isoFormat = y + '-' + mStr + '-' + dStr + 'T' + t
-  return date
+  return gmtStr
 }
 
-function calculateRangeDates(tweetDate) {
-  var before = tweetDate
-  console.log(tweetDate.getUTCHours() -3)
-  before.setHours(-3)
-  var after = tweetDate
-  before.setHours(tweetDate.getHours() + 3)
+function calculateRangeDates(tweetDateStr) {
+  var tweetDate = new Date(tweetDateStr)
+  var before = new Date(tweetDateStr)
+  before.setHours(tweetDate.getHours()-3)
+  var after = new Date(tweetDateStr)
+  after.setHours(tweetDate.getHours()+3)
 
   return {
+    'tweetDate':tweetDate,
     'before':before,
     'after':after
   }
