@@ -268,8 +268,8 @@ function calculateStatsPerTweet(id, res, tweets, i, stats) {
       res.json({'status':'mentions_not_found'})
     }
   })
-  // Calculate avgs per hour
-  // Calculate engagement
+
+
   // Construct Metric obj and append to stats obj
   // Mentions.find({handle:req.query.handle},function(err, tracker){
   //   if(err) res.send(err)
