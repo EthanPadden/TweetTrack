@@ -65,6 +65,13 @@ function gatherEngmtStats(i) {
             success: function(data){
                 if(data.status == 0) {
                     var engmt = calcGatheredStats(data)
+                    if(data.tweet.text.indexOf('RT ') != 0) {
+                        engmts.push(engmt)
+                        
+                        hasLinks.push((data.tweet.text.indexOf('http') != -1))
+                        l.push('.')
+        
+                    }
                     var row = $('#tweet-table-body').children()[i]
                     var cell = $(row).children()[4]
                     $(cell).html(engmt)
@@ -80,37 +87,34 @@ function gatherEngmtStats(i) {
 }
 
 
-  var wL = 1
+  var wL = 10
   var wR = 10
-  var lM = 20
-  var done = false
+  var lM = 1
 function calcGatheredStats(data) {
-    if(texts.length < 10)
-    texts.push(data.tweet.text)
-    else if(!done) {
-        generateBarGraph()
-        done = true
-    }
+
+
+
     var likes = data.tweet.favourite_count
     var rts = data.tweet.rt_count
     var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions
     
     var engmt = (wL * likes) + (wR * rts) + (lM * mentionRatio)
+    console.log('likes: ' + likes + ' rts: ' + rts + ' m: ' + mentionRatio)
     return Math.round(engmt)
 }
 
 var texts = []
+var engmts = []
+var hasLinks = []
+var l = []
+
 function generateBarGraph() {
     var rows = $('#tweet-table-body').children()
-    var engmts = []
-    var hasLinks = []
+   
     console.log(texts)
     for(var i in texts) {
         var children = $(rows[i]).children()
         
-        engmts.push(parseInt($(children[4]).html()))
-        if(texts[i].indexOf('http') == -1) hasLinks[i] = 0
-        else hasLinks[i] = 1
     }
     console.log(engmts)
     console.log(hasLinks)
@@ -122,14 +126,14 @@ function generateBarGraph() {
 
     var colours = []
     for(var i in hasLinks) {
-        if(hasLinks[i] == 1) colours[i] = green
+        if(hasLinks[i] == true) colours[i] = green
         else colours[i] = red
     }
 
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['a','a','a','a','a','a','a','a','a','a',],
+            labels: l,
           datasets: [
             {
               label: "Engagement score",
@@ -151,3 +155,5 @@ function generateBarGraph() {
     <td>0</td>
     <td>78</td>
 </tr> */}
+
+$('#analysis-graph-btn').click(generateBarGraph)
