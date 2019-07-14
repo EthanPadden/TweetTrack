@@ -41,16 +41,12 @@ function processReturnedTrackers(trackers, i) {
 
 function updateStats(trackers, i) {
     if(i >= trackers.length) return
-    console.log('UPDATE: ' + trackers[i].handle)
     $.ajax({
         type: 'GET',
         url: '/track/getStats',
         data: { 'handle': trackers[i].handle },
         success: function(data) {
-            console.log('GET ' + trackers[i].handle)
             if (data.status == 0) {
-               console.log("STATS RETURNED " + trackers[i].handle)
-                // console.log(data)
                updateTrackerDisplay(data.stats, trackers[i].handle)
                updateStats(trackers, ++i)
 

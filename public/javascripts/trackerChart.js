@@ -56,9 +56,9 @@ function constructChart(stats, followers, handle) {
     });
 
     calculatedStats = {
-        'avg_likes':results.avg_likes,
-        'avg_rts':results.avg_likes,
-        'mentions':mentions
+        'avg_likes':Math.round(results.avg_likes),
+        'avg_rts':Math.round(results.avg_likes),
+        'mentions':Math.round(mentions)
     }
     displayStats(calculatedStats, handle)
 }
