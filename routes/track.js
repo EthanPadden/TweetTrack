@@ -6,6 +6,7 @@ const { exec } = require('child_process')
 var Trackers = require('../models/trackers')
 var Tweets = require('../models/tweets')
 var Mentions = require('../models/mentions')
+var Stats = require('../models/stats')
 var fs = require('fs')
 const { fork } = require('child_process')
 var killProcessTime = 3000
@@ -119,46 +120,21 @@ router.get('/killTracker', function (req, res, next) {
       if(err) res.send(err)
       else if(tracker) {
         if(!tracker._id) res.json({'status':2})
-        calculateStats(String(tracker._id), res, null, 0)
+        else returnStats(tracker._id.toString(), res)
       }
     })
   })
 
-  function calculateStats(id, res, stats, sch) {
-    console.log('Gathering statistics...' + id)
-
-    if(sch == 0) {
-      Tweets.find({tracker_id:id}, function(err, tweets){
-        if(err) res.send(err)
-        else {
-          var likesCount = 0
-          var rtCount = 0
-          for(var i in tweets) {
-            likesCount += tweets[i].favourite_count
-            rtCount += tweets[i].rt_count
-          }
-  
-          stats = {
-            'tweet_count':tweets.length,
-            'likes_count':likesCount,
-            'rt_count':rtCount
-          }
-        
-          calculateStats(id, res, stats, 1)
-        } 
-      })
-    } if (sch == 1) {
-      Mentions.find({tracker_id:id}, function(err, mentions){
-        if(err) res.send(err)
-        else {
-          stats.mentions_count = mentions.length
-          res.json({'status':0, 'stats':stats})
-        } 
-      })
+function returnStats(id, res) {
+  Stats.findOne({tracker_id:id}, function(err, stats) {
+    if(err) res.send(err)
+    else if(stats) {
+      res.json({'status':0, 'stats':stats})
+    }else {
+      res.json({'status':'stats_not_found'})
     }
-    
-  }
-
+  })
+}
 router.get('/getTweets', function (req, res, next) {
   Tweets.find({handle:req.query.handle},function(err, tweets){
     if(err) res.send(err)

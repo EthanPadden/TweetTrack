@@ -11,9 +11,11 @@ function getRunningTrackers() {
                    var handle = data.trackers[i].handle
                    addAccount(handle, true)
                     constructTracker(handle)
-                   updateStats(handle)
                }
 
+                   updateStats(data.trackers, 0)
+            //    console.log("Returned tracker details - ")
+            //    console.log(data.trackers)
                processReturnedTrackers(data.trackers, 0)
 
                
@@ -30,22 +32,28 @@ function getRunningTrackers() {
 function processReturnedTrackers(trackers, i) {
     if(i >= trackers.length) return
     setTimeout(function(){
-        console.log(trackers[i])
+        // console.log("Tracker " + i + ': ')
+        // console.log(trackers[i])
         displayTrackerDetails(trackers[i])
         processReturnedTrackers(trackers, ++i)
  }, 2000)
 }
 
-function updateStats(handle) {
+function updateStats(trackers, i) {
+    if(i >= trackers.length) return
+    console.log('UPDATE: ' + trackers[i].handle)
     $.ajax({
         type: 'GET',
         url: '/track/getStats',
-        data: { 'handle': handle },
+        data: { 'handle': trackers[i].handle },
         success: function(data) {
+            console.log('GET ' + trackers[i].handle)
             if (data.status == 0) {
-            //    console.log("STATS RETURNED " + handle)
+               console.log("STATS RETURNED " + trackers[i].handle)
                 // console.log(data)
-               updateTrackerDisplay(data.stats, handle)
+               updateTrackerDisplay(data.stats, trackers[i].handle)
+               updateStats(trackers, ++i)
+
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },
@@ -53,6 +61,8 @@ function updateStats(handle) {
             console.log(errMsg);
         }
     });
+
+    console.log('skip')
 }
 
 function updateTrackerDisplay(stats, handle) {

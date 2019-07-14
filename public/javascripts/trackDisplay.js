@@ -77,6 +77,7 @@ function displayTracker(i) {
 }
 
 $('#stop-track-btn').click(function() {
+    /*
     updateTrackingStatus(trackerIndex, 2)
     $.ajax({
         type: 'GET',
@@ -89,6 +90,7 @@ $('#stop-track-btn').click(function() {
             console.log(errMsg);
         }
     });
+    */
 })
 // function getPreviousMonday () {
 //   var date = new Date()
@@ -169,13 +171,21 @@ function constructTracker(handle) {
 }
 
 function displayTrackerDetails(tracker) {
+    
     var selector = '#tracker-section #tracker-' + tracker.handle
    
     $(selector + ' #start-date').html('Started: ' + tracker.start_date.split(' IST')[0])    
     $(selector + ' #status').html('Status: tracking')  
     
-    
-    var i = accounts.map(function(e) { return e.handle; }).indexOf(tracker.handle);
-    var name = accounts[i].name
+    var account = findAccount(accounts, tracker.handle)
+    var name = account.name
     $(selector + ' #name').html('Tracker - ' + name)
+}
+
+function findAccount(arr, handle) {
+    for(var i in arr) {
+        if(arr[i].handle == handle) return arr[i]
+    }
+
+    return null
 }

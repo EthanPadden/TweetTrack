@@ -7,8 +7,8 @@ $("body").on('click', '#tracker-link-btn', function(){
  $(document).ready(function(){
     var handle = document.cookie.split('handle=')[1]
 
-     setTitle(handle)
-     gatherTweets(handle)
+    //  setTitle(handle)
+    //  gatherTweets(handle)
  })
 
  function setTitle(handle) {
@@ -53,7 +53,7 @@ $("body").on('click', '#tracker-link-btn', function(){
 
 function gatherEngmtStats(i) {
     if(i >= $('#tweet-table-body').children().length) {
-        console.log("Base case")
+        // console.log("Base case")
         return
     }
     else {
