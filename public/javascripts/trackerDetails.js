@@ -1,13 +1,15 @@
-$("body").on('click', '#tracker-link-btn', function(){
-    var handle = $('#tracker-link-btn')[0].getAttribute('handle')
+$("body").on('click', '#tracker-link-btn', function(e){
+    var handle = e.target.outerHTML.split('=')[3].split('"')[1]
     window.trackHandle = handle
     $(location).attr('href', '/tracker?handle=' + handle );
  });
 
+ 
+
  $(document).ready(function(){
     var handle = document.cookie.split('handle=')[1]
-
-    //  setTitle(handle)
+    console.log(document.cookie)
+     setTitle(handle)
     //  gatherTweets(handle)
  })
 
