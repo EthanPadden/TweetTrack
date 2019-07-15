@@ -47,24 +47,25 @@ $("body").on('click', '#tracker-link-btn', function(e){
  });
 
  function displayTweetEngmtDetails(data) {
-    console.log(data)
+    var spanBold = '<span style="font-weight:bolder">'
 
-    $('#likes').html('Likes: ' + data.tweet.favourite_count)
-    $('#rts').html('RTs: ' + data.tweet.rt_count)
+    $('#likes').html(spanBold + 'Likes: </span>' + data.tweet.favourite_count)
+    $('#rts').html(spanBold + 'RTs: </span>' + data.tweet.rt_count)
     if(data.tweet.is_rt == 1) $('#is-rt').html('This is a retweet')
     else if(data.tweet.is_rt == 0) $('#is-rt').html('This is not a retweet')
     
     if(data.tweet.text.indexOf('http') == -1) $('#has-link').html('This has no links')
     if(data.tweet.text.indexOf('http') != -1) $('#has-link').html('This has one or more links')
 
-    $('#mentions-b').html('Mentions before: ' + data.mentions_stats.before_mentions)
-    $('#mentions-a').html('Mentions after: ' + data.mentions_stats.after_mentions)
+    $('#mentions-b').html(spanBold + 'Mentions before: </span>' + data.mentions_stats.before_mentions)
+    $('#mentions-a').html(spanBold + 'Mentions after: </span>' + data.mentions_stats.after_mentions)
 
 
     var engmt = calcGatheredStats(data)
     $('#engmt').html('Engagement: ' + engmt)
     generateTweetEngmtChart(data)
  }
+
 
  $(document).ready(function(){
     var handle = document.cookie.split('handle=')[1]
