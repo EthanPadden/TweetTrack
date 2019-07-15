@@ -1,13 +1,31 @@
+var selectedTweet = -1
+
+$(document).ready(function(){
+    $('#tweet-table-body tr').css( 'cursor', 'pointer' );
+})
 $("body").on('click', '#tracker-link-btn', function(e){
     var handle = e.target.outerHTML.split('=')[3].split('"')[1]
     window.trackHandle = handle
     $(location).attr('href', '/tracker?handle=' + handle );
  });
  $("body").on('mouseenter', '#tweet-table-body tr', function(e){
-    $(e.target.parentNode).css('background-color', '#96BFFF')
+    var select = e.target.parentNode
+    if(select != selectedTweet)
+   $(select).css('background-color', '#96BFFF')
  })
  $("body").on('mouseleave', '#tweet-table-body tr', function(e){
-    $(e.target.parentNode).css('background-color', '#FFFFFF')
+     var select = e.target.parentNode
+     if(select != selectedTweet)
+    $(select).css('background-color', '#FFFFFF')
+
+ })
+
+ $("body").on('click', '#tweet-table-body tr', function(e){
+    $(selectedTweet).css('background-color', '#FFFFFF')
+    $(selectedTweet).css('color', '#212529')
+    $(e.target.parentNode).css('background-color', '#007BFF')
+    $(e.target.parentNode).css('color', '#FFFFFF')
+    selectedTweet = e.target.parentNode
  })
 
 
