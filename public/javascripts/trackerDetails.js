@@ -3,7 +3,15 @@ $("body").on('click', '#tracker-link-btn', function(e){
     window.trackHandle = handle
     $(location).attr('href', '/tracker?handle=' + handle );
  });
+ $("body").on('mouseenter', '#tweet-table-body tr', function(e){
+    $(e.target.parentNode).css('background-color', '#96BFFF')
+ })
+ $("body").on('mouseleave', '#tweet-table-body tr', function(e){
+    $(e.target.parentNode).css('background-color', '#FFFFFF')
+ })
 
+
+ 
  $("body").on('click', '#tweet-table-body', function(e){
      var id = e.target.parentNode.id
 
