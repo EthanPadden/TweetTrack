@@ -158,6 +158,7 @@ function constructTracker(handle) {
         +'<div class="row">'
         + '<div class="col-6"><canvas id="engmt-chart"></canvas></div>'
          + '<div class="col-6">'
+          +  '<div><strong id="engmt">Engagement: </strong></div>'
           +  '<div id="avg-likes">Average Likes: </div>'
            + '<div id="avg-rts">Average Retweets: </div>'
             +'<div id="mentions">Mentions: </div>'
