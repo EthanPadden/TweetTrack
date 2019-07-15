@@ -1,8 +1,5 @@
 var selectedTweet = -1
 
-$(document).ready(function(){
-    $('#tweet-table-body tr').css( 'cursor', 'pointer' );
-})
 $("body").on('click', '#tracker-link-btn', function(e){
     var handle = e.target.outerHTML.split('=')[3].split('"')[1]
     window.trackHandle = handle
