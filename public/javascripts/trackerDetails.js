@@ -74,7 +74,8 @@ $("body").on('click', '#tracker-link-btn', function(e){
     $('#emojies-used').html(spanBold + 'Emojies used: </span>' + emojies)
     else 
     $('#emojies-used').html(spanBold + 'Emojies used: </span>None')
-
+    $('#tweet-engmt-info').removeClass('hidden')
+    console.log("HERE")
  }
 
 
