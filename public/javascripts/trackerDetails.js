@@ -185,7 +185,10 @@ function generateBarGraph() {
 function generateTweetEngmtChart(data) {
     var ctx = $('#analysis-section canvas')
     var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions*100
-    console.log(Math.abs(mentionRatio))
+    var mentionColour;
+    console.log(mentionRatio)
+    if(mentionRatio < 100) mentionColour = '#FF652F'
+    else mentionColour = '#14A76C'
     new Chart(ctx, {
         type: 'pie',
         data: {
@@ -193,7 +196,7 @@ function generateTweetEngmtChart(data) {
 
         datasets: [
             {
-            backgroundColor: ['#FFE400', '#FF652F', '#14A76C'],
+            backgroundColor: ['#FFE400', '#007BFF', mentionColour],
             data: [(wL*data.tweet.favourite_count), (wR*data.tweet.rt_count), Math.abs(lM*mentionRatio)]
             }
         ]
