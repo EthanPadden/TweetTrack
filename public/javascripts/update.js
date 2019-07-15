@@ -58,7 +58,6 @@ function updateStats(trackers, i) {
         }
     });
 
-    console.log('skip')
 }
 
 function updateTrackerDisplay(stats, handle) {

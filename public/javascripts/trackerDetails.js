@@ -4,13 +4,31 @@ $("body").on('click', '#tracker-link-btn', function(e){
     $(location).attr('href', '/tracker?handle=' + handle );
  });
 
+ $("body").on('click', '#tweet-table-body', function(e){
+     var id = e.target.parentNode.id
+
+     $.ajax({
+        type: 'GET',
+        url: '/track/tweetEngmt',
+        data: {'_id':id},
+        success: function(data){
+            if(data.status == 0) {
+                console.log(data)
+            }
+            else if (data.status == -1) console.log("Error");
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
+ });
+
  
 
  $(document).ready(function(){
     var handle = document.cookie.split('handle=')[1]
-    console.log(document.cookie)
      setTitle(handle)
-    //  gatherTweets(handle)
+     gatherTweets(handle)
  })
 
  function setTitle(handle) {
@@ -55,7 +73,6 @@ $("body").on('click', '#tracker-link-btn', function(e){
 
 function gatherEngmtStats(i) {
     if(i >= $('#tweet-table-body').children().length) {
-        // console.log("Base case")
         return
     }
     else {
@@ -67,13 +84,6 @@ function gatherEngmtStats(i) {
             success: function(data){
                 if(data.status == 0) {
                     var engmt = calcGatheredStats(data)
-                    if(data.tweet.text.indexOf('RT ') != 0) {
-                        engmts.push(engmt)
-                        
-                        hasLinks.push((data.tweet.text.indexOf('http') != -1))
-                        l.push('.')
-        
-                    }
                     var row = $('#tweet-table-body').children()[i]
                     var cell = $(row).children()[4]
                     $(cell).html(engmt)
@@ -88,6 +98,13 @@ function gatherEngmtStats(i) {
     }
 }
 
+/*if(data.tweet.text.indexOf('RT ') != 0) {
+                        engmts.push(engmt)
+                        
+                        hasLinks.push((data.tweet.text.indexOf('http') != -1))
+                        l.push('.')
+        
+                    }*/
 
   var wL = 10
   var wR = 10
@@ -101,7 +118,7 @@ function calcGatheredStats(data) {
     var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions
     
     var engmt = (wL * likes) + (wR * rts) + (lM * mentionRatio)
-    console.log('likes: ' + likes + ' rts: ' + rts + ' m: ' + mentionRatio)
+    // console.log('likes: ' + likes + ' rts: ' + rts + ' m: ' + mentionRatio)
     return Math.round(engmt)
 }
 
@@ -113,13 +130,10 @@ var l = []
 function generateBarGraph() {
     var rows = $('#tweet-table-body').children()
    
-    console.log(texts)
     for(var i in texts) {
         var children = $(rows[i]).children()
         
     }
-    console.log(engmts)
-    console.log(hasLinks)
 
     var ctx = $('#analysis-section canvas')
 
