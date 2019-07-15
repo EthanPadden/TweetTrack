@@ -13,7 +13,7 @@ $("body").on('click', '#tracker-link-btn', function(e){
         data: {'_id':id},
         success: function(data){
             if(data.status == 0) {
-                console.log(data)
+                displayTweetEngmtDetails(data)
             }
             else if (data.status == -1) console.log("Error");
         },
@@ -23,7 +23,25 @@ $("body").on('click', '#tracker-link-btn', function(e){
     });
  });
 
- 
+ function displayTweetEngmtDetails(data) {
+    console.log(data)
+
+    $('#likes').html('Likes: ' + data.tweet.favourite_count)
+    $('#rts').html('RTs: ' + data.tweet.rt_count)
+    if(data.tweet.is_rt == 1) $('#is-rt').html('This is a retweet')
+    else if(data.tweet.is_rt == 0) $('#is-rt').html('This is not a retweet')
+    
+    if(data.tweet.text.indexOf('http') == -1) $('#has-link').html('This has no links')
+    if(data.tweet.text.indexOf('http') != -1) $('#has-link').html('This has one or more links')
+
+    $('#mentions-b').html('Mentions before: ' + data.mentions_stats.before_mentions)
+    $('#mentions-a').html('Mentions after: ' + data.mentions_stats.after_mentions)
+
+
+    var engmt = calcGatheredStats(data)
+    $('#engmt').html('Engagement: ' + engmt)
+    generateTweetEngmtChart(data)
+ }
 
  $(document).ready(function(){
     var handle = document.cookie.split('handle=')[1]
@@ -106,16 +124,16 @@ function gatherEngmtStats(i) {
         
                     }*/
 
-  var wL = 10
+  var wL = 1
   var wR = 10
-  var lM = 1
+  var lM = 100
 function calcGatheredStats(data) {
 
 
 
     var likes = data.tweet.favourite_count
     var rts = data.tweet.rt_count
-    var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions
+    var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions*100
     
     var engmt = (wL * likes) + (wR * rts) + (lM * mentionRatio)
     // console.log('likes: ' + likes + ' rts: ' + rts + ' m: ' + mentionRatio)
@@ -164,12 +182,28 @@ function generateBarGraph() {
         }
     });
 }
-{/* <tr id="5d267459c19495b26e8de32b">
-    <td>RT @cleantechnica: Tesla Model 3 Awarded...</td>
-    <td>Thu Jul 11 00:27:16</td>
-    <td>0</td>
-    <td>0</td>
-    <td>78</td>
-</tr> */}
+function generateTweetEngmtChart(data) {
+    var ctx = $('#analysis-section canvas')
+    var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions*100
+    console.log(Math.abs(mentionRatio))
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+        labels: ["Likes","Retweets", "Mentions Ratio"],
 
+        datasets: [
+            {
+            backgroundColor: ['#FFE400', '#FF652F', '#14A76C'],
+            data: [(wL*data.tweet.favourite_count), (wR*data.tweet.rt_count), Math.abs(lM*mentionRatio)]
+            }
+        ]
+        },
+        options: {
+        title: {
+            display: true,
+            text: 'Contribution to metric'
+        }
+        }
+    });
+}
 $('#analysis-graph-btn').click(generateBarGraph)
