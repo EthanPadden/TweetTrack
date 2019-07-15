@@ -66,8 +66,15 @@ $("body").on('click', '#tracker-link-btn', function(e){
     generateTweetEngmtChart(data)
 
     var parts = extractMentionsAndHashtags(data.tweet.text)
-    console.log(parts.mentions)
-    console.log(parts.hashtags)
+    $('#mentions-used').html(spanBold + 'Mentioned users: </span>' + parts.mentions)
+    $('#hashtags-used').html(spanBold + 'Hashtags used: </span>' + parts.hashtags)
+
+    var emojies = extractEmojies(data.tweet.text)
+    if(emojies != null) 
+    $('#emojies-used').html(spanBold + 'Emojies used: </span>' + emojies)
+    else 
+    $('#emojies-used').html(spanBold + 'Emojies used: </span>None')
+
  }
 
 
@@ -85,6 +92,20 @@ function extractMentionsAndHashtags(text){
         'mentions':mentions,
         'hashtags':hashtags
     }
+}
+
+function extractEmojies(text) {
+    var emojiRegex = /([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g;
+
+    var emojies = []
+    // for(var i in text) {
+    //     if (text[i].match(emojiRegex)) {
+    //         emojies.push(text[i])
+    //     }
+    // }
+
+    return text.match(emojiRegex)
+        
 }
 
  $(document).ready(function(){
