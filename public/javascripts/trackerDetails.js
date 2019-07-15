@@ -64,8 +64,28 @@ $("body").on('click', '#tracker-link-btn', function(e){
     var engmt = calcGatheredStats(data)
     $('#engmt').html('Engagement: ' + engmt)
     generateTweetEngmtChart(data)
+
+    var parts = extractMentionsAndHashtags(data.tweet.text)
+    console.log(parts.mentions)
+    console.log(parts.hashtags)
  }
 
+
+function extractMentionsAndHashtags(text){
+    var words = text.split(' ')
+    var mentions = []
+    var hashtags = []
+
+    for(var i in words) {
+        if(words[i].indexOf('@') == 0) mentions.push(words[i])
+        if(words[i].indexOf('#') == 0) hashtags.push(words[i])
+    }
+
+    return {
+        'mentions':mentions,
+        'hashtags':hashtags
+    }
+}
 
  $(document).ready(function(){
     var handle = document.cookie.split('handle=')[1]
