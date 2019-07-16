@@ -30,7 +30,7 @@ function calculateEngagementFromStats(stats, followersCount) {
     if(stats.tweet_count > 0) {
         avgL = stats.likes_count/stats.tweet_count
         avgR = stats.rt_count/stats.tweet_count
-        engmt = 100*(avgL/followersCount) + 1000*(avgR/followersCount) + stats.mentions_count
+        engmt = 10*(avgL/followersCount) + 100*(avgR/followersCount) + stats.mentions_count
     }   
 
     var results = {
