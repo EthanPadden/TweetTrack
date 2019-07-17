@@ -14,4 +14,4 @@ var got_statsSchema = new Schema({
   i : {type: Number}
 })
 
-module.exports = mongoose.model('Mentions', got_statsSchema)
+module.exports = mongoose.model('got_stats', got_statsSchema)

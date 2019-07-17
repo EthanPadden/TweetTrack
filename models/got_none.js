@@ -14,4 +14,4 @@ var got_noneSchema = new Schema({
   i : {type: Number}
 })
 
-module.exports = mongoose.model('Mentions', got_noneSchema)
+module.exports = mongoose.model('got_none', got_noneSchema)

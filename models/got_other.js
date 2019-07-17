@@ -14,4 +14,4 @@ var got_otherSchema = new Schema({
   i : {type: Number}
 })
 
-module.exports = mongoose.model('Mentions', got_otherSchema)
+module.exports = mongoose.model('got_other', got_otherSchema)

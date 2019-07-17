@@ -14,4 +14,4 @@ var got_tweetsSchema = new Schema({
   i : {type: Number}
 })
 
-module.exports = mongoose.model('Mentions', got_tweetsSchema)
+module.exports = mongoose.model('got_tweets', got_tweetsSchema)

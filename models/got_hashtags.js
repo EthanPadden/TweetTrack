@@ -14,4 +14,4 @@ var got_hashtagsSchema = new Schema({
   i : {type: Number}
 })
 
-module.exports = mongoose.model('Mentions', got_hashtagsSchema)
+module.exports = mongoose.model('got_gashtags', got_hashtagsSchema)
