@@ -11,4 +11,17 @@ var Stats = require('../models/got_stats')
 var Retweets = require('../models/got_retweets')
 
 
+router.get('/getTweets', function (req, res, next) {
+
+  
+    Tweets.find({},function(err, tweets){
+      if(err) res.send(err)
+      else if(tweets) {
+          res.json({'status':0, 'tweets':tweets})
+      } else {
+        res.json({'status':1})
+      }
+    })
+  })
+
 module.exports = router
