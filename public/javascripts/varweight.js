@@ -9,7 +9,22 @@ $('#calc-w-btn').click(function(){
     }
 
     if(weights.length == 5) {
-        // Check if stats are stored in browser - if not, make ajax request
+        if(gStats.GameOfThrones == null) {
+            $.ajax({
+                type: 'GET',
+                url: '/got/getStats',
+                success: function(data) {
+                    if (data.status == 0) {
+                        gStats.GameOfThrones = data.stats
+                        console.log(data)
+                    } else if(data.status) console.log("Error: status " + data.status);
+                    else console.log("Error: no status available");
+                },
+                error: function(errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
         // Calc stats from weights
     }
 })

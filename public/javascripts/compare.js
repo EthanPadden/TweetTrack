@@ -3,7 +3,7 @@ $(document).ready(function() {
 
 })
 
-var stats = {
+var gStats = {
     'GameOfThrones':null,
     'HBO':null
 }
