@@ -41,3 +41,21 @@ function calculateEngagementFromStats(stats, followersCount) {
 
     return results;
 }
+
+function calculateEngagementFromWeights(stats, weights) {
+    var avgL = 0
+    var avgR = 0
+
+    if(stats.tweet_count > 0) {
+        avgL = stats.likes_count/stats.tweet_count
+        avgR = stats.rt_count/stats.tweet_count
+    }   
+
+    engmt = weight.likes*avgL + weights.retweets*avgR + weights.mentions*stats.mentions_count + weights.hashtags * stats.hashtags_count + weights.other*stats.other_count
+
+    var results = {
+        "avg_likes":avgL,
+        "avg_rts":avgR,
+        "engagement":engmt
+    }
+}
