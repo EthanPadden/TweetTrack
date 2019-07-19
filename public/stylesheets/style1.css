@@ -56,7 +56,7 @@ html {
     max-width: 100%;
   }
   
- .col-6 {
+ .col, .col-6 {
      padding: 0 0.5% 0 0.5%
  }
   
