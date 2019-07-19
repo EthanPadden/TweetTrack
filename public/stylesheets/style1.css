@@ -1,0 +1,80 @@
+html {
+    height: 100%;
+    width: 100%;
+  }
+  
+  body {
+    height: 100%;
+    max-width: 100%;
+    background-color: var(--grey-light)
+  }
+   
+   body > div.row {
+     margin-top: 0.6%;
+      margin-bottom: 0.6%;
+  
+   }
+  
+   body > div:nth-child(1) {
+     margin: 0%;
+   }
+  
+  
+   body > div:last-child(){
+    margin-bottom: 0.6%;
+   }
+  .overview-wrapper {
+    width: 100%;
+  }
+  
+  #title {
+    background-color: var(--grey-dark);
+    padding: 0.5%;
+    padding-left: 1%;
+  }
+  #title h1 {
+    font-size: 3em;
+    color: white;
+  }
+  
+  :root{
+    --grey-dark: #272727;
+    --grey-light: #747474;
+    --red: #FF652F;
+    --yellow: #FFE400;
+    --green: #14A76C;
+  }
+  
+  .no-margin {
+    /* width: 90% */
+    margin: 0;
+  }
+  
+
+  
+  .row {
+    max-width: 100%;
+  }
+  
+ .col-6 {
+     padding: 0 0.5% 0 0.5%
+ }
+  
+  .hidden {
+    display: none;
+  }
+  
+  /* .main-section {
+    background-color: var(--grey-light);
+    
+  } */
+  /* Overriding Bootstrap */
+  .card {
+    border-radius: 3px;
+  }
+  
+
+  #tweet-table-body tr {
+    cursor: pointer;
+  }
+  
