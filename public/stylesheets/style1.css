@@ -56,7 +56,7 @@ html {
     max-width: 100%;
   }
   
- .col, .col-6 {
+.col-6 {
      padding: 0 0.5% 0 0.5%
  }
   
@@ -78,3 +78,17 @@ html {
     cursor: pointer;
   }
   
+  .mid-input {
+    border-radius: 0;      
+  }
+
+  .no-grey {
+      background-color: white;
+        border-top: none;
+        border-right: none;
+        border-bottom: none;
+  }
+
+  .no-padding {
+      padding: 0
+  }
