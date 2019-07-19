@@ -42,20 +42,39 @@ function calculateEngagementFromStats(stats, followersCount) {
     return results;
 }
 
-function calculateEngagementFromWeights(stats, weights) {
+function calculateEngagementFromWeights(stats, weights, tweets) {
+    console.log(stats)
+    console.log(weights)
+    console.log(tweets)
+    var counts = getCounts(tweets)
     var avgL = 0
     var avgR = 0
 
+    // FOR NOW: - instead of tweet loop
+    var tweetCount = stats.GameOfThrones.tweets
+    console.log(tweetCount)
+    if(tweetCount > 0) avgR = stats.GameOfThrones.retweets/tweetCount
+
     if(stats.tweet_count > 0) {
-        avgL = stats.likes_count/stats.tweet_count
-        avgR = stats.rt_count/stats.tweet_count
+        avgL = counts.likes_count/stats.tweet_count
+        // avgR = counts.rt_count/stats.tweet_count
     }   
 
-    engmt = weight.likes*avgL + weights.retweets*avgR + weights.mentions*stats.mentions_count + weights.hashtags * stats.hashtags_count + weights.other*stats.other_count
+    engmt = weights[0]*avgL + weights[1]*avgR + weights[2]*stats.GameOfThrones.mentions + weights[3] * stats.GameOfThrones.hashtags + weights[4]*stats.GameOfThrones.other
 
-    var results = {
-        "avg_likes":avgL,
-        "avg_rts":avgR,
-        "engagement":engmt
+    return {
+        "avg_likes":Math.round(avgL),
+        "avg_rts":Math.round(avgR),
+        "engagement":Math.round(engmt)
     }
+}
+
+function getCounts(tweets) {
+    var likes = 0
+    var rts = 0
+    for(var i in tweets) {
+        likes += tweets[i].favourite_count
+        rts += tweets[i].retweet_count
+    }
+    return {'likes_count': likes, 'rt_count':rts}
 }
