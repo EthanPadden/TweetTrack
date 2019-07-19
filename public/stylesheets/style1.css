@@ -85,7 +85,7 @@ html {
   .no-grey {
       background-color: white;
         border-top: none;
-        border-right: none;
+        border-left: none;
         border-bottom: none;
   }
 
