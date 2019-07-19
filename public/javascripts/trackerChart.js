@@ -23,7 +23,6 @@ function trackerEngmtChart(stats, handle) {
 function constructChart(stats, followers, handle) {
     // console.log(handle)
     var results = calculateEngagementFromStats(stats, followers)
-    
     var engagement = results.engagement
     var mentions = stats.mentions_count
 
@@ -43,7 +42,7 @@ function constructChart(stats, followers, handle) {
         datasets: [
             {
             backgroundColor: ['#FFE400', '#FF652F', '#14A76C'],
-            data: [(100*results['avg_likes']), (results['avg_rts']*1000), mentions]
+            data: [(10*results['avg_likes']), (results['avg_rts']*100), mentions]
             }
         ]
         },
@@ -56,9 +55,10 @@ function constructChart(stats, followers, handle) {
     });
 
     calculatedStats = {
-        'avg_likes':results.avg_likes,
-        'avg_rts':results.avg_likes,
-        'mentions':mentions
+        'avg_likes':Math.round(results.avg_likes),
+        'avg_rts':Math.round(results.avg_rts),
+        'mentions':Math.round(mentions),
+        'engmt':Math.round(engagement)
     }
     displayStats(calculatedStats, handle)
 }
@@ -69,4 +69,7 @@ function displayStats(stats, handle) {
     $(selector + ' #avg-likes').html('Average likes: ' + stats.avg_likes)
     $(selector + ' #avg-rts').html('Average retweets: ' + stats.avg_rts)
     $(selector + ' #mentions').html('Mentions: ' + stats.mentions)
+    console.log(stats)
+    $(selector + ' #engmt').html('Engagement: ' + stats.engmt)
+
 }

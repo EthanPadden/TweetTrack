@@ -6,6 +6,7 @@ const { exec } = require('child_process')
 var Trackers = require('../models/trackers')
 var Tweets = require('../models/tweets')
 var Mentions = require('../models/mentions')
+var Stats = require('../models/stats')
 var fs = require('fs')
 const { fork } = require('child_process')
 var killProcessTime = 3000
@@ -119,47 +120,43 @@ router.get('/killTracker', function (req, res, next) {
       if(err) res.send(err)
       else if(tracker) {
         if(!tracker._id) res.json({'status':2})
-        calculateStats(String(tracker._id), res, null, 0)
+        else returnStats(tracker._id.toString(), res)
       }
     })
   })
 
-  function calculateStats(id, res, stats, sch) {
-    console.log('Gathering statistics...' + id)
-
-    if(sch == 0) {
-      Tweets.find({tracker_id:id}, function(err, tweets){
-        if(err) res.send(err)
-        else {
-          var likesCount = 0
-          var rtCount = 0
-          for(var i in tweets) {
-            likesCount += tweets[i].favourite_count
-            rtCount += tweets[i].rt_count
-          }
-  
-          stats = {
-            'tweet_count':tweets.length,
-            'likes_count':likesCount,
-            'rt_count':rtCount
-          }
-        
-          calculateStats(id, res, stats, 1)
-        } 
-      })
-    } if (sch == 1) {
-      Mentions.find({tracker_id:id}, function(err, mentions){
-        if(err) res.send(err)
-        else {
-          stats.mentions_count = mentions.length
-          res.json({'status':0, 'stats':stats})
-        } 
-      })
+function returnStats(id, res) {
+  Stats.findOne({tracker_id:id}, function(err, stats) {
+    if(err) res.send(err)
+    else if(stats) {
+      res.json({'status':0, 'stats':stats})
+    }else {
+      res.json({'status':'stats_not_found'})
     }
-    
-  }
-
-
+  })
+}
+router.get('/getTweets', function (req, res, next) {
+  Tweets.find({handle:req.query.handle},function(err, tweets){
+    if(err) res.send(err)
+    else if(tweets) {
+      var tweetRes = []
+      for(var i in tweets) {
+        tweetRes.push({
+          'tweet_id':tweets[i].tweet_id,
+          'created_at':tweets[i].created_at,
+          'text':tweets[i].text,
+          'favourite_count':tweets[i].favourite_count,
+          'rt_count':tweets[i].rt_count,
+          'is_rt':tweets[i].is_rt,
+          '_id':tweets[i]._id
+        })
+      }
+      res.json({'status':0, 'tweets':tweetRes})
+    } else {
+      res.json({'status':'tweets_not_found'})
+    }
+  })
+})
 
 router.get('/checkStatus', function (req, res, next) {
   // {handle:String}
@@ -201,5 +198,149 @@ router.get('/runningTrackers', function (req, res, next) {
 process.on('exit', function () {
   if (tracker != null) tracker.send('end')
 })
+
+router.get('/trackerData', function (req, res, next) {
+  // Input: {handle:String}
+
+  Trackers.findOne({handle:req.query.handle},function(err, tracker){
+    if(err) res.send(err)
+    else if(tracker) {
+        var id = tracker._id.toString()
+        getTweets(id, res)
+    } else {
+      res.json({'status':'tracker_not_found'})
+    }
+  })
+})
+
+router.get('/tweetEngmt', function (req, res, next) {
+  Tweets.findOne({_id:req.query._id},function(err, tweet){
+    if(err) res.send(err)
+    else if(tweet) {
+      // res.json({'status':0, 'tweet':tweet})
+      calculateMentionStats(tweet.handle, res, tweet)
+    } else {
+      res.json({'status':'tweet_not_found'})
+    }
+  })
+})
+
+// function getTweets(id, res) {
+//   Tweets.find({tracker_id:id},function(err, tweets){
+//     if(err) res.send(err)
+//     else if(tweets) {
+//       stats = {
+//         'tweetEngmtMetrics':null
+//       }
+//       calculateMentionStats(id, res, tweets, 0, stats)
+
+//     } else {
+//       res.json({'status':'tweets_not_found'})
+//     }
+//   })
+// }
+
+function calculateMentionStats(h, res, tweet) {
+  // Get created at
+  var createdAt = tweet.created_at
+
+  // Get mentions 3 hrs before
+  // Get mentions 3 hrs after
+  var gmtStr = toGmtStr(createdAt)
+  var range = calculateRangeDates(gmtStr)
+
+//  { birth: { $gt: new Date('1940-01-01'), $lt: new Date('1960-01-01') }
+  
+    var beforeMentions = 0
+    var afterMentions = 0
+
+  Mentions.find({handle:h}, function (err, mentions) {
+    if(err) res.send(err)
+    else if(mentions) {
+        for(var i in mentions) {
+          var gmtMentionDate = toGmtStr(mentions[i].created_at)
+          var mentionDate = new Date(gmtMentionDate)
+          if(mentionDate >= range.before && mentionDate <= range.tweetDate) beforeMentions++
+          if(mentionDate > range.tweetDate && mentionDate <= range.after) afterMentions++
+          returnData = {
+            'before_mentions':beforeMentions,
+            'after_mentions':afterMentions
+          }
+        }
+        res.json({'status':0, 'tweet':tweet, 'mentions_stats': returnData})
+
+    } else {
+      res.json({'status':'mentions_not_found'})
+      return null
+    }
+  })
+
+
+  // Construct Metric obj and append to stats obj
+  // Mentions.find({handle:req.query.handle},function(err, tracker){
+  //   if(err) res.send(err)
+  //   else if(tracker) {
+  //       var id = tracker._id.toString()
+  //       getTweets(id, res)
+  //   } else {
+  //     res.json({'status':'tracker_not_found'})
+  //   }
+  // })
+    
+  
+  
+}
+
+// var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ]
+
+function toGmtStr(dateStr) {
+  // Does not matter if GMT or IST - just calculating before and after
+  // Thu Jul 11 00:27:16 IST 2019
+  // 04 Dec 1995 00:12:00 GMT
+  var parts = dateStr.split(' ')
+
+  var d = parts[2] // Always has a 0 before single digit
+
+  // var m = months.indexOf(parts[1])
+  // var mStr = ("0" + m).slice(-2);
+  var m = parts[1]
+
+  var y = parts[5]
+
+  var t = parts[3]
+  // var tParts = t.split(':')
+  // var h = tParts[0]
+  // var min = tParts[1]
+  // var s = tParts[2]
+  var gmtStr = d + ' ' + m + ' ' + y + ' ' + t + ' GMT'
+
+  // console.log(y + ' ' + m + ' ' + d + ' ' + h + ' ' + min + ' ' + s)
+  // var date = new Date(y,m,d,h,min,s)
+  // date.setUTCDate(d)
+  // date.setUTCHours(h)
+  // var isoFormat = y + '-' + mStr + '-' + dStr + 'T' + t
+  return gmtStr
+}
+
+function calculateRangeDates(tweetDateStr) {
+  var tweetDate = new Date(tweetDateStr)
+  var before = new Date(tweetDateStr)
+  before.setHours(tweetDate.getHours()-3)
+  var after = new Date(tweetDateStr)
+  after.setHours(tweetDate.getHours()+3)
+
+  return {
+    'tweetDate':tweetDate,
+    'before':before,
+    'after':after
+  }
+}
+
+// parse a date in yyyy-mm-dd format
+function parseDate(input) {
+  var parts = input.split('-');
+  // new Date(year, month [, day [, hours[, minutes[, seconds[, ms]]]]])
+  return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
+}
 
 module.exports = router

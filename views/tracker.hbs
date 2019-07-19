@@ -1,0 +1,101 @@
+<div class="row no-margin">
+    <div class="col-1"></div>
+    <div class="col-10">
+        <div class="card">
+            <div class="card-body" id="analysis-section">
+                <div class="row">
+                    <div class="col-6">
+                        <h4>Analysis - </h4>
+                    </div>
+                    <div class="col-4"></div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-primary"
+                            id="analysis-graph-btn">Analysis</button>
+                    </div>
+                </div>
+                <div class="row hidden" id='tweet-engmt-info'>
+                    <div class="col-6">
+                        <div><strong id="engmt"></strong></div>
+                        <canvas></canvas>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="row"><div class="col"><strong>Statistics:</strong></div></div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div id="likes"></div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div id="rts"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div id="mentions-b"></div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div id="mentions-a"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row"><div class="col"><strong>Content
+                                    analysis:</strong></div></div>
+                        <div class="card">
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div id="is-rt"></div>
+                                </div>
+                                <div class="col-6">
+                                    <div id="has-link"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <div id="mentions-used"></div>
+                                </div>
+                                <div class="col-6">
+                                    <div id="hashtags-used"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div id="emojies-used"></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div></div>
+
+                </div>
+                <div class="row overview-accounts no-margin">
+                    <div class="col">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tweet</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Likes</th>
+                                    <th scope="col">Retweets</th>
+                                    <th scope="col">Engagement</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tweet-table-body">
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

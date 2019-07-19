@@ -1,4 +1,79 @@
 
+{{!-- TABLE --}}
+<div class="row no-margin">
+  <div class="col-1"></div>
+  <div class="col-10">
+    <div class="card overview-wrapper">
+  <div class="card-body">
+    <div class="row overview-accounts no-margin">
+  <div class="col">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tracking accounts...</th>
+          <th scope="col"></th>
+          <th scope="col">Tweets</th>
+          <th scope="col">Followers</th>
+          <th scope="col">Tracking</th>
+        </tr>
+      </thead>
+      <tbody id="overview-table-body">
+        
+       </tbody>
+    </table>
+    
+    </div>  
+</div>
+
+{{!-- HANDLE INPUT --}}
+<div class="row no-margin">
+    <div class="input-group" id="input-handle-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">@</span>
+      </div>
+      <input type="text" class="form-control" id="handle-input">
+      <div class="input-group-append">
+        <button class="btn btn-primary" id="add-account-btn">+</button>
+      </div>
+      <div class="input-group-append" id="handle-msg">
+        <label class="input-group-text">Enter Twitter handle to compare account</label>
+      </div>
+    </div>
+  
+</div>
+  </div>
+</div>
+  </div>
+  <div class="col-1"></div>
+  
+</div>
+
+
+
+{{!-- NAV BAR --}}
+<div class="row no-margin hidden" id="nav-bar">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <div class="card">
+        <div class="card-body">
+
+<ul class="nav nav-pills nav-fill">
+  <li class="nav-item">
+    <a class="nav-link active" id="graph-tab">Overview</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="compare-tab">Compare</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="track-tab">Track</a>
+  </li>
+  
+</ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-1"></div>
+  </div>
 {{!-- GRAPH OPTIONS --}}
 <div class="row no-margin hidden" id="graph-options">
   <div class="col-1"></div>

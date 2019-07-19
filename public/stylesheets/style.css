@@ -142,3 +142,11 @@ body {
 #tracker-section > div {
   padding: 0%
 }
+
+#tweet-table-body tr {
+  cursor: pointer;
+}
+
+.card-section {
+  background-color: #96BFFF
+}
