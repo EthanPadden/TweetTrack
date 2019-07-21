@@ -9,7 +9,7 @@ $('#calc-w-btn').click(function(){
     }
 
     if(weights.length == 5) {
-        if(gStats.GameOfThrones == null) {
+        if(gStats.GameOfThrones == null || gStats.GameOfThrones.avg_likes == null ||  gStats.GameOfThrones.avg_rts == null) {
             $.ajax({
                 type: 'GET',
                 url: '/got/getStats',
@@ -27,7 +27,6 @@ $('#calc-w-btn').click(function(){
         } else {
 
         }
-        // Calc stats from weights
     }
 })
 
@@ -37,17 +36,12 @@ function getTweets(weights) {
         url: '/got/getTweets',
         success: function(data) {
             if (data.status == 0) {
-                var results = calculateEngagementFromWeights(gStats, weights, data.tweets)
-                gStats.avg_likes = results.avg_likes
-                gStats.avg_rts = results.avg_rts
-                var dataForGraph = {
-                    'avg_likes':results.avg_likes,
-                    'avg_rts':results.avg_rts,
-                    'mentions': gStats.GameOfThrones.mentions,
-                    'hashtags': gStats.GameOfThrones.hashtags,
-                    'other': gStats.GameOfThrones.other
-                }
-                generateTweetEngmtChart(dataForGraph)
+                var tweetStats = getStatsFromTweets(data.tweets)
+                gStats.GameOfThrones.avg_likes = tweetStats.avg_likes
+                gStats.GameOfThrones.avg_rts = tweetStats.avg_rts
+
+                var engmt = calculateEngagementFromWeights(gStats, weights)
+                generateTweetEngmtChart(gStats.GameOfThrones, weights)
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },

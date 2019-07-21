@@ -8,9 +8,15 @@ var gStats = {
     'HBO':null
 }
 
-function generateTweetEngmtChart(data) {
+function generateTweetEngmtChart(data, weights) {
+    // FOR NOW: USING RTS ATTIBUTE INSTEAD OF AVG RTS
+    var contrib_l = data.avg_likes*weights[0]
+    var contrib_r = data.retweets*weights[1]
+    var contrib_m = data.mentions*weights[2]
+    var contrib_h = data.hashtags*weights[3]
+    var contrib_o = data.other*weights[4]
     var ctx = $('#GameOfThronesCtx')
-    console.log(data)
+    console.log(weights)
     new Chart(ctx, {
         type: 'pie',
         data: {
@@ -19,7 +25,7 @@ function generateTweetEngmtChart(data) {
         datasets: [
             {
             backgroundColor: ['#FF652F', '#FFE400', '#14A76C', '#007BFF', '#747474'],
-            data: [data.avg_likes, data.avg_rts, data.mentions, data.hashtags, data.other]
+            data: [contrib_l, contrib_r, contrib_m, contrib_h, contrib_o]
             }
         ]
         },
