@@ -25,7 +25,8 @@ $('#calc-w-btn').click(function(){
                 }
             });
         } else {
-
+            var engmt = calculateEngagementFromWeights(gStats, weights)
+            generateTweetEngmtChart(gStats.GameOfThrones, weights)
         }
     }
 })
