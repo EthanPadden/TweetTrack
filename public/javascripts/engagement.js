@@ -43,16 +43,12 @@ function calculateEngagementFromStats(stats, followersCount) {
 }
 
 function calculateEngagementFromWeights(stats, weights, tweets) {
-    console.log(stats)
-    console.log(weights)
-    console.log(tweets)
     var counts = getCounts(tweets)
     var avgL = 0
     var avgR = 0
 
     // FOR NOW: - instead of tweet loop
     var tweetCount = stats.GameOfThrones.tweets
-    console.log(tweetCount)
     if(tweetCount > 0) avgR = stats.GameOfThrones.retweets/tweetCount
 
     if(stats.tweet_count > 0) {
