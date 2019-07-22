@@ -6,7 +6,7 @@ var Mentions = require('../models/got_mentions')
 var Users = require('../models/got_users')
 var Hashtags = require('../models/got_hashtags')
 var None = require('../models/got_none')
-var Other = require('../models/got_other')
+var Others = require('../models/got_other')
 var Stats = require('../models/got_stats')
 var Retweets = require('../models/got_retweets')
 
@@ -37,7 +37,7 @@ router.get('/getStats', function (req, res, next) {
       if(err) res.send(err)
       else if(tweet) {
         // res.json({'status':0, 'tweet':tweet})
-        calculateStats(tweet.handle, res, tweet)
+        calculateEngmtStats(tweet.handle, res, tweet)
       } else {
         res.json({'status':'tweet_not_found'})
       }
@@ -48,9 +48,9 @@ router.get('/getStats', function (req, res, next) {
   
 function calculateEngmtStats(h, res, tweet) {
   var range = {
-    'before':tweet.timestamp_ms - 10800000,
-    'tweetDate':tweet.timestamp_ms,
-    'after':tweet.timestamp_ms + 10800000 
+    'before':+tweet.timestamp_ms - 10800000,
+    'tweetDate':+tweet.timestamp_ms,
+    'after':+tweet.timestamp_ms + 10800000 
   }
   
   var stats = {
@@ -74,15 +74,15 @@ function calculateMentions(stats, range, res, h) {
           if(mentionDate >= range.before && mentionDate <= range.tweetDate) stats.before_mentions++
           if(mentionDate > range.tweetDate && mentionDate <= range.after) stats.after_mentions++
         }
-        calculateHashtags(stats, range, res, h)
+        calculateHashtags(stats, range, res)
     } else {
       res.json({'status':'mentions_not_found'})
       return null
     }
   })
 }
-function calculateHashtags(stats, range, res, h) {
-  Hashtags.find({handle:h}, function (err, hashtags) {
+function calculateHashtags(stats, range, res) {
+  Hashtags.find({}, function (err, hashtags) {
     if(err) res.send(err)
     else if(hashtags) {
         for(var i in hashtags) {
@@ -90,26 +90,26 @@ function calculateHashtags(stats, range, res, h) {
           if(mentionDate >= range.before && mentionDate <= range.tweetDate) stats.before_hashtags++
           if(mentionDate > range.tweetDate && mentionDate <= range.after) stats.after_hashtags++
         }
-        calculateOther(stats, range, res, h)
+
+        setTimeout(function(){calculateOthers(stats, range, res)},1000)
     } else {
       res.json({'status':'hashtags_not_found'})
       return null
     }
   })
 }
-function calculateOther(stats, range, res, h) {
-  Other.find({handle:h}, function (err, others) {
+function calculateOthers(stats, range, res) {
+  Others.find({}, function (err, others) {
     if(err) res.send(err)
     else if(others) {
         for(var i in others) {
           var mentionDate = others[i].timestamp_ms
-          if(mentionDate >= range.before && mentionDate <= range.tweetDate) stats.before_others++
-          if(mentionDate > range.tweetDate && mentionDate <= range.after) stats.after_others++
+          if(mentionDate >= range.before && mentionDate <= range.tweetDate) stats.before_hashtags++
+          if(mentionDate > range.tweetDate && mentionDate <= range.after) stats.after_hashtags++
         }
-
         res.json({'status':0, 'stats':stats})
     } else {
-      res.json({'status':'hashtags_not_found'})
+      res.json({'status':'others_not_found'})
       return null
     }
   })
