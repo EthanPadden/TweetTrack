@@ -1,8 +1,9 @@
 var weightInputs = ['wL', 'wR', 'wM', 'wH', 'wO']
+var weights = []
+
 var gTweets = {GameOfThrones:null}
 
 $('#calc-w-btn').click(function(){
-    var weights = []
     for(var i in weightInputs){
         var w = $('#' + weightInputs[i]).val()
         if(isNaN(w) || w.length == 0) alert("Weight must be a number")
