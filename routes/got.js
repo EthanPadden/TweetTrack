@@ -32,4 +32,55 @@ router.get('/getStats', function (req, res, next) {
     })
   })
 
+  router.get('/tweetEngmt', function (req, res, next) {
+    Tweets.findOne({_id:req.query._id},function(err, tweet){
+      if(err) res.send(err)
+      else if(tweet) {
+        // res.json({'status':0, 'tweet':tweet})
+        calculateStats(tweet.handle, res, tweet)
+      } else {
+        res.json({'status':'tweet_not_found'})
+      }
+    })
+  })
+
+
+  
+function calculateEngmtStats(h, res, tweet) {
+  var range = {
+    bef:tweet.timestamp_ms - 10800000,
+    aft:tweet.timestamp_ms + 10800000 
+  }
+
+  
+  var stats = {
+    'before_mentions':0,
+    'after_mentions':0,
+    'before_hashtags':0,
+    'after_hashtags':0,
+    'before_other':0,
+    'after_other':0,
+    'retweets':0
+  }
+
+  calculateMentions(stats, range, res)
+// //  { birth: { $gt: new Date('1940-01-01'), $lt: new Date('1960-01-01') }
+}
+
+
+
+  // Mentions.find({handle:h}, function (err, mentions) {
+  //   if(err) res.send(err)
+  //   else if(mentions) {
+  //       for(var i in mentions) {
+          
+  //       }
+  //   } else {
+  //     res.json({'status':'mentions_not_found'})
+  //     return null
+  //   }
+  // })
+
+
+
 module.exports = router
