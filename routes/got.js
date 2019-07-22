@@ -48,10 +48,10 @@ router.get('/getStats', function (req, res, next) {
   
 function calculateEngmtStats(h, res, tweet) {
   var range = {
-    bef:tweet.timestamp_ms - 10800000,
-    aft:tweet.timestamp_ms + 10800000 
+    'before':tweet.timestamp_ms - 10800000,
+    'tweetDate':tweet.timestamp_ms,
+    'after':tweet.timestamp_ms + 10800000 
   }
-
   
   var stats = {
     'before_mentions':0,
@@ -63,23 +63,27 @@ function calculateEngmtStats(h, res, tweet) {
     'retweets':0
   }
 
-  calculateMentions(stats, range, res)
+  calculateMentions(stats, range, res, h)
 // //  { birth: { $gt: new Date('1940-01-01'), $lt: new Date('1960-01-01') }
 }
 
+function calculateMentions(stats, range, res, h) {
+  Mentions.find({handle:h}, function (err, mentions) {
+    if(err) res.send(err)
+    else if(mentions) {
+        for(var i in mentions) {
+          var mentionDate = mentions[i].timestamp_ms
+          if(mentionDate >= range.before && mentionDate <= range.tweetDate) stats.before_mentions++
+          if(mentionDate > range.tweetDate && mentionDate <= range.after) stats.after_mentions++
+        }
+    } else {
+      res.json({'status':'mentions_not_found'})
+      return null
+    }
+  })
+}
 
 
-  // Mentions.find({handle:h}, function (err, mentions) {
-  //   if(err) res.send(err)
-  //   else if(mentions) {
-  //       for(var i in mentions) {
-          
-  //       }
-  //   } else {
-  //     res.json({'status':'mentions_not_found'})
-  //     return null
-  //   }
-  // })
 
 
 
