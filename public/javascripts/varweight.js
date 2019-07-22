@@ -1,4 +1,5 @@
 var weightInputs = ['wL', 'wR', 'wM', 'wH', 'wO']
+var gTweets = {GameOfThrones:null}
 
 $('#calc-w-btn').click(function(){
     var weights = []
@@ -43,6 +44,9 @@ function getTweets(weights) {
 
                 var engmt = calculateEngagementFromWeights(gStats, weights)
                 generateTweetEngmtChart(gStats.GameOfThrones, weights)
+
+                gTweets.GameOfThrones.tweets = data.tweets
+                getIndividualTweetEngmts(0)
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },
@@ -52,3 +56,25 @@ function getTweets(weights) {
     });
 }
 
+function getIndividualTweetEngmts(i) {
+    if(i >= gTweets.GameOfThrones.length) console.log(gTweets)
+    else {
+        $.ajax({
+            type: 'GET',
+            url: '/got/tweetEngmt',
+            data: {'_id':gTweets.GameOfThrones[i]._id},
+            success: function(data){
+                if(data.status == 0) {
+                    gTweets.GameOfThrones.mention_stats = data.mention_stats
+                    getIndividualTweetEngmts(++i)
+                }
+                else if (data.status == -1) console.log("Error");
+            },
+            error: function(errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+    
+    
+}
