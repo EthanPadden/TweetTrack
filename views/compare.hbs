@@ -1,18 +1,32 @@
 <div class="row no-margin">
-    <div class="col">
-        <div class="card">
-            <div class="card-body" id="weight-input-section">
-                <div class="row no-margin">
-                    <div class="col-2 no-padding">
-                        <span class="input-group-text engmt-label">Engagement =
-                        </span>
-                    </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body" id="weight-input-section">
+                    <div class="row no-margin">
+                        <div class="col-2 no-padding">
+                            <span class="input-group-text engmt-label">Engagement
+                                =
+                            </span>
+                        </div>
 
-                    <div class="col-2 no-padding">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="wL">
-                            <div class="input-group-append">
-                                <span class="input-group-text">Likes</span>
+                        <div class="col-2 no-padding">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="wL">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Likes</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 no-padding">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text no-grey"> +
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" id="wR">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Retweets</span>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -22,59 +36,56 @@
                                 <span class="input-group-text no-grey"> +
                                 </span>
                             </div>
-                            <input type="text" class="form-control" id="wR">
+                            <input type="text" class="form-control" id="wM">
                             <div class="input-group-append">
-                                <span class="input-group-text">Retweets</span>
-                            </span>
+                                <span class="input-group-text">Mentions</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 no-padding">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text no-grey"> +
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" id="wH">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Hashtags</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 no-padding">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text no-grey"> +
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" id="wO">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Other</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-2 no-padding">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text no-grey"> +
-                            </span>
-                        </div>
-                        <input type="text" class="form-control" id="wM">
-                        <div class="input-group-append">
-                            <span class="input-group-text">Mentions</span>
-                        </div>
+                <div class="row">
+                    <div class="col-11"></div>
+                    <div class="col-1">
+                        <button class="btn btn-primary" id="calc-w-btn">Calculate</button>
                     </div>
-                </div>
-                <div class="col-2 no-padding">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text no-grey"> +
-                            </span>
-                        </div>
-                        <input type="text" class="form-control" id="wH">
-                        <div class="input-group-append">
-                            <span class="input-group-text">Hashtags</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-2 no-padding">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text no-grey"> +
-                            </span>
-                        </div>
-                        <input type="text" class="form-control" id="wO">
-                        <div class="input-group-append">
-                            <span class="input-group-text">Other</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-11"></div>
-                <div class="col-1">
-                    <button class="btn btn-primary" id="calc-w-btn">Calculate</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="row no-margin">
+    <div class="col">
+        <div class="card">
+            <div class="card-body" id="engagement-chart-section">
+                <canvas></canvas>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row no-margin">
