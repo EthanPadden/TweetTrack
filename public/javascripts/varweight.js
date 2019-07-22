@@ -45,7 +45,8 @@ function getTweets(weights) {
                 var engmt = calculateEngagementFromWeights(gStats, weights)
                 generateTweetEngmtChart(gStats.GameOfThrones, weights)
 
-                gTweets.GameOfThrones.tweets = data.tweets
+                gTweets.GameOfThrones = data.tweets
+                gTweets.GameOfThrones.stats = []
                 getIndividualTweetEngmts(0)
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
@@ -65,7 +66,7 @@ function getIndividualTweetEngmts(i) {
             data: {'_id':gTweets.GameOfThrones[i]._id},
             success: function(data){
                 if(data.status == 0) {
-                    gTweets.GameOfThrones.mention_stats = data.mention_stats
+                    gTweets.GameOfThrones.stats.push(data.stats)
                     getIndividualTweetEngmts(++i)
                 }
                 else if (data.status == -1) console.log("Error");
