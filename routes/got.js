@@ -59,12 +59,10 @@ function calculateEngmtStats(h, res, tweet) {
     'before_hashtags':0,
     'after_hashtags':0,
     'before_other':0,
-    'after_other':0,
-    'retweets':0
+    'after_other':0
   }
 
   calculateMentions(stats, range, res, h)
-// //  { birth: { $gt: new Date('1940-01-01'), $lt: new Date('1960-01-01') }
 }
 
 function calculateMentions(stats, range, res, h) {
@@ -76,8 +74,42 @@ function calculateMentions(stats, range, res, h) {
           if(mentionDate >= range.before && mentionDate <= range.tweetDate) stats.before_mentions++
           if(mentionDate > range.tweetDate && mentionDate <= range.after) stats.after_mentions++
         }
+        calculateHashtags(stats, range, res, h)
     } else {
       res.json({'status':'mentions_not_found'})
+      return null
+    }
+  })
+}
+function calculateHashtags(stats, range, res, h) {
+  Hashtags.find({handle:h}, function (err, hashtags) {
+    if(err) res.send(err)
+    else if(hashtags) {
+        for(var i in hashtags) {
+          var mentionDate = hashtags[i].timestamp_ms
+          if(mentionDate >= range.before && mentionDate <= range.tweetDate) stats.before_hashtags++
+          if(mentionDate > range.tweetDate && mentionDate <= range.after) stats.after_hashtags++
+        }
+        calculateOther(stats, range, res, h)
+    } else {
+      res.json({'status':'hashtags_not_found'})
+      return null
+    }
+  })
+}
+function calculateOther(stats, range, res, h) {
+  Other.find({handle:h}, function (err, others) {
+    if(err) res.send(err)
+    else if(others) {
+        for(var i in others) {
+          var mentionDate = others[i].timestamp_ms
+          if(mentionDate >= range.before && mentionDate <= range.tweetDate) stats.before_others++
+          if(mentionDate > range.tweetDate && mentionDate <= range.after) stats.after_others++
+        }
+
+        res.json({'status':0, 'stats':stats})
+    } else {
+      res.json({'status':'hashtags_not_found'})
       return null
     }
   })
