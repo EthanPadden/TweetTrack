@@ -137,6 +137,13 @@ function getTweetEngagementsToAdd(stats, cells) {
 }
 
 $('#graph-w-btn').click(function() {
-    if(allEngmtLoaded) generateAccountEngmtChart()
-    else alert("Please wait until Tweet statistics are gathered from server")
+    if(!allEngmtLoaded) {
+            var cardBody = $('#engagement-chart-section div.card-body')[0]
+            console.log(cardBody)
+        $(cardBody).prepend('<p>Note that all tweet engagments were not loaded when this graph was generated</p>')
+    }
+    
+    generateAccountEngmtChart()
+   
+    
 })
