@@ -18,7 +18,7 @@ $('#calc-w-btn').click(function(){
                 success: function(data) {
                     if (data.status == 0) {
                         gStats.GameOfThrones = data.stats[0]
-                        getTweets(weights)
+                        getTweets()
                     } else if(data.status) console.log("Error: status " + data.status);
                     else console.log("Error: no status available");
                 },
@@ -33,22 +33,26 @@ $('#calc-w-btn').click(function(){
     }
 })
 
-function getTweets(weights) {
+function getTweets() {
     $.ajax({
         type: 'GET',
         url: '/got/getTweets',
         success: function(data) {
             if (data.status == 0) {
-                var tweetStats = getStatsFromTweets(data.tweets)
-                gStats.GameOfThrones.avg_likes = tweetStats.avg_likes
-                gStats.GameOfThrones.avg_rts = tweetStats.avg_rts
+                // var tweetStats = getStatsFromTweets(data.tweets)
+                // gStats.GameOfThrones.avg_likes = tweetStats.avg_likes
+                // gStats.GameOfThrones.avg_rts = tweetStats.avg_rts
 
-                var engmt = calculateEngagementFromWeights(gStats, weights)
-                generateTweetEngmtChart(gStats.GameOfThrones, weights)
+                // var engmt = calculateEngagementFromWeights(gStats, weights)
+                // generateTweetEngmtChart(gStats.GameOfThrones, weights)
 
-                gTweets.GameOfThrones = data.tweets
-                gTweets.GameOfThrones.stats = []
-                getIndividualTweetEngmts(0)
+                // gTweets.GameOfThrones = data.tweets
+                // gTweets.GameOfThrones.stats = []
+                // getIndividualTweetEngmts(0)
+
+                for(var i in data.tweets) {
+                    addTweetToTable(data.tweets[i])
+                }
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },
@@ -56,6 +60,18 @@ function getTweets(weights) {
             console.log(errMsg);
         }
     });
+}
+
+function addTweetToTable(tweet) {
+    var tableBody = $('#GOT-table tbody')[0]
+    var html = '<tr><td>' + tweet.text + '</td>'
+    + '<td>Calculating...</td>'
+    + '<td class="hidden">' + tweet._id + '</td>'
+    + '<td class="hidden">' + tweet.tweet_id + '</td>'
+    + '<td class="hidden">' + tweet.favourite_count + '</td>'
+    + '<td class="hidden">' + tweet.retweet_count + '</td>'
+    + '<td class="hidden">' + tweet.timestamp_ms + '</td></tr>'
+    $(tableBody).append(html)
 }
 
 function getIndividualTweetEngmts(i) {
