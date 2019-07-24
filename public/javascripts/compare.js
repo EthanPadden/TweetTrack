@@ -41,6 +41,9 @@ function generateAccountEngmtChart() {
     var ctx = $('#engagement-chart-section canvas')[0]
 
     $('#engagement-chart-section').removeClass('hidden')
+    var engmts = gatherTweetEngmtData()
+    if(engmts != null) console.log(engmts)
+    else console.log("NULL init")
 
     // new Chart(ctx, {
     //     type: 'line',
@@ -86,5 +89,19 @@ function generateAccountEngmtChart() {
 
 
 function gatherTweetEngmtData() {
+    var engmts = []
 
+    var tableBody = $('#GOT-table tbody')[0]
+    var rows = $(tableBody).children()
+    var i = 0
+    var lim = rows.length
+    for (i = 0; i < lim; i++) {
+      if (rows[i].childElementCount == 7) {
+        var eCell = $(rows[i]).children()[1]
+        engmts.push(parseInt($(eCell).html()))
+      } else {
+          if(engmts.length > 0) return engmts
+          else return null
+      }
+    }
 }
