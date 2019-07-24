@@ -16,7 +16,6 @@ function generateTweetEngmtChart(data, weights) {
     var contrib_h = data.hashtags*weights[3]
     var contrib_o = data.other*weights[4]
     var ctx = $('#GameOfThronesCtx')
-    console.log(weights)
     new Chart(ctx, {
         type: 'pie',
         data: {

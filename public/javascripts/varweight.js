@@ -7,10 +7,12 @@ $('#calc-w-btn').click(function(){
     for(var i in weightInputs){
         var w = $('#' + weightInputs[i]).val()
         if(isNaN(w) || w.length == 0) alert("Weight must be a number")
-        else weights.push(parseFloat(w))
+        else weights[i] = parseFloat(w)
     }
+    console.log(weights)
 
     if(weights.length == 5) {
+        console.log(gStats)
         if(gStats.GameOfThrones == null || gStats.GameOfThrones.avg_likes == null ||  gStats.GameOfThrones.avg_rts == null) {
             $.ajax({
                 type: 'GET',
@@ -29,6 +31,8 @@ $('#calc-w-btn').click(function(){
         } else {
             var engmt = calculateEngagementFromWeights(gStats, weights)
             generateTweetEngmtChart(gStats.GameOfThrones, weights)
+            // Check for tweets
+            console.log("Tweet check")
         }
     }
 })
