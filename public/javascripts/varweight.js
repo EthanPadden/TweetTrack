@@ -85,13 +85,23 @@ function getIndividualTweetEngmts(i) {
             data: {'_id':rows[i].id},
             success: function(data){
                 if(data.status == 0) {
-                    // var html = '<td'
                    var cells = $(rows[i]).children()
                     data.stats.likes = parseInt($(cells[3]).html())
                     data.stats.rts = parseInt($(cells[4]).html())
                     var engmt = calculateTweetEngagement(data.stats, weights)
                     
                     $(cells[1]).html(engmt)
+                    var statsToSave = {
+                        'b_mentions':data.stats.before_mentions,
+                        'a_mentions':data.stats.after_mentions,
+                        'b_hashtags':data.stats.before_hashtags,
+                        'a_hashtags':data.stats.after_hashtags,
+                        'b_other':data.stats.before_other,
+                        'a_other':data.stats.after_other
+                    }
+
+                    var html = '<td class="hidden">' + JSON.stringify(statsToSave) + '</td>'
+                    $(rows[i]).append(html)
                     // getIndividualTweetEngmts(++i)
                 }
                 else if (data.status == -1) console.log("Error");
