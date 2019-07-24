@@ -64,9 +64,8 @@ function getTweets() {
 
 function addTweetToTable(tweet) {
     var tableBody = $('#GOT-table tbody')[0]
-    var html = '<tr><td>' + tweet.text + '</td>'
+    var html = '<tr id="' + tweet._id + '"><td>' + tweet.text + '</td>'
     + '<td>Calculating...</td>'
-    + '<td class="hidden">' + tweet._id + '</td>'
     + '<td class="hidden">' + tweet.tweet_id + '</td>'
     + '<td class="hidden">' + tweet.favourite_count + '</td>'
     + '<td class="hidden">' + tweet.retweet_count + '</td>'
