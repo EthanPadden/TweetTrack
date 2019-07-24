@@ -52,7 +52,7 @@ function getTweets() {
                 }
 
                 // Table has been created at this point
-                // getIndividualTweetEngmts(0)
+                getIndividualTweetEngmts(0)
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },
@@ -74,16 +74,25 @@ function addTweetToTable(tweet) {
 }
 
 function getIndividualTweetEngmts(i) {
-    if(i >= gTweets.GameOfThrones.length) console.log(gTweets)
+    var tableBody = $('#GOT-table tbody')[0]
+    var rows = $(tableBody).children()
+
+    if(i >= rows.length) console.log("Done")
     else {
         $.ajax({
             type: 'GET',
             url: '/got/tweetEngmt',
-            data: {'_id':gTweets.GameOfThrones[i]._id},
+            data: {'_id':rows[i].id},
             success: function(data){
                 if(data.status == 0) {
-                    gTweets.GameOfThrones.stats.push(data.stats)
-                    getIndividualTweetEngmts(++i)
+                    // var html = '<td'
+                   var cells = $(rows[i]).children()
+                    data.stats.likes = parseInt($(cells[3]).html())
+                    data.stats.rts = parseInt($(cells[4]).html())
+                    var engmt = calculateTweetEngagement(data.stats, weights)
+                    
+                    $(cells[1]).html(engmt)
+                    // getIndividualTweetEngmts(++i)
                 }
                 else if (data.status == -1) console.log("Error");
             },
@@ -92,6 +101,4 @@ function getIndividualTweetEngmts(i) {
             }
         });
     }
-    
-    
 }
