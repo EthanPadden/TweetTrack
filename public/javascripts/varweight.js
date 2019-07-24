@@ -9,10 +9,8 @@ $('#calc-w-btn').click(function(){
         if(isNaN(w) || w.length == 0) alert("Weight must be a number")
         else weights[i] = parseFloat(w)
     }
-    console.log(weights)
 
     if(weights.length == 5) {
-        console.log(gStats)
         if(gStats.GameOfThrones == null || gStats.GameOfThrones.avg_likes == null ||  gStats.GameOfThrones.avg_rts == null) {
             $.ajax({
                 type: 'GET',
@@ -31,8 +29,24 @@ $('#calc-w-btn').click(function(){
         } else {
             var engmt = calculateEngagementFromWeights(gStats, weights)
             generateTweetEngmtChart(gStats.GameOfThrones, weights)
-            // Check for tweets
-            console.log("Tweet check")
+
+            // All tweets are likely to be loaded, because of the high speed of that route (1 DB operation)
+            // Check have all tweets the stats cell:
+            var tableBody = $('#GOT-table tbody')[0]
+            var rows = $(tableBody).children()
+            var i = 0
+            var lim = rows.length
+            for(i = 0; i < lim; i++) {
+                if(rows[i].childElementCount < 7) {
+                    getTweetStatsToAdd(i)
+                } else {
+                    var cells = $(rows[i]).children()
+                    var stats = JSON.parse($(cells[6]).html())
+                    stats.likes = parseInt($(cells[3]).html())
+                    stats.rts = parseInt($(cells[4]).html())
+                    getTweetEngagementsToAdd(stats, cells)
+                }
+            }
         }
     }
 })
@@ -56,7 +70,7 @@ function getTweets() {
                 }
 
                 // Table has been created at this point
-                getIndividualTweetEngmts(0)
+                getTweetStatsToAdd(0)
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },
@@ -77,11 +91,11 @@ function addTweetToTable(tweet) {
     $(tableBody).append(html)
 }
 
-function getIndividualTweetEngmts(i) {
+function getTweetStatsToAdd(i) {
     var tableBody = $('#GOT-table tbody')[0]
     var rows = $(tableBody).children()
 
-    if(i >= rows.length) console.log("Done")
+    if(i >= rows.length) getTweetEngagementsToAdd()
     else {
         $.ajax({
             type: 'GET',
@@ -92,18 +106,15 @@ function getIndividualTweetEngmts(i) {
                    var cells = $(rows[i]).children()
                     data.stats.likes = parseInt($(cells[3]).html())
                     data.stats.rts = parseInt($(cells[4]).html())
-                    var engmt = calculateTweetEngagement(data.stats, weights)
-                    
-                    $(cells[1]).html(engmt)
                     var statsToSave = {
-                        'b_mentions':data.stats.before_mentions,
-                        'a_mentions':data.stats.after_mentions,
-                        'b_hashtags':data.stats.before_hashtags,
-                        'a_hashtags':data.stats.after_hashtags,
-                        'b_other':data.stats.before_other,
-                        'a_other':data.stats.after_other
+                        'before_mentions':data.stats.before_mentions,
+                        'after_mentions':data.stats.after_mentions,
+                        'before_hashtags':data.stats.before_hashtags,
+                        'after_hashtags':data.stats.after_hashtags,
+                        'before_other':data.stats.before_other,
+                        'after_other':data.stats.after_other
                     }
-
+                    getTweetEngagementsToAdd(data.stats, cells)
                     var html = '<td class="hidden">' + JSON.stringify(statsToSave) + '</td>'
                     $(rows[i]).append(html)
                     // getIndividualTweetEngmts(++i)
@@ -115,4 +126,10 @@ function getIndividualTweetEngmts(i) {
             }
         });
     }
+}
+
+function getTweetEngagementsToAdd(stats, cells) {
+    var engmt = calculateTweetEngagement(stats, weights)
+    console.log(engmt)
+    $(cells[1]).html(engmt)
 }

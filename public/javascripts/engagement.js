@@ -64,6 +64,8 @@ function getStatsFromTweets(tweets) {
 }
 
 function calculateTweetEngagement(stats, weights) {
+    console.log(stats)
+    console.log(weights)
     var mentionsRatio = stats.after_mentions
     var hashtagsRatio = stats.after_hashtags
     var otherRatio = stats.after_other
