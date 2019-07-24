@@ -39,20 +39,20 @@ function getTweets() {
         url: '/got/getTweets',
         success: function(data) {
             if (data.status == 0) {
-                // var tweetStats = getStatsFromTweets(data.tweets)
-                // gStats.GameOfThrones.avg_likes = tweetStats.avg_likes
-                // gStats.GameOfThrones.avg_rts = tweetStats.avg_rts
+                var tweetStats = getStatsFromTweets(data.tweets)
+                gStats.GameOfThrones.avg_likes = tweetStats.avg_likes
+                gStats.GameOfThrones.avg_rts = tweetStats.avg_rts
 
-                // var engmt = calculateEngagementFromWeights(gStats, weights)
-                // generateTweetEngmtChart(gStats.GameOfThrones, weights)
+                var engmt = calculateEngagementFromWeights(gStats, weights)
+                generateTweetEngmtChart(gStats.GameOfThrones, weights)
 
-                // gTweets.GameOfThrones = data.tweets
-                // gTweets.GameOfThrones.stats = []
-                // getIndividualTweetEngmts(0)
 
                 for(var i in data.tweets) {
                     addTweetToTable(data.tweets[i])
                 }
+
+                // Table has been created at this point
+                // getIndividualTweetEngmts(0)
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
         },
