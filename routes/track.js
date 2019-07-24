@@ -218,12 +218,63 @@ router.get('/tweetEngmt', function (req, res, next) {
     if(err) res.send(err)
     else if(tweet) {
       // res.json({'status':0, 'tweet':tweet})
-      calculateMentionStats(tweet.handle, res, tweet)
+      var stats =[]
+      var range = {
+        'before':tweet.timestamp_ms - 10800000,
+        'tweetDate':tweet.timestamp_ms,
+        'after':tweet.timestamp_ms + 10800000
+      }
+      calculateTimeStats(stats, range, res, 'GameOfThrones', 0)
     } else {
       res.json({'status':'tweet_not_found'})
     }
   })
 })
+
+
+function calculateTimeStats(stats, range, res, h, i) {
+  if(i >= 6) {
+    var resStats = {
+      'before_mentions':stats[0],
+      'after_mentions':stats[1],
+      'before_hashtags':stats[2],
+      'after_hashtags':stats[3],
+      'before_other':stats[4],
+      'after_other':stats[5]
+    }
+    res.json({'status':0, 'stats':resStats})
+  } else {
+    var start, finish
+    var Collection
+    if(i%2 == 0) {
+      var x = i/2
+      Collection = collections[x]
+      start = range.before
+      finish = range.tweetDate
+      
+      console.log("i = " + i + "\tDB[" + x + "]\t" + "s:bef" + "\tf:t")
+    } else {
+      var x = (i-1)/2
+      Collection = collections[x]
+      start = range.tweetDate
+      finish = range.after
+      console.log("i = " + i + "\tDB[" + x + "]\t" + "s:t" + "\tf:aft")
+
+    }
+    
+    Collection.find({handle:h}).where('timestamp_ms').gt(start).lt(finish).exec(function (err, tweets) {
+      if(err) res.send(err)
+      else if(tweets) {
+        console.log(tweets.length + " found")
+        stats[i] = tweets.length
+        calculateTimeStats(stats, range, res, h, ++i)
+      } else {
+        res.json({'err_at':i})
+        return null
+      }
+    })
+  }
+}
 
 // function getTweets(id, res) {
 //   Tweets.find({tracker_id:id},function(err, tweets){
