@@ -95,7 +95,7 @@ function getTweetStatsToAdd(i) {
     var tableBody = $('#GOT-table tbody')[0]
     var rows = $(tableBody).children()
 
-    if(i >= rows.length) getTweetEngagementsToAdd()
+    if(i >= rows.length)    return
     else {
         $.ajax({
             type: 'GET',
@@ -117,7 +117,7 @@ function getTweetStatsToAdd(i) {
                     getTweetEngagementsToAdd(data.stats, cells)
                     var html = '<td class="hidden">' + JSON.stringify(statsToSave) + '</td>'
                     $(rows[i]).append(html)
-                    // getIndividualTweetEngmts(++i)
+                    getTweetStatsToAdd(++i)
                 }
                 else if (data.status == -1) console.log("Error");
             },
@@ -130,6 +130,5 @@ function getTweetStatsToAdd(i) {
 
 function getTweetEngagementsToAdd(stats, cells) {
     var engmt = calculateTweetEngagement(stats, weights)
-    console.log(engmt)
     $(cells[1]).html(engmt)
 }
