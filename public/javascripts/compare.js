@@ -37,3 +37,7 @@ function generateTweetEngmtChart(data, weights) {
     });
 }
 
+function generateAccountEngmtChart() {
+    console.log("Graph")
+}
+

@@ -1,5 +1,6 @@
 var weightInputs = ['wL', 'wR', 'wM', 'wH', 'wO']
 var weights = []
+var allEngmtLoaded = false
 
 var gTweets = {GameOfThrones:null}
 
@@ -61,7 +62,9 @@ function getTweets() {
                 gStats.GameOfThrones.avg_likes = tweetStats.avg_likes
                 gStats.GameOfThrones.avg_rts = tweetStats.avg_rts
 
+                // Account engagement
                 var engmt = calculateEngagementFromWeights(gStats, weights)
+
                 generateTweetEngmtChart(gStats.GameOfThrones, weights)
 
 
@@ -95,7 +98,7 @@ function getTweetStatsToAdd(i) {
     var tableBody = $('#GOT-table tbody')[0]
     var rows = $(tableBody).children()
 
-    if(i >= rows.length)    return
+    if(i >= rows.length) allEngmtLoaded = true
     else {
         $.ajax({
             type: 'GET',
@@ -132,3 +135,8 @@ function getTweetEngagementsToAdd(stats, cells) {
     var engmt = calculateTweetEngagement(stats, weights)
     $(cells[1]).html(engmt)
 }
+
+$('#graph-w-btn').click(function() {
+    if(allEngmtLoaded) generateAccountEngmtChart()
+    else alert("Please wait until Tweet statistics are gathered from server")
+})
