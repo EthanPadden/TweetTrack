@@ -172,6 +172,8 @@ function constructTracker(handle) {
 }
 
 function displayTrackerDetails(tracker) {
+    // console.log(tracker)
+    // console.log(accounts)
     
     var selector = '#tracker-section #tracker-' + tracker.handle
    

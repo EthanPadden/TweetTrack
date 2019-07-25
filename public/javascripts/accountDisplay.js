@@ -8,7 +8,7 @@ $('#handle-input').keyup(function(event){
     isHandleValid(handle);
 });
 
-function addAccount(h, isTracking) {
+function addAccount(h, isTracking, tracker) {
     $.ajax({
         type: 'GET',
         url: '/account/getBasicInfo',
@@ -16,6 +16,9 @@ function addAccount(h, isTracking) {
         success: function(data){
             if(data.status == 0) {
                 accounts.push(data);
+                console.log(data)
+        displayTrackerDetails(tracker)
+
                 addUserToTable(data);
                 addGraphOptions();
                 updateOptions(data);

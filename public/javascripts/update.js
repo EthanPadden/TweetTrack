@@ -6,17 +6,14 @@ function getRunningTrackers() {
         url: '/track/runningTrackers',
         success: function(data) {
             if (data.status == 0) {
-            //    console.log(data)
                for(var i in data.trackers) {
                    var handle = data.trackers[i].handle
-                   addAccount(handle, true)
+                   addAccount(handle, true, data.trackers[i])
                     constructTracker(handle)
                }
 
                    updateStats(data.trackers, 0)
-            //    console.log("Returned tracker details - ")
-            //    console.log(data.trackers)
-               processReturnedTrackers(data.trackers, 0)
+         
 
                
 
@@ -29,15 +26,7 @@ function getRunningTrackers() {
     });
 }
 
-function processReturnedTrackers(trackers, i) {
-    if(i >= trackers.length) return
-    setTimeout(function(){
-        // console.log("Tracker " + i + ': ')
-        // console.log(trackers[i])
-        displayTrackerDetails(trackers[i])
-        processReturnedTrackers(trackers, ++i)
- }, 2000)
-}
+
 
 function updateStats(trackers, i) {
     if(i >= trackers.length) return
