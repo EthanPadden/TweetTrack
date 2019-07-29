@@ -184,7 +184,9 @@ router.get('/runningTrackers', function (req, res, next) {
       for(var i in trackers) {
         t = {
           'handle':trackers[i].handle,
-          'start_date':trackers[i].start_date
+          'start_date':trackers[i].start_date,
+          'system':trackers[i].toObject().system,
+          'status':trackers[i].toObject().status
         }
         trackerInfo.push(t)
       }
