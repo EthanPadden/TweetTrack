@@ -174,11 +174,15 @@ function constructTracker(handle) {
 function displayTrackerDetails(tracker) {
     // console.log(tracker)
     // console.log(accounts)
+
     
     var selector = '#tracker-section #tracker-' + tracker.handle
+    
    
     $(selector + ' #start-date').html('Started: ' + tracker.start_date.split(' IST')[0])    
-    $(selector + ' #status').html('Status: tracking')  
+    
+    if(tracker.stored_status == 0) $(selector + ' #status').html('Status: not stored')  
+    else if(tracker.stored_status == 1) $(selector + ' #status').html('Status: stored')  
     
     var account = findAccount(accounts, tracker.handle)
     var name = account.name
