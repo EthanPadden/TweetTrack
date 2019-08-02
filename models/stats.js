@@ -3,13 +3,14 @@ var Schema = mongoose.Schema
 require('./util')
 
 var statsSchema = new Schema({
-    last_updated: {type: String},
-    handle: {type: String},
-    tracker_id: {type: String},
-    tweet_count: {type: Number},
-    mentions_count: {type: Number},
-    likes_count: {type: Number},
-    rt_count: {type: Number}
+    tweet_id: {type: Number},
+    created_at: {type: Number},
+    test: {type: String},
+    favourite_count: {type: Number}.
+    rt_count: {type: Number},
+    is_rt: {type: Boolean},
+    media_entities: {type: Object},
+    url_entities: {type: Object}
   })
 
-module.exports = mongoose.model('Stats', statsSchema)
+module.exports = mongoose.model('Mentions', mentionsSchema)
