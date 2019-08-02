@@ -76,7 +76,7 @@
                     </div></div>
 
                 </div>
-                <div class="row overview-accounts no-margin">
+                <div class="row tweet-table no-margin">
                     <div class="col">
                         <table class="table">
                             <thead>
@@ -85,7 +85,15 @@
                                     <th scope="col">Date</th>
                                     <th scope="col">Likes</th>
                                     <th scope="col">Retweets</th>
-                                    <th scope="col">Engagement</th>
+                                    <th scope="col" class='hidden'>is_rt</th>
+                                    <th scope="col" class='hidden'>media_entities</th>
+                                    <th scope="col" class='hidden'>url_entities</th>
+                                    <th scope="col" class='hidden'>before_mentions</th>
+                                    <th scope="col" class='hidden'>after_mentions</th>
+                                    <th scope="col" class='hidden'>before_hashtags</th>
+                                    <th scope="col" class='hidden'>after_hashtags</th>
+                                    <th scope="col" class='hidden'>before_other</th>
+                                    <th scope="col" class='hidden'>after_other</th>
                                 </tr>
                             </thead>
                             <tbody id="tweet-table-body">
