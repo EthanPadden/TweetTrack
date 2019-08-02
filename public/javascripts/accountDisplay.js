@@ -15,9 +15,9 @@ function addAccount(h, isTracking, tracker) {
         data: {'handle':h},
         success: function(data){
             if(data.status == 0) {
+                data.tracker = tracker
                 accounts.push(data);
                 displayTrackerDetails(tracker)
-
                 addUserToTable(data);
                 addGraphOptions();
                 updateOptions(data);

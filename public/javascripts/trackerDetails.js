@@ -3,7 +3,10 @@ var selectedTweet = -1
 $("body").on('click', '#tracker-link-btn', function(e){
     var handle = e.target.outerHTML.split('=')[3].split('"')[1]
     window.trackHandle = handle
-    $(location).attr('href', '/tracker?handle=' + handle );
+    var account = findAccount(accounts, handle)
+    
+    if(account.tracker.stored_status == 0) $(location).attr('href', '/tracker?handle=' + handle );
+    else if(account.tracker.stored_status == 1) $(location).attr('href', '/analysis?handle=' + handle );
  });
  $("body").on('mouseenter', '#tweet-table-body tr', function(e){
     var select = e.target.parentNode
