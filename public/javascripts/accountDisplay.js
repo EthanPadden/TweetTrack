@@ -16,8 +16,7 @@ function addAccount(h, isTracking, tracker) {
         success: function(data){
             if(data.status == 0) {
                 accounts.push(data);
-                console.log(data)
-        displayTrackerDetails(tracker)
+                displayTrackerDetails(tracker)
 
                 addUserToTable(data);
                 addGraphOptions();
