@@ -78,9 +78,8 @@ function createSEngmtChart() {
     var ctx = $('#tweet-engmt-info canvas')
     var timeLimits = getLimits()
     var vals = getSXAxis(timeLimits)
-    var engmts = []
-    gatherTweetStats()
-
+    var engmts = gatherTweetStats()
+    console.log(engmts)
     // new Chart(ctx, {
     //     type: 'line',
     //     data: {
@@ -137,24 +136,13 @@ function getSXAxis(range) {
         startDate.setDate(startDate.getDate() + 1);
     }
     return vals
-    // var vals = [new Date(range[0]-step)]
-    // for(var i = 0; i < 8; i++) {
-    //     vals.push(new Date(range[0] + (i*step)))
-    // }
-    // return vals
-
-    // Get date of min and max
-    // Divide into days
-    
 }
 
-function getEngmts() {
-    gatherTweetStats()
-}
+
 
 function gatherTweetStats() {
     var rows = $('#tweet-table-body').children()
-
+    var engmts = []
     for(var i = 0; i < rows.length; i++) {
         var cells = $(rows[i]).children()
         var data = {
@@ -171,8 +159,9 @@ function gatherTweetStats() {
                 'after_other':parseInt($(cells[14]).html())
             }
         }
-        console.log(data)
+        engmts.push(calcGatheredStats(data))
     }
+    return engmts
 }
 
 var weights = [1,1,1,1,1]
@@ -180,9 +169,13 @@ var weights = [1,1,1,1,1]
 function calcGatheredStats(data) {
     var likes = data.tweet.favourite_count
     var rts = data.tweet.rt_count
-    var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions*100
+    var mentionRatio = data.mentions_stats.after_mentions
+    var hashtagsRatio = data.mentions_stats.after_mentions
+    var otherRatio = data.mentions_stats.after_mentions
+    if(data.mentions_stats.before_mentions > 0) mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions*100
+    if(data.mentions_stats.before_hashtags > 0) hashtagsRatio = data.mentions_stats.after_hashtags/data.mentions_stats.before_hashtags*100
+    if(data.mentions_stats.before_other > 0) otherRatio = data.mentions_stats.after_other/data.mentions_stats.after_other*100
     
-    var engmt = (wL * likes) + (wR * rts) + (lM * mentionRatio)
-    // console.log('likes: ' + likes + ' rts: ' + rts + ' m: ' + mentionRatio)
+    var engmt = (weights[0] * likes) + (weights[1] * rts) + (weights[2] * mentionRatio) + (weights[2] * hashtagsRatio) + (weights[2] * otherRatio)
     return Math.round(engmt)
 }
