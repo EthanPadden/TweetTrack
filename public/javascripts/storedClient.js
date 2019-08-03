@@ -3,6 +3,28 @@ $(document).ready(function () {
   gatherTweets(handle)
   setName(handle)
 })
+var selectedTweet = -1
+
+$("body").on('mouseenter', '#tweet-table-body tr', function(e){
+    var select = e.target.parentNode
+    if(select != selectedTweet)
+   $(select).css('background-color', '#96BFFF')
+ })
+ $("body").on('mouseleave', '#tweet-table-body tr', function(e){
+     var select = e.target.parentNode
+     if(select != selectedTweet)
+    $(select).css('background-color', '#FFFFFF')
+
+ })
+
+ $("body").on('click', '#tweet-table-body tr', function(e){
+    $(selectedTweet).css('background-color', '#FFFFFF')
+    $(selectedTweet).css('color', '#212529')
+    $(e.target.parentNode).css('background-color', '#007BFF')
+    $(e.target.parentNode).css('color', '#FFFFFF')
+    selectedTweet = e.target.parentNode
+ })
+
 
 function setName (handle) {
   $.ajax({
