@@ -49,6 +49,7 @@ function gatherTweets(handle) {
                 + '<td>' + date + '</td>'
                 + '<td>' + data.favourite_count + '</td>'
                 + '<td>' + data.rt_count + '</td>'
+                + '<td>Calculating...</td>'
                 + '<td class="hidden">' + data.text + '</td>'
                 + '<td class="hidden">' + data.created_at + '</td>'
                 + '<td class="hidden">' + data.is_rt + '</td>'
@@ -114,6 +115,10 @@ function createSEngmtChart() {
       
 }
 
+function updateEngmtsOnTable() {
+
+}
+
 function compare( a, b ) {
     if ( a.t < b.t ){
       return -1;
@@ -131,7 +136,7 @@ function getLimits() {
     var timestamps = []
     for(var i = 0; i < rows.length; i++) {
         var cells = $(rows[i]).children()
-        var timestamp = $(cells[5]).html()
+        var timestamp = $(cells[6]).html()
         timestamps.push(timestamp)
     }
     var min = timestamps[0]
@@ -176,17 +181,17 @@ function gatherTweetStats() {
                 'tweet_id':rows[i].id
             },
             'mentions_stats':{
-                'before_mentions':parseInt($(cells[9]).html()),
-                'after_mentions':parseInt($(cells[10]).html()),
-                'before_hashtags':parseInt($(cells[11]).html()),
-                'after_hashtags':parseInt($(cells[12]).html()),
-                'before_other':parseInt($(cells[13]).html()),
-                'after_other':parseInt($(cells[14]).html())
+                'before_mentions':parseInt($(cells[10]).html()),
+                'after_mentions':parseInt($(cells[11]).html()),
+                'before_hashtags':parseInt($(cells[12]).html()),
+                'after_hashtags':parseInt($(cells[13]).html()),
+                'before_other':parseInt($(cells[14]).html()),
+                'after_other':parseInt($(cells[15]).html())
             }
         }
         engmts.push( {
             y:calcGatheredStats(data),
-                        t:new Date(parseInt($(cells[5]).html()))
+                        t:new Date(parseInt($(cells[6]).html()))
                     }
                     )
 

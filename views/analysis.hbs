@@ -3,53 +3,20 @@
     <div class="col-10">
         <div class="card">
             <div class="card-body" id="analysis-section">
+
+                {{!-- TITLE --}}
                 <div class="row">
                     <div class="col">
                         <h4>Analysis - </h4>
                     </div>
-                    
                 </div>
+
+                {{!-- GRAPH --}}
                 <div class="row hidden" id='tweet-engmt-info'>
                     <div class="col">
                         <div><strong id="engmt"></strong></div>
                         <canvas></canvas>
                     </div>
-
-                    
-
-                        <div class="row"><div class="col"><strong>Content
-                                    analysis:</strong></div></div>
-                        <div class="card">
-
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div id="is-rt"></div>
-                                </div>
-                                <div class="col-6">
-                                    <div id="has-link"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <div id="mentions-used"></div>
-                                </div>
-                                <div class="col-6">
-                                    <div id="hashtags-used"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div id="emojies-used"></div>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    </div></div>
-
                 </div>
                 <div class="row tweet-table no-margin">
                     <div class="col">
@@ -60,6 +27,7 @@
                                     <th scope="col">Date</th>
                                     <th scope="col">Likes</th>
                                     <th scope="col">Retweets</th>
+                                    <th scope="col">Engagament</th>
                                     <th scope="col" class='hidden'>full_text</th>
                                     <th scope="col" class='hidden'>timestamp</th>
                                     <th scope="col" class='hidden'>is_rt</th>
