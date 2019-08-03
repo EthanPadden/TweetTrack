@@ -78,7 +78,30 @@ function createSEngmtChart() {
     var ctx = $('#tweet-engmt-info canvas')
     var timeLimits = getLimits()
     var vals = getSXAxis(timeLimits)
-    
+    var engmts = []
+    gatherTweetStats()
+
+    // new Chart(ctx, {
+    //     type: 'line',
+    //     data: {
+    //         labels: vals,
+    //         datasets: [{ 
+    //             data: [],
+    //             label: "Engagement",
+    //             borderColor: "#3e95cd",
+    //             fill: false
+    //           }]
+    //       },
+    //     options: {
+    //       title: {
+    //         display: true,
+    //         text: 'Engagment'
+    //       }
+    //     }
+    //   });
+
+    // $('#tweet-engmt-info').removeClass('hidden')
+      
 }
 
 function getLimits() {
@@ -99,10 +122,67 @@ function getLimits() {
 }
 
 function getSXAxis(range) {
-    var step = (range[1] - range[0])/8
-    var vals = [(range[0]-step)]
-    for(var i = 0; i < 8; i++) {
-        vals.push(range[0] + (i*step))
+    var time = range[1] - range[0]
+    var numDays = Math.round(time/86400000)
+    var startDate = new Date(range[0])
+    startDate.setHours(0)
+    startDate.setMinutes(0)
+    startDate.setSeconds(0)
+    startDate.setMilliseconds(0)
+    
+
+    var vals = []
+    for(var i = 0; i <= numDays; i++) {
+        vals.push(new Date(startDate).toDateString())
+        startDate.setDate(startDate.getDate() + 1);
     }
     return vals
+    // var vals = [new Date(range[0]-step)]
+    // for(var i = 0; i < 8; i++) {
+    //     vals.push(new Date(range[0] + (i*step)))
+    // }
+    // return vals
+
+    // Get date of min and max
+    // Divide into days
+    
+}
+
+function getEngmts() {
+    gatherTweetStats()
+}
+
+function gatherTweetStats() {
+    var rows = $('#tweet-table-body').children()
+
+    for(var i = 0; i < rows.length; i++) {
+        var cells = $(rows[i]).children()
+        var data = {
+            'tweet': {
+                'favourite_count':parseInt($(cells[2]).html()),
+                'rt_count':parseInt($(cells[3]).html())
+            },
+            'mentions_stats':{
+                'before_mentions':parseInt($(cells[9]).html()),
+                'after_mentions':parseInt($(cells[10]).html()),
+                'before_hashtags':parseInt($(cells[11]).html()),
+                'after_hashtags':parseInt($(cells[12]).html()),
+                'before_other':parseInt($(cells[13]).html()),
+                'after_other':parseInt($(cells[14]).html())
+            }
+        }
+        console.log(data)
+    }
+}
+
+var weights = [1,1,1,1,1]
+
+function calcGatheredStats(data) {
+    var likes = data.tweet.favourite_count
+    var rts = data.tweet.rt_count
+    var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions*100
+    
+    var engmt = (wL * likes) + (wR * rts) + (lM * mentionRatio)
+    // console.log('likes: ' + likes + ' rts: ' + rts + ' m: ' + mentionRatio)
+    return Math.round(engmt)
 }
