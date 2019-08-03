@@ -44,7 +44,7 @@ function gatherTweets(handle) {
 
  function addTweetToTable(data) {
      var date = new Date(data.created_at).toString().split(' GMT')[0]
-    var tableRow = '<tr id="' + data._id + '">'
+    var tableRow = '<tr id="' + data.tweet_id + '">'
                 + '<td>' + data.text.slice(0,40) + '...</td>'
                 + '<td>' + date + '</td>'
                 + '<td>' + data.favourite_count + '</td>'
@@ -77,31 +77,54 @@ function gatherTweets(handle) {
 function createSEngmtChart() {
     var ctx = $('#tweet-engmt-info canvas')
     var timeLimits = getLimits()
-    var vals = getSXAxis(timeLimits)
+    // Dates are timestamps here
     var engmts = gatherTweetStats()
-    console.log(engmts)
-    // new Chart(ctx, {
-    //     type: 'line',
-    //     data: {
-    //         labels: vals,
-    //         datasets: [{ 
-    //             data: [],
-    //             label: "Engagement",
-    //             borderColor: "#3e95cd",
-    //             fill: false
-    //           }]
-    //       },
-    //     options: {
-    //       title: {
-    //         display: true,
-    //         text: 'Engagment'
-    //       }
-    //     }
-    //   });
 
-    // $('#tweet-engmt-info').removeClass('hidden')
+    engmts.sort( compare );
+    console.log(engmts)
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{ 
+                data:engmts,
+                label: "Engagement",
+                borderColor: "#14A76C",
+                fill: false
+              }]
+          },
+        options: {
+          title: {
+            display: true,
+            text: 'Engagment'
+          },
+          scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                    unit: 'day'
+                }
+            }]
+        }
+        }
+      });
+     
+
+    $('#tweet-engmt-info').removeClass('hidden')
       
 }
+
+function compare( a, b ) {
+    if ( a.t < b.t ){
+      return -1;
+    }
+    if ( a.t > b.t ){
+      return 1;
+    }
+    return 0;
+  }
+  
+  
 
 function getLimits() {
     var rows = $('#tweet-table-body').children()
@@ -145,10 +168,12 @@ function gatherTweetStats() {
     var engmts = []
     for(var i = 0; i < rows.length; i++) {
         var cells = $(rows[i]).children()
+        
         var data = {
             'tweet': {
                 'favourite_count':parseInt($(cells[2]).html()),
-                'rt_count':parseInt($(cells[3]).html())
+                'rt_count':parseInt($(cells[3]).html()),
+                'tweet_id':rows[i].id
             },
             'mentions_stats':{
                 'before_mentions':parseInt($(cells[9]).html()),
@@ -159,7 +184,12 @@ function gatherTweetStats() {
                 'after_other':parseInt($(cells[14]).html())
             }
         }
-        engmts.push(calcGatheredStats(data))
+        engmts.push( {
+            y:calcGatheredStats(data),
+                        t:new Date(parseInt($(cells[5]).html()))
+                    }
+                    )
+
     }
     return engmts
 }
