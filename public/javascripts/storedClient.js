@@ -1,7 +1,22 @@
 $(document).ready(function() {
     var handle = document.cookie.split('handle=')[1]
     gatherTweets(handle)
+    setName(handle)
 })
+
+function setName(handle) {
+    $.ajax({
+        type: 'GET',
+        url: '/account/getBasicInfo',
+        data: {'handle':handle},
+        success: function(data){
+           $('#analysis-section h4').html('Analysis - ' + data.name)
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
+}
 
 
 
@@ -24,6 +39,7 @@ function gatherTweets(handle) {
         }
     });
  }
+
 
  function addTweetToTable(data) {
    
