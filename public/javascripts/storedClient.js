@@ -77,7 +77,8 @@ function gatherTweets(handle) {
 function createSEngmtChart() {
     var ctx = $('#tweet-engmt-info canvas')
     var timeLimits = getLimits()
-    console.log(timeLimits)
+    var vals = getSXAxis(timeLimits)
+    
 }
 
 function getLimits() {
@@ -95,4 +96,13 @@ function getLimits() {
         if(timestamps[i] > max) max = timestamps[i]
     }
     return [parseInt(min), parseInt(max)]
+}
+
+function getSXAxis(range) {
+    var step = (range[1] - range[0])/8
+    var vals = [(range[0]-step)]
+    for(var i = 0; i < 8; i++) {
+        vals.push(range[0] + (i*step))
+    }
+    return vals
 }
