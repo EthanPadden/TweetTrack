@@ -14,15 +14,10 @@ var idPrintTime = 3000
 const {ObjectID} = require('mongodb'); 
 
 router.get('/getStats', function (req, res, next) {
-    var id = req.query.id
-
-    TweetStats.findOne({tweet_id:id}, function(err, stats){
+    TweetStats.find({}, function(err, stats){
       if(err) res.send(err)
       else if(stats) {
-        if(!stats._id) res.json({'status':2})
-        else {
             res.json({'status':0, 'stats':stats})
-        }
       }
     })
   })
