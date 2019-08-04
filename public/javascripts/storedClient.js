@@ -26,27 +26,53 @@ $("body").on('mouseenter', '#tweet-table-body tr', function(e){
  })
 
  $("body").on('click', '#tweet-table-body', function(e){
-    var cells = $(e.target.parentNode).children()
+  var cells = $(e.target.parentNode).children()
+
+  var likes = parseInt($(cells[2]).html())
+  var rts = parseInt($(cells[3]).html())
+   var beforeMentions = parseInt($(cells[8]).html())
+   var afterMentions = parseInt($(cells[9]).html())
+   var beforeHashtags = parseInt($(cells[10]).html())
+   var afterHashtags = parseInt($(cells[11]).html())
+   var beforeOther = parseInt($(cells[12]).html())
+   var afterOther = parseInt($(cells[13]).html())
+
     var spanBold = '<span style="font-weight:bolder">'
     $('#tweet-engmt').html(spanBold + 'Engagement: </span>' + $(cells[4]).html())
-    $('#likes').html(spanBold + 'Likes: </span>' + $(cells[2]).html())
-    $('#rts').html(spanBold + 'RTs: </span>' + $(cells[3]).html())
-    $('#mentions-b').html(spanBold + 'Mentions before: </span>' + $(cells[8]).html())
-    $('#mentions-a').html(spanBold + 'Mentions after: </span>' + $(cells[9]).html())
-    $('#hashtags-b').html(spanBold + 'Hashtags before: </span>' + $(cells[10]).html())
-    $('#hashtags-a').html(spanBold + 'Hashtags after: </span>' + $(cells[11]).html())
-    $('#other-b').html(spanBold + 'Other before: </span>' + $(cells[12]).html())
-    $('#other-s').html(spanBold + 'Other after: </span>' + $(cells[13]).html())
+    $('#likes').html(spanBold + 'Likes: </span>' + likes)
+    $('#rts').html(spanBold + 'RTs: </span>' + rts)
+    $('#mentions-b').html(spanBold + 'Mentions before: </span>' + beforeMentions)
+    $('#mentions-a').html(spanBold + 'Mentions after: </span>' + afterMentions)
+    $('#hashtags-b').html(spanBold + 'Hashtags before: </span>' + beforeHashtags)
+    $('#hashtags-a').html(spanBold + 'Hashtags after: </span>' + afterHashtags)
+    $('#other-b').html(spanBold + 'Other before: </span>' + beforeOther)
+    $('#other-a').html(spanBold + 'Other after: </span>' + afterOther)
 
     if($(cells[7]).html() == "true") $('#is-rt').html('This is a retweet')
     else if($(cells[7]).html() == "false") $('#is-rt').html('This is not a retweet')
 
     var extractRes = extractMentionsAndHashtags($(cells[5]).html())
-    $('#mentions-used').html(spanBold + 'User mentions after: </span>' + extractRes.mentions)
+    $('#mentions-used').html(spanBold + 'User mentions: </span>' + extractRes.mentions)
     $('#hashtags-used').html(spanBold + 'Hashtags used: </span>' + extractRes.hashtags)
     $('#emojies-used').html(spanBold + 'Emojies used: </span>' + extractEmojies($(cells[5]).html()))
 
     $('#stats-row').removeClass('hidden')
+    var data = {
+      'tweet':{
+        'favourite_count':likes,
+        'rt_count':rts
+      },
+      'mentions_stats':{
+        'before_mentions':beforeMentions,
+        'after_mentions':afterMentions,
+        'before_hashtags':beforeHashtags,
+        'after_hashtags':afterHashtags,
+        'before_other':beforeOther,
+        'after_other':afterOther
+      }
+    }
+
+    generateTweetEngmtChart(data)
 });
 function extractMentionsAndHashtags(text){
   var words = text.split(' ')
@@ -71,36 +97,39 @@ function extractEmojies(text) {
       
 }
 
-function displayTweetEngmtDetails(data) {
-    
+ function generateTweetEngmtChart(data) {
+  var ctx = $('#stats-row canvas')
+  console.log(ctx)
+  var mentionRatio = data.mentions_stats.after_mentions*100
+  if(data.mentions_stats.before_mentions > 0) mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions*100
+  var hashtagsRatio = data.mentions_stats.after_hashtags*100
+  if(data.mentions_stats.before_hashtags > 0) hashtagsRatio = data.mentions_stats.after_hashtags/data.mentions_stats.before_hashtags*100
+  var otherRatio = data.mentions_stats.after_other*100
+  if(data.mentions_stats.before_other > 0) otherRatio = data.mentions_stats.after_other/data.mentions_stats.before_other*100
 
-    
-    
-    
-    if(data.tweet.text.indexOf('http') == -1) $('#has-link').html('This has no links')
-    if(data.tweet.text.indexOf('http') != -1) $('#has-link').html('This has one or more links')
+  
+  if(mentionRatio < 100) mentionColour = '#FF652F'
+  else mentionColour = '#14A76C'
+  new Chart(ctx, {
+      type: 'pie',
+      data: {
+      labels: ["Likes","Retweets", "Mentions", "Hashtags", "Other"],
 
-   
-
-
-    var engmt = calcGatheredStats(data)
-    $('#engmt').html('Engagement: ' + engmt)
-    generateTweetEngmtChart(data)
-
-    var parts = extractMentionsAndHashtags(data.tweet.text)
-    $('#mentions-used').html(spanBold + 'Mentioned users: </span>' + parts.mentions)
-    $('#hashtags-used').html(spanBold + 'Hashtags used: </span>' + parts.hashtags)
-
-    var emojies = extractEmojies(data.tweet.text)
-    if(emojies != null) 
-    $('#emojies-used').html(spanBold + 'Emojies used: </span>' + emojies)
-    else 
-    $('#emojies-used').html(spanBold + 'Emojies used: </span>None')
-    $('#tweet-engmt-info').removeClass('hidden')
-    console.log("HERE")
- }
-
-
+      datasets: [
+          {
+          backgroundColor: ['#FFE400', '#007BFF', '#14A76C','#FF652F', '#000000'],
+          data: [(weights[0]*data.tweet.favourite_count), (weights[1]*data.tweet.rt_count), Math.abs(weights[2]*mentionRatio), Math.abs(weights[2]*hashtagsRatio), Math.abs(weights[2]*otherRatio)]
+          }
+      ]
+      },
+      options: {
+      title: {
+          display: true,
+          text: 'Contribution to metric'
+      }
+      }
+  });
+}
 function setName (handle) {
   $.ajax({
     type: 'GET',
@@ -173,9 +202,9 @@ function createSEngmtChart () {
   var timeLimits = getLimits()
   // Dates are timestamps here
   var engmts = gatherTweetStats()
-
   engmts.sort(compare)
-  console.log(engmts)
+
+
 
   new Chart(ctx, {
     type: 'line',
