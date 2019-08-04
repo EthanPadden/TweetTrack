@@ -25,6 +25,54 @@ $("body").on('mouseenter', '#tweet-table-body tr', function(e){
     selectedTweet = e.target.parentNode
  })
 
+ $("body").on('click', '#tweet-table-body', function(e){
+    var cells = $(e.target.parentNode).children()
+    var spanBold = '<span style="font-weight:bolder">'
+    $('#likes').html(spanBold + 'Likes: </span>' + $(cells[2]).html())
+    $('#rts').html(spanBold + 'RTs: </span>' + $(cells[3]).html())
+    $('#mentions-b').html(spanBold + 'Mentions before: </span>' + $(cells[8]).html())
+    $('#mentions-a').html(spanBold + 'Mentions after: </span>' + $(cells[9]).html())
+    $('#hashtags-b').html(spanBold + 'Hashtags before: </span>' + $(cells[10]).html())
+    $('#hashtags-a').html(spanBold + 'Hashtags after: </span>' + $(cells[11]).html())
+    $('#other-b').html(spanBold + 'Other before: </span>' + $(cells[12]).html())
+    $('#other-s').html(spanBold + 'Other after: </span>' + $(cells[13]).html())
+
+    if($(cells[7]).html() == "true") $('#is-rt').html('This is a retweet')
+    else if($(cells[7]).html() == "false") $('#is-rt').html('This is not a retweet')
+
+    console.log($('#stats-row'))
+    $('#stats-row').removeClass('hidden')
+});
+
+function displayTweetEngmtDetails(data) {
+    
+
+    
+    
+    
+    if(data.tweet.text.indexOf('http') == -1) $('#has-link').html('This has no links')
+    if(data.tweet.text.indexOf('http') != -1) $('#has-link').html('This has one or more links')
+
+   
+
+
+    var engmt = calcGatheredStats(data)
+    $('#engmt').html('Engagement: ' + engmt)
+    generateTweetEngmtChart(data)
+
+    var parts = extractMentionsAndHashtags(data.tweet.text)
+    $('#mentions-used').html(spanBold + 'Mentioned users: </span>' + parts.mentions)
+    $('#hashtags-used').html(spanBold + 'Hashtags used: </span>' + parts.hashtags)
+
+    var emojies = extractEmojies(data.tweet.text)
+    if(emojies != null) 
+    $('#emojies-used').html(spanBold + 'Emojies used: </span>' + emojies)
+    else 
+    $('#emojies-used').html(spanBold + 'Emojies used: </span>None')
+    $('#tweet-engmt-info').removeClass('hidden')
+    console.log("HERE")
+ }
+
 
 function setName (handle) {
   $.ajax({
@@ -192,12 +240,12 @@ function gatherTweetStats () {
         'tweet_id': rows[i].id
       },
       'mentions_stats': {
-        'before_mentions': parseInt($(cells[10]).html()),
-        'after_mentions': parseInt($(cells[11]).html()),
-        'before_hashtags': parseInt($(cells[12]).html()),
-        'after_hashtags': parseInt($(cells[13]).html()),
-        'before_other': parseInt($(cells[14]).html()),
-        'after_other': parseInt($(cells[15]).html())
+        'before_mentions': parseInt($(cells[8]).html()),
+        'after_mentions': parseInt($(cells[9]).html()),
+        'before_hashtags': parseInt($(cells[10]).html()),
+        'after_hashtags': parseInt($(cells[11]).html()),
+        'before_other': parseInt($(cells[12]).html()),
+        'after_other': parseInt($(cells[13]).html())
       }
     }
     var engmt = calcGatheredStats(data)
