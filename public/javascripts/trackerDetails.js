@@ -102,11 +102,12 @@ function extractEmojies(text) {
     var emojiRegex = /([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g;
 
     var emojies = []
-    // for(var i in text) {
-    //     if (text[i].match(emojiRegex)) {
-    //         emojies.push(text[i])
-    //     }
-    // }
+    var words = text.split(' ')
+    for(var i in words) {
+        if (words[i].match(emojiRegex)) {
+            emojies.push(text.match(emojiRegex))
+        }
+    }
 
     return text.match(emojiRegex)
         
