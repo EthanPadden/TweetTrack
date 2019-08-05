@@ -315,7 +315,7 @@ function gatherTweetStats () {
   return engmts
 }
 
-var weights = [1, 1, 1, 1, 1]
+var weights = [1, 1, 0, 0, 0]
 
 function calcGatheredStats (data) {
   var likes = data.tweet.favourite_count
@@ -327,6 +327,6 @@ function calcGatheredStats (data) {
   if (data.mentions_stats.before_hashtags > 0) hashtagsRatio = data.mentions_stats.after_hashtags / data.mentions_stats.before_hashtags * 100
   if (data.mentions_stats.before_other > 0) otherRatio = data.mentions_stats.after_other / data.mentions_stats.after_other * 100
 
-  var engmt = (weights[0] * likes) + (weights[1] * rts) + (weights[2] * mentionRatio) + (weights[2] * hashtagsRatio) + (weights[2] * otherRatio)
+  var engmt = (weights[0] * likes) + (weights[1] * rts) + (weights[2] * mentionRatio) + (weights[3] * hashtagsRatio) + (weights[4] * otherRatio)
   return Math.round(engmt)
 }
