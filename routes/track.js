@@ -29,7 +29,6 @@ router.get('/trackUser', function (req, res, next) {
 
 
   track.stdout.on('data', (data) => {
-    console.log(i)
     var output = `${data}`
 
     // Check if there is an error:
@@ -38,7 +37,7 @@ router.get('/trackUser', function (req, res, next) {
     }
 
     
-    if(i == 6) { // If it is the second DB signal, extract the tracker ID
+    if(i == 5) { // If it is the second DB signal, extract the tracker ID
       if(output.indexOf(signals[i]) != -1) {
         trackerID = output.split(':')[1]
         i++
@@ -48,62 +47,35 @@ router.get('/trackUser', function (req, res, next) {
           i++
       } 
     } else {
-      // Call function to process rest
-      // console.log("Process complete - " + trackerID)
-      // console.log("Process details - " + track.id)
+      saveProcessID(trackerID, track.pid, res)
     }
   });
 
 })
 
 function saveProcessID(trackerID, pid, res) {
-
+  Trackers.findOne({_id:trackerID}, function (err,tracker) {
+      if (err)
+        res.json({'status':1, 'err':err})
+      else if(tracker) {
+        tracker.pid = pid;
+        tracker.save(function(err, tracker) {
+            if (err){
+              res.json({'status':1, 'err':err})
+              throw err;
+            }
+            res.json({'status':0})
+        });
+      } else {
+        res.json({'status':1, 'err':'unknown'})
+      }
+  });
 }
   
-  
-  // APPROACH:
-  // Java starts tracker
-  // JS waits for a short period of time
-  // Java prints the tracker id to a file
-  // JS reads file
-  // JS clears file fs.truncate('/path/to/file', 0, function(){console.log('done')})
 
-  // NEW APPROACH:
-  // Java checks if
-//   setTimeout(function() {
-//   console.log('3 - ' + (track == null))
 
-//     // console.log(track)
-//   	 var pid = track.pid
 
-//      fs.readFile('trackerid.txt', function (err, data) {
-//       var data = `${data}`;
-//         console.log('A')
-//       if(data.indexOf('ID') == -1) {
-//         res.json({'status' : 'error'})
-//       } else {
-//         console.log('B')
-
-//         var trackerID = data.split(':')[1];
-//         // var trackerIDObj = ObjectID(trackerID)
-//         var idToSch = trackerID.split('\n')[0]
-//         Trackers.findOne({_id:idToSch}, function (err,tracker) {
-
-//             if (err)
-//                 res.send(err);
-//             else if(tracker) {
-//                   tracker.pid = pid;
-//                   tracker.save(function(err, tracker) {
-//                     if (err){
-//                       res.json({'status':1, 'err':err})
-//                       throw err;
-//                     }
-//                     res.json({'status':0})
-//                 });
-//             } else {
-//               console.log('err')
-//             }
-//         });
+//        
 //       }
      
 //   })
