@@ -88,8 +88,8 @@ router.get('/stopTracker', function (req, res, next) {
       var pid = tracker.pid
       exec('kill -9 ' + parseInt(pid))
       setTimeout(function () {
-        tracker.status = 0
-        tracker.save(function (err, tracker) {
+      tracker.status = 0
+        tracker.save(function (err, status) {
           if (err) {
             res.json({'status': 1, 'err': err})
             throw err
@@ -99,13 +99,14 @@ router.get('/stopTracker', function (req, res, next) {
       }, killProcessTime)
     } else {
       res.json({'status': 1})
-    } 
+    }
   })
 })
 
+
 router.get('/deleteTracker', function (req, res, next) {
   // {tracker_id:String}
-// Trackers.findOne({_id: req.query.tracker_id}, function (err, tracker) {
+  // Trackers.findOne({_id: req.query.tracker_id}, function (err, tracker) {
   //   if (err) res.json({'status': 1,'msg': err})
   //   else if (tracker) {
   //     var pid = tracker.pid
