@@ -3,10 +3,10 @@ var yellowTheme = 'rgba(255, 228, 0, 1)';
 var defaultNumTweets = 30; // If increased too much, it exceeds the max buffer
 var accounts = [];
 
-$('#handle-input').keyup(function(event){
-    var handle = event.target.value;
-    isHandleValid(handle);
-});
+// $('#handle-input').keyup(function(event){
+//     var handle = event.target.value;
+//     isHandleValid(handle);
+// });
 
 function addAccount(h, isTracking, tracker) {
     $.ajax({
@@ -35,12 +35,12 @@ function addAccount(h, isTracking, tracker) {
     });
 }
 
-$('#add-account-btn').click(function(event){
-    var handle = $('#handle-input').val();
-    if (isHandleValid(handle)) {
-        addAccount(handle, false)
-    } 
-});
+// $('#add-account-btn').click(function(event){
+//     var handle = $('#handle-input').val();
+//     if (isHandleValid(handle)) {
+//         addAccount(handle, false)
+//     } 
+// });
 
 function showHandleInput() {
     
