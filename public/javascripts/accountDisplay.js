@@ -8,18 +8,18 @@ var accounts = [];
 //     isHandleValid(handle);
 // });
 
-function addAccount(h, isTracking, tracker) {
+function addAccount(tracker) {
     $.ajax({
         type: 'GET',
         url: '/account/getBasicInfo',
-        data: {'handle':h},
+        data: {'handle':tracker.handle},
         success: function(data){
             if(data.status == 0) {
                 accounts.push(data);
                 // console.log(data)
         displayTrackerDetails(tracker)
 
-                addUserToTable(data, tracker._id);
+                addUserToTable(data, tracker._id, (tracker.status == 1));
                 addGraphOptions();
                 updateOptions(data);
                 updateStatusUI(tracker._id, (tracker.status == 1))
@@ -65,14 +65,17 @@ function updateStatusUI(trackerId, isTracking) {
 function hideHandleInput() {
     $('#input-handle-group').parent().addClass('hidden');
 }
-function addUserToTable(data, trackerId) {
+function addUserToTable(data, trackerId, isTracking) {
+    var deleteIcon
+    if(isTracking) deleteIcon = '<i class="material-icons delete">remove_circle_outline</i>'
+    else deleteIcon = '<i class="material-icons delete">delete_sweep</i>'
     var tableRow = '<tr id="' + trackerId + '">'
                 + '<th scope="row">' + data.name + '</th>'
                 + '<td>@' + data.handle + '</td>'
                 + '<td>' + data.tweetCount + '</td>'
                 + '<td>' + data.followersCount + '</td>'
                 + '<td><span class="badge badge-secondary not-tracking">Not tracking</span></td>'
-                + '<td><i class="material-icons delete">remove_circle_outline</i></td>'
+                + '<td>' + deleteIcon + '</td>'
                 + '</tr>';
                 var tableHTML = $('#overview-table-body').html();
                 tableHTML += tableRow;
