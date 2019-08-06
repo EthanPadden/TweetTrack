@@ -27,16 +27,16 @@
 
 {{!-- HANDLE INPUT --}}
 <div class="row no-margin">
-    <div class="input-group" id="input-handle-group">
+    <div class="input-group" id="input-tracker-handle">
       <div class="input-group-prepend">
         <span class="input-group-text">@</span>
       </div>
       <input type="text" class="form-control" id="handle-input">
       <div class="input-group-append">
-        <button class="btn btn-primary" id="add-account-btn">+</button>
+        <button class="btn btn-primary" id="add-account-btn">Track</button>
       </div>
       <div class="input-group-append" id="handle-msg">
-        <label class="input-group-text">Enter Twitter handle to compare account</label>
+        <label class="input-group-text">Enter Twitter handle...</label>
       </div>
     </div>
   
@@ -48,27 +48,6 @@
   
 </div>
 
-{{!-- TRACKING OPTIONS --}}
-<div class="row no-margin hidden" id="tracking-options">
-  <div class="col-1"></div>
-  <div class="col-10">
-    <div class="card">
-      <div class="card-body">
-        <div class="input-group" id="input-track-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Add/show tracker for...</span>
-          </div>
-          <select class="custom-select" id="account-dropdown-track">
-          </select>
-          <div class="input-group-append">
-            <button class="btn btn-primary" id="add-tracker-btn">+</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-1"></div>
-</div>
 
 {{!-- TRACKER --}}
 <div class="row no-margin" id="tracker-section">
