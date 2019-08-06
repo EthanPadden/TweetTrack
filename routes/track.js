@@ -26,7 +26,7 @@ router.get('/trackUser', function (req, res, next) {
   var i = 0 // Loop through remaining signals in order
   var signals = ['SIG_CMD','SIG_ACCT_0','SIG_ACCT_1','SIG_DB_0','SIG_DB_1','SIG_DB_2','SIG_TRACK_0','SIG_TRACK_1']
   var trackerID = null
-
+  var ended = false
 
   track.stdout.on('data', (data) => {
     var output = `${data}`
@@ -46,8 +46,9 @@ router.get('/trackUser', function (req, res, next) {
       if(output.indexOf(signals[i]) != -1) {
           i++
       } 
-    } else {
+    } else if(!ended) {
       saveProcessID(trackerID, track.pid, res)
+      ended = true
     }
   });
 
