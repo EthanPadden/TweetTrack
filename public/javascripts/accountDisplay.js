@@ -16,10 +16,10 @@ function addAccount(h, isTracking, tracker) {
         success: function(data){
             if(data.status == 0) {
                 accounts.push(data);
-                console.log(data)
+                // console.log(data)
         displayTrackerDetails(tracker)
 
-                addUserToTable(data);
+                addUserToTable(data, tracker.id);
                 addGraphOptions();
                 updateOptions(data);
                 window.accounts = accounts;
@@ -48,7 +48,7 @@ function showHandleInput() {
 function hideHandleInput() {
     $('#input-handle-group').parent().addClass('hidden');
 }
-function addUserToTable(data) {
+function addUserToTable(data, trackerId) {
     var indexOfUser = accounts.indexOf(data)
     var tableRow = '<tr>'
                 + '<th scope="row">' + data.name + '</th>'
@@ -325,10 +325,10 @@ $('#add-metrics-btn').click(function(event){
 });
 
 function displayEngagementChart(user, data, index) {
-    console.log("DATA FOR INDEX " + index);
-    console.log(data);
+    // console.log("DATA FOR INDEX " + index);
+    // console.log(data);
 
-    console.log("USER ENGAGEMENT: "  + user.name);
+    // console.log("USER ENGAGEMENT: "  + user.name);
     var results = calculateEngagement(data.tweetStream, user.followersCount);
     var engagement = results.engagement;
     var nthchild = parseInt(index) + 2;
@@ -399,7 +399,7 @@ function displayEngagementChart(user, data, index) {
         data: chartData,
         // options: options
     });
-    console.log(user);
+    // console.log(user);
     $(selector + ' h4').html(user.name + ':\n' + Math.round(engagement) + '%');
     if(index == 1) $('#engagementChart').removeClass('hidden');
 }
