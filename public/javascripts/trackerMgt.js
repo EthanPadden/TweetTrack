@@ -18,6 +18,10 @@ $('body').on('click', '#account-table i.delete', function (e) {
   else if (trackingStatus == 'Not tracking') deleteOptions(false, parentRow.id)
 })
 
+$('body').on('mouseenter', '#account-table i.delete', function (e) {
+  $(e.target).css('cursor', 'pointer')
+})
+
 function deleteOptions (isTracking, trackerId) {
   if (isTracking) {
     swal({
@@ -50,34 +54,34 @@ function deleteOptions (isTracking, trackerId) {
   }
 }
 
-function stopTracker(trackerId) {
-    $.ajax({
-        type: 'GET',
-        url: '/track/stopTracker',
-        data: {'tracker_id': trackerId},
-        success: function (data) {
-          if (data.status == 0) {
-            swal({
-                title: 'Tracker has been stopped',
-                text: 'You can still view the tracked information',
-                icon: 'success'
-              })
-          } else if (data.status == 1) { // Problem with finding tracker in DB
-            swal({
-                title: 'Error',
-                text: 'There was a problem with stopping the tracker',
-                icon: 'error'
-              })
-          }
-        },
-        error: function (errMsg) {
-            swal({
-                title: 'Error',
-                text: 'There was a problem with stopping the tracker',
-                icon: 'error'
-              })
-        }
+function stopTracker (trackerId) {
+  $.ajax({
+    type: 'GET',
+    url: '/track/stopTracker',
+    data: {'tracker_id': trackerId},
+    success: function (data) {
+      if (data.status == 0) {
+        swal({
+          title: 'Tracker has been stopped',
+          text: 'You can still view the tracked information',
+          icon: 'success'
+        })
+      } else if (data.status == 1) { // Problem with finding tracker in DB
+        swal({
+          title: 'Error',
+          text: 'There was a problem with stopping the tracker',
+          icon: 'error'
+        })
+      }
+    },
+    error: function (errMsg) {
+      swal({
+        title: 'Error',
+        text: 'There was a problem with stopping the tracker',
+        icon: 'error'
       })
+    }
+  })
 }
 
 $('#add-account-btn').click(function (event) {
