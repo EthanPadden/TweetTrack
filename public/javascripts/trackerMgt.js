@@ -3,7 +3,6 @@ $(document).ready(function() {
         trigger:'manual'
     }
     $('#handle-input').tooltip(options)
-
 })
 
 $('#handle-input').keyup(function(event){
@@ -14,7 +13,31 @@ $('#handle-input').keyup(function(event){
 $('#add-account-btn').click(function(event){
     var handle = $('#handle-input').val();
     if (isHandleValid(handle)) {
-        alert("Tracker created")
+        $.ajax({
+            type: 'GET',
+            url: '/track/trackUser',
+            data: {'handle':handle},
+            success: function(data){
+                if(data.status == 0) {
+            //         accounts.push(data);
+            //         console.log(data)
+            // displayTrackerDetails(tracker)
+    
+            //         addUserToTable(data);
+            //         addGraphOptions();
+            //         updateOptions(data);
+            //         window.accounts = accounts;
+            //         if(accounts.length == 2) hideHandleInput();
+            //         var i = accounts.map(function(e) { return e.handle; }).indexOf(data.handle);
+            //         if(isTracking) updateTrackingStatus(i, 1)
+                    console.log(data)
+                }
+                else if (data.status == -1) $('#handle-msg').html("Account not found");
+            },
+            error: function(errMsg) {
+                console.log(errMsg);
+            }
+        });
     } 
 });
 

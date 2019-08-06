@@ -11,7 +11,7 @@ var fs = require('fs')
 const { fork } = require('child_process')
 var killProcessTime = 3000
 var idPrintTime = 3000
-const {ObjectID} = require('mongodb'); 
+const {ObjectID} = require('mongodb');
 
 router.get('/trackUser', function (req, res, next) {
   // {handle:String}
@@ -20,13 +20,47 @@ router.get('/trackUser', function (req, res, next) {
   var track = spawn('java', ['-jar', 'java/TweetTrack.jar', 'tracker', handle], { detached: true, stdio: ['pipe','pipe','pipe'] })
   track.unref() // Stops parent from waiting for tracker to exit
 
-  console.log('1 - ' + (track == null))
+  // 0 - pointer not null
   while (true) if (track != null) break // Wait for process to start
-  // track.stdout.pipe(process.stdout)
-  console.log('2 - ' + (track == null))
-  
 
-  // console.log(track)
+  var i = 0 // Loop through remaining signals in order
+  var signals = ['SIG_CMD','SIG_ACCT_0','SIG_ACCT_1','SIG_DB_0','SIG_DB_1','SIG_DB_2','SIG_TRACK_0','SIG_TRACK_1']
+  var trackerID = null
+
+
+  track.stdout.on('data', (data) => {
+    console.log(i)
+    var output = `${data}`
+
+    // Check if there is an error:
+    if(output.indexOf('_ERR') != -1) {
+      res.json({'status':-1,'err':output})
+    }
+
+    
+    if(i == 6) { // If it is the second DB signal, extract the tracker ID
+      if(output.indexOf(signals[i]) != -1) {
+        trackerID = output.split(':')[1]
+        i++
+      }      
+    } else if(i<8) { // Else wait for the next signal
+      if(output.indexOf(signals[i]) != -1) {
+          i++
+      } 
+    } else {
+      // Call function to process rest
+      // console.log("Process complete - " + trackerID)
+      // console.log("Process details - " + track.id)
+    }
+  });
+
+})
+
+function saveProcessID(trackerID, pid, res) {
+
+}
+  
+  
   // APPROACH:
   // Java starts tracker
   // JS waits for a short period of time
@@ -34,50 +68,51 @@ router.get('/trackUser', function (req, res, next) {
   // JS reads file
   // JS clears file fs.truncate('/path/to/file', 0, function(){console.log('done')})
 
-  setTimeout(function() {
-  console.log('3 - ' + (track == null))
+  // NEW APPROACH:
+  // Java checks if
+//   setTimeout(function() {
+//   console.log('3 - ' + (track == null))
 
-    // console.log(track)
-  	 var pid = track.pid
+//     // console.log(track)
+//   	 var pid = track.pid
 
-     fs.readFile('trackerid.txt', function (err, data) {
-      var data = `${data}`;
-        console.log('A')
-      if(data.indexOf('ID') == -1) {
-        res.json({'status' : 'error'})
-      } else {
-        console.log('B')
+//      fs.readFile('trackerid.txt', function (err, data) {
+//       var data = `${data}`;
+//         console.log('A')
+//       if(data.indexOf('ID') == -1) {
+//         res.json({'status' : 'error'})
+//       } else {
+//         console.log('B')
 
-        var trackerID = data.split(':')[1];
-        // var trackerIDObj = ObjectID(trackerID)
-        var idToSch = trackerID.split('\n')[0]
-        Trackers.findOne({_id:idToSch}, function (err,tracker) {
-        console.log('C')
+//         var trackerID = data.split(':')[1];
+//         // var trackerIDObj = ObjectID(trackerID)
+//         var idToSch = trackerID.split('\n')[0]
+//         Trackers.findOne({_id:idToSch}, function (err,tracker) {
 
-            if (err)
-                res.send(err);
-            else if(tracker) {
-              console.log('D')
-                  tracker.pid = pid;
-                  tracker.save(function(err, tracker) {
-                    if (err)
-                        throw err;
-                    console.log('E')
-                        res.json({'status':0})
-                });
-            } else {
-              console.log('err')
-            }
-        });
-      }
+//             if (err)
+//                 res.send(err);
+//             else if(tracker) {
+//                   tracker.pid = pid;
+//                   tracker.save(function(err, tracker) {
+//                     if (err){
+//                       res.json({'status':1, 'err':err})
+//                       throw err;
+//                     }
+//                     res.json({'status':0})
+//                 });
+//             } else {
+//               console.log('err')
+//             }
+//         });
+//       }
      
-  })
+//   })
   
   
-  //   res.json({ 'status': 0 })
+//   //   res.json({ 'status': 0 })
 
   
-}, idPrintTime)})
+// }, idPrintTime)})
 
 router.get('/killTracker', function (req, res, next) {
   console.log("Request to kill trackers for " + req.query.handle)
