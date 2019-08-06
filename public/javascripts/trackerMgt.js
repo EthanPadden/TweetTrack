@@ -10,6 +10,50 @@ $('#handle-input').keyup(function (event) {
   isHandleValid(handle)
 })
 
+$('body').on('click', '#account-table i.delete', function (e) {
+  var parentRow = $(e.target).parents()[1]
+  var trackingStatusCell = $(parentRow).children()[4]
+  var trackingStatus = $($(trackingStatusCell).children()[0]).html()
+  if (trackingStatus == 'Tracking') deleteOptions(true)
+  else if (trackingStatus == 'Not tracking') deleteOptions(false)
+})
+
+function deleteOptions (isTracking) {
+  if (isTracking) {
+    swal({
+      title: 'Stop tracker?',
+      text: 'This tracker is currently tracking. Do you want to stop it?',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal({
+            title: 'Tracker has been stopped',
+            text: 'You can still view the tracked information',
+            icon: 'success'
+          })
+        }
+      })
+  } else {
+    swal({
+      title: 'Delete tracked information?',
+      text: 'This information cannot be recovered once deleted. Are you sure?',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal('The tracked information has been deleted',
+            {icon: 'success'}
+          )
+        }
+      })
+  }
+}
+
 $('#add-account-btn').click(function (event) {
   var handle = $('#handle-input').val()
   if (isHandleValid(handle)) {
@@ -19,7 +63,7 @@ $('#add-account-btn').click(function (event) {
       data: {'handle': handle},
       success: function (data) {
         if (data.status == 0) {
-          swal({text:'Tracker set up',icon:'success'})
+          swal({text: 'Tracker set up',icon: 'success'})
         } else if (data.status == -1) { // Problem with Java process
           handleErr(data.err.trim())
         } else if (data.status == 1) { // Problem with finding tracker in DB
@@ -52,17 +96,17 @@ function handleErr (signal) {
       msg = 'There was an authentication problem when trying to access the database'
       break
     case 'SIG_DB_CLIENT':
-        msg = 'There was a problem setting up the tracker in the database'
-        break
+      msg = 'There was a problem setting up the tracker in the database'
+      break
     default:
       msg = 'The server returned an error message that was not recognised'
       break
   }
 
   swal({
-      title:'Error',
-      text:msg,
-      icon:'warning'
+    title: 'Error',
+    text: msg,
+    icon: 'warning'
   })
 }
 

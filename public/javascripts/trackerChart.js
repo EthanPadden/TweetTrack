@@ -69,7 +69,7 @@ function displayStats(stats, handle) {
     $(selector + ' #avg-likes').html('Average likes: ' + stats.avg_likes)
     $(selector + ' #avg-rts').html('Average retweets: ' + stats.avg_rts)
     $(selector + ' #mentions').html('Mentions: ' + stats.mentions)
-    console.log(stats)
+    // console.log(stats)
     $(selector + ' #engmt').html('Engagement: ' + stats.engmt)
 
 }
