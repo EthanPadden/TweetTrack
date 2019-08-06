@@ -50,7 +50,7 @@ function hideHandleInput() {
 }
 function addUserToTable(data, trackerId) {
     var indexOfUser = accounts.indexOf(data)
-    var tableRow = '<tr>'
+    var tableRow = '<tr' + trackerId + '>'
                 + '<th scope="row">' + data.name + '</th>'
                 + '<td>@' + data.handle + '</td>'
                 + '<td>' + data.tweetCount + '</td>'
