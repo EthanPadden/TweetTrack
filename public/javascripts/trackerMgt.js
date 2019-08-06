@@ -1,3 +1,11 @@
+$(document).ready(function() {
+    var options = {
+        trigger:'manual'
+    }
+    $('#handle-input').tooltip(options)
+
+})
+
 $('#handle-input').keyup(function(event){
     var handle = event.target.value;
     isHandleValid(handle);
@@ -24,6 +32,6 @@ function isHandleValid(handle) {
         return false;
     }
 
-    // $('#handle-msg').html('Click \'+\' to add account');
+    $('#handle-input').tooltip('show');
     return true;
  }
