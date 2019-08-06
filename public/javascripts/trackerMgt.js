@@ -19,11 +19,11 @@ $('#add-account-btn').click(function (event) {
       data: {'handle': handle},
       success: function (data) {
         if (data.status == 0) {
-          alert('Tracker set up')
+          swal({text:'Tracker set up',icon:'success'})
         } else if (data.status == -1) { // Problem with Java process
           handleErr(data.err.trim())
         } else if (data.status == 1) { // Problem with finding tracker in DB
-          alert('There was a problem setting up the tracker in the database')
+          handleErr('SIG_DB_CLIENT')
         }
       },
       error: function (errMsg) {
@@ -34,27 +34,36 @@ $('#add-account-btn').click(function (event) {
 })
 
 function handleErr (signal) {
+  var msg
   switch (signal) {
     case 'SIG_CMD_ERR_0':
     case 'SIG_CMD_ERR_1':
-      alert('There was an error with the input arguments to the Java code')
+      msg = 'There was an error with the input arguments to the Java code'
       break
     case 'SIG_ACCT_ERR_0':
-      alert('There was an error when trying to access the Twitter API')
+      msg = 'There was an error when trying to access the Twitter API'
       break
     case 'SIG_ACCT_ERR_1':
-        console.log(signal)
-      alert('Account not found')
+      console.log(signal)
+      msg = 'Account not found'
       break
     case 'SIG_DB_ERR_0':
     case 'SIG_DB_ERR_1':
-      alert('There was an authentication problem when trying to access the database')
+      msg = 'There was an authentication problem when trying to access the database'
       break
+    case 'SIG_DB_CLIENT':
+        msg = 'There was a problem setting up the tracker in the database'
+        break
     default:
-        console.log(signal)
-      alert('The server returned an error message that was not recognised')
+      msg = 'The server returned an error message that was not recognised'
       break
   }
+
+  swal({
+      title:'Error',
+      text:msg,
+      icon:'warning'
+  })
 }
 
 function isHandleValid (handle) {
