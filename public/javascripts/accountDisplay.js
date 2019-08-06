@@ -56,6 +56,7 @@ function addUserToTable(data) {
                 + '<td>' + data.tweetCount + '</td>'
                 + '<td>' + data.followersCount + '</td>'
                 + '<td><span class="badge badge-secondary not-tracking">Not tracking</span></td>'
+                + '<td><i class="material-icons delete">remove_circle_outline</i></td>'
                 + '</tr>';
                 var tableHTML = $('#overview-table-body').html();
                 tableHTML += tableRow;

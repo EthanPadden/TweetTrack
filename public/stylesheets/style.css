@@ -150,3 +150,7 @@ body {
 .card-section {
   background-color: #96BFFF
 }
+
+.delete {
+  color: var(--red)
+}
