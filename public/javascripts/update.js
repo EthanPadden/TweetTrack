@@ -29,6 +29,8 @@ function getRunningTrackers() {
 
 
 
+
+
 function updateStats(trackers, i) {
     if(i >= trackers.length) return
     $.ajax({

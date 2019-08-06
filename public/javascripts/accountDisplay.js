@@ -19,13 +19,15 @@ function addAccount(h, isTracking, tracker) {
                 // console.log(data)
         displayTrackerDetails(tracker)
 
-                addUserToTable(data, tracker.id);
+                addUserToTable(data, tracker._id);
                 addGraphOptions();
                 updateOptions(data);
-                window.accounts = accounts;
-                if(accounts.length == 2) hideHandleInput();
-                var i = accounts.map(function(e) { return e.handle; }).indexOf(data.handle);
-                if(isTracking) updateTrackingStatus(i, 1)
+                updateStatusUI(tracker._id, (tracker.status == 1))
+
+                // window.accounts = accounts;
+                // if(accounts.length == 2) hideHandleInput();
+                // var i = accounts.map(function(e) { return e.handle; }).indexOf(data.handle);
+                // if(isTracking) updateTrackingStatus(i, 1)
             }
             else if (data.status == -1) $('#handle-msg').html("Account not found");
         },
@@ -42,15 +44,29 @@ function addAccount(h, isTracking, tracker) {
 //     } 
 // });
 
-function showHandleInput() {
-    
+function updateStatusUI(trackerId, isTracking) {
+    var selector = '#' + trackerId
+    var cell = $($(selector).children()[4]).children()[0]
+
+    if(isTracking) {
+        $(cell).removeClass('not-tracking')
+        $(cell).removeClass('stopping')
+        $(cell).addClass('tracking')
+        $(cell).html('Tracking')
+        $('#tracker #status').html('Status: <span class="badge badge-secondary tracking">Active</span>')
+    } else {
+        $(cell).removeClass('tracking')
+        $(cell).removeClass('stopping')
+        $(cell).addClass('not-tracking')
+        $(cell).html('Not tracking')
+        $('#tracker #status').html('Status: <span class="badge badge-secondary not-tracking">Stopped</span>')
+    } 
 }
 function hideHandleInput() {
     $('#input-handle-group').parent().addClass('hidden');
 }
 function addUserToTable(data, trackerId) {
-    var indexOfUser = accounts.indexOf(data)
-    var tableRow = '<tr' + trackerId + '>'
+    var tableRow = '<tr id="' + trackerId + '">'
                 + '<th scope="row">' + data.name + '</th>'
                 + '<td>@' + data.handle + '</td>'
                 + '<td>' + data.tweetCount + '</td>'
