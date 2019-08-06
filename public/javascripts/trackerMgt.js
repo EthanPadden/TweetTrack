@@ -14,11 +14,11 @@ $('body').on('click', '#account-table i.delete', function (e) {
   var parentRow = $(e.target).parents()[1]
   var trackingStatusCell = $(parentRow).children()[4]
   var trackingStatus = $($(trackingStatusCell).children()[0]).html()
-  if (trackingStatus == 'Tracking') deleteOptions(true)
-  else if (trackingStatus == 'Not tracking') deleteOptions(false)
+  if (trackingStatus == 'Tracking') deleteOptions(true, parentRow.id)
+  else if (trackingStatus == 'Not tracking') deleteOptions(false, parentRow.id)
 })
 
-function deleteOptions (isTracking) {
+function deleteOptions (isTracking, trackerId) {
   if (isTracking) {
     swal({
       title: 'Stop tracker?',
@@ -29,11 +29,7 @@ function deleteOptions (isTracking) {
     })
       .then((willDelete) => {
         if (willDelete) {
-          swal({
-            title: 'Tracker has been stopped',
-            text: 'You can still view the tracked information',
-            icon: 'success'
-          })
+          stopTracker(trackerId)
         }
       })
   } else {
@@ -52,6 +48,36 @@ function deleteOptions (isTracking) {
         }
       })
   }
+}
+
+function stopTracker(trackerId) {
+    $.ajax({
+        type: 'GET',
+        url: '/track/stopTracker',
+        data: {'tracker_id': trackerId},
+        success: function (data) {
+          if (data.status == 0) {
+            swal({
+                title: 'Tracker has been stopped',
+                text: 'You can still view the tracked information',
+                icon: 'success'
+              })
+          } else if (data.status == 1) { // Problem with finding tracker in DB
+            swal({
+                title: 'Error',
+                text: 'There was a problem with stopping the tracker',
+                icon: 'error'
+              })
+          }
+        },
+        error: function (errMsg) {
+            swal({
+                title: 'Error',
+                text: 'There was a problem with stopping the tracker',
+                icon: 'error'
+              })
+        }
+      })
 }
 
 $('#add-account-btn').click(function (event) {
