@@ -20,6 +20,10 @@ $('body').on('click', '#account-table i.delete', function (e) {
 
 $('body').on('click', '#stop-track-btn', function (e) {
   var handle = $(e.target).attr('handle')
+  var cardBody = $(e.target).parents()[2]
+  var row = $(cardBody).children()[1]
+  var col = $(row).children()[1]
+  var statusStr = $(col).html().split('Status: ')[1]
   
 })
 
