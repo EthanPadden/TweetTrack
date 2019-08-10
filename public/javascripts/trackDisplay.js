@@ -145,7 +145,7 @@ function constructTracker(handle) {
     + '<div class="row">'
     + '<div class="col-8"><h4 id="name">Tracker - </h4></div>'
     + '<div class="col-2"><button type="button" class="btn btn-info" handle="' + handle + '" id="tracker-link-btn">Analysis</button></div>'
-    + '<div class="col-2"><button type="button" class="btn btn-danger" id="stop-track-btn">Stop</button></div>'
+    + '<div class="col-2"><button type="button" class="btn btn-danger" handle="' + handle + '" id="stop-track-btn">Stop</button></div>'
     + '</div>'
      +   '<div class="row">'
       +    '<div class="col-4" id="start-date">Started: </div>'

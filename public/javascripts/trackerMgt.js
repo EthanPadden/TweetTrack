@@ -18,6 +18,11 @@ $('body').on('click', '#account-table i.delete', function (e) {
   else if (trackingStatus == 'Not tracking') deleteOptions(false, parentRow.id)
 })
 
+$('body').on('click', '#stop-track-btn', function (e) {
+  var handle = $(e.target).attr('handle')
+  
+})
+
 $('body').on('mouseenter', '#account-table i.delete', function (e) {
   $(e.target).css('cursor', 'pointer')
 })
