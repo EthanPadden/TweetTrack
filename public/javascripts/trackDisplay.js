@@ -172,7 +172,7 @@ function constructTracker(handle) {
 }
 
 function displayTrackerDetails(tracker) {
-    console.log(tracker)
+    // console.log(tracker)
     // console.log(accounts)
     var statusStr
     if(tracker.status == 1) statusStr = 'tracking'
@@ -182,6 +182,7 @@ function displayTrackerDetails(tracker) {
    
     $(selector + ' #start-date').html('Started: ' + tracker.start_date.split(' IST')[0])    
     $(selector + ' #status').html('Status: ' + statusStr)  
+    $(selector + ' div.card-body')[0].id = tracker._id
     
     var account = findAccount(accounts, tracker.handle)
     var name = account.name

@@ -23,8 +23,11 @@ $('body').on('click', '#stop-track-btn', function (e) {
   var cardBody = $(e.target).parents()[2]
   var row = $(cardBody).children()[1]
   var col = $(row).children()[1]
-  var statusStr = $(col).html().split('Status: ')[1]
-  
+  var trackingStatus = $(col).html().split('Status: ')[1]
+
+  var id = cardBody.id
+  if (trackingStatus == 'tracking') deleteOptions(true, id)
+  else if (trackingStatus == 'stopped') deleteOptions(false, id)
 })
 
 $('body').on('mouseenter', '#account-table i.delete', function (e) {
