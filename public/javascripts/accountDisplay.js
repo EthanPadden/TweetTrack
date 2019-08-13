@@ -3,29 +3,31 @@ var yellowTheme = 'rgba(255, 228, 0, 1)';
 var defaultNumTweets = 30; // If increased too much, it exceeds the max buffer
 var accounts = [];
 
-$('#handle-input').keyup(function(event){
-    var handle = event.target.value;
-    isHandleValid(handle);
-});
+// $('#handle-input').keyup(function(event){
+//     var handle = event.target.value;
+//     isHandleValid(handle);
+// });
 
-function addAccount(h, isTracking, tracker) {
+function addAccount(tracker) {
     $.ajax({
         type: 'GET',
         url: '/account/getBasicInfo',
-        data: {'handle':h},
+        data: {'handle':tracker.handle},
         success: function(data){
             if(data.status == 0) {
                 accounts.push(data);
-                console.log(data)
+                // console.log(data)
         displayTrackerDetails(tracker)
 
-                addUserToTable(data);
+                addUserToTable(data, tracker._id, (tracker.status == 1));
                 addGraphOptions();
                 updateOptions(data);
-                window.accounts = accounts;
-                if(accounts.length == 2) hideHandleInput();
-                var i = accounts.map(function(e) { return e.handle; }).indexOf(data.handle);
-                if(isTracking) updateTrackingStatus(i, 1)
+                updateStatusUI(tracker._id, (tracker.status == 1))
+
+                // window.accounts = accounts;
+                // if(accounts.length == 2) hideHandleInput();
+                // var i = accounts.map(function(e) { return e.handle; }).indexOf(data.handle);
+                // if(isTracking) updateTrackingStatus(i, 1)
             }
             else if (data.status == -1) $('#handle-msg').html("Account not found");
         },
@@ -35,27 +37,45 @@ function addAccount(h, isTracking, tracker) {
     });
 }
 
-$('#add-account-btn').click(function(event){
-    var handle = $('#handle-input').val();
-    if (isHandleValid(handle)) {
-        addAccount(handle, false)
-    } 
-});
+// $('#add-account-btn').click(function(event){
+//     var handle = $('#handle-input').val();
+//     if (isHandleValid(handle)) {
+//         addAccount(handle, false)
+//     } 
+// });
 
-function showHandleInput() {
-    
+function updateStatusUI(trackerId, isTracking) {
+    var selector = '#' + trackerId
+    var cell = $($(selector).children()[4]).children()[0]
+
+    if(isTracking) {
+        $(cell).removeClass('not-tracking')
+        $(cell).removeClass('stopping')
+        $(cell).addClass('tracking')
+        $(cell).html('Tracking')
+        $('#tracker #status').html('Status: <span class="badge badge-secondary tracking">Active</span>')
+    } else {
+        $(cell).removeClass('tracking')
+        $(cell).removeClass('stopping')
+        $(cell).addClass('not-tracking')
+        $(cell).html('Not tracking')
+        $('#tracker #status').html('Status: <span class="badge badge-secondary not-tracking">Stopped</span>')
+    } 
 }
 function hideHandleInput() {
     $('#input-handle-group').parent().addClass('hidden');
 }
-function addUserToTable(data) {
-    var indexOfUser = accounts.indexOf(data)
-    var tableRow = '<tr>'
+function addUserToTable(data, trackerId, isTracking) {
+    var deleteIcon
+    if(isTracking) deleteIcon = '<i class="material-icons delete">remove_circle_outline</i>'
+    else deleteIcon = '<i class="material-icons delete">delete_sweep</i>'
+    var tableRow = '<tr id="' + trackerId + '">'
                 + '<th scope="row">' + data.name + '</th>'
                 + '<td>@' + data.handle + '</td>'
                 + '<td>' + data.tweetCount + '</td>'
                 + '<td>' + data.followersCount + '</td>'
                 + '<td><span class="badge badge-secondary not-tracking">Not tracking</span></td>'
+                + '<td>' + deleteIcon + '</td>'
                 + '</tr>';
                 var tableHTML = $('#overview-table-body').html();
                 tableHTML += tableRow;
@@ -324,10 +344,10 @@ $('#add-metrics-btn').click(function(event){
 });
 
 function displayEngagementChart(user, data, index) {
-    console.log("DATA FOR INDEX " + index);
-    console.log(data);
+    // console.log("DATA FOR INDEX " + index);
+    // console.log(data);
 
-    console.log("USER ENGAGEMENT: "  + user.name);
+    // console.log("USER ENGAGEMENT: "  + user.name);
     var results = calculateEngagement(data.tweetStream, user.followersCount);
     var engagement = results.engagement;
     var nthchild = parseInt(index) + 2;
@@ -398,7 +418,7 @@ function displayEngagementChart(user, data, index) {
         data: chartData,
         // options: options
     });
-    console.log(user);
+    // console.log(user);
     $(selector + ' h4').html(user.name + ':\n' + Math.round(engagement) + '%');
     if(index == 1) $('#engagementChart').removeClass('hidden');
 }

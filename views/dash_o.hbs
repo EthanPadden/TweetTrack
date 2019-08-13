@@ -7,7 +7,7 @@
   <div class="card-body">
     <div class="row overview-accounts no-margin">
   <div class="col">
-    <table class="table">
+    <table class="table" id="account-table">
       <thead>
         <tr>
           <th scope="col">Tracking accounts...</th>
@@ -15,6 +15,7 @@
           <th scope="col">Tweets</th>
           <th scope="col">Followers</th>
           <th scope="col">Tracking</th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody id="overview-table-body">
@@ -31,7 +32,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text">@</span>
       </div>
-      <input type="text" class="form-control" id="handle-input">
+      <input type="text" class="form-control" id="handle-input" data-toggle="tooltip" data-placement="bottom">
       <div class="input-group-append">
         <button class="btn btn-primary" id="add-account-btn">Track</button>
       </div>

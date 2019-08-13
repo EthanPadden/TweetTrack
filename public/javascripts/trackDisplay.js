@@ -145,7 +145,7 @@ function constructTracker(handle) {
     + '<div class="row">'
     + '<div class="col-8"><h4 id="name">Tracker - </h4></div>'
     + '<div class="col-2"><button type="button" class="btn btn-info" handle="' + handle + '" id="tracker-link-btn">Analysis</button></div>'
-    + '<div class="col-2"><button type="button" class="btn btn-danger" id="stop-track-btn">Stop</button></div>'
+    + '<div class="col-2"><button type="button" class="btn btn-danger" handle="' + handle + '" id="stop-track-btn">Stop</button></div>'
     + '</div>'
      +   '<div class="row">'
       +    '<div class="col-4" id="start-date">Started: </div>'
@@ -174,11 +174,15 @@ function constructTracker(handle) {
 function displayTrackerDetails(tracker) {
     // console.log(tracker)
     // console.log(accounts)
-    
+    var statusStr
+    if(tracker.status == 1) statusStr = 'tracking'
+    else if(tracker.status == 0) statusStr = 'stopped'
+
     var selector = '#tracker-section #tracker-' + tracker.handle
    
     $(selector + ' #start-date').html('Started: ' + tracker.start_date.split(' IST')[0])    
-    $(selector + ' #status').html('Status: tracking')  
+    $(selector + ' #status').html('Status: ' + statusStr)  
+    $(selector + ' div.card-body')[0].id = tracker._id
     
     var account = findAccount(accounts, tracker.handle)
     var name = account.name
