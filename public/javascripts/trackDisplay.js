@@ -35,40 +35,6 @@ $('#add-tracker-btn').click(function(event) {
     });
 });
 
-function updateTrackingStatus(i, cmd) {
-    // 0 - not tracking
-    // 1 - tracking
-    // 2 - stopping
-    // console.log("Update: " + i + " to " + cmd)
-
-    // Keep the accounts array moving the same as the table
-    var n = i + 1
-    var tableRow = $('#overview-table-body > tr:nth-child(' + n + ')')
-    var cell = tableRow[0].cells[4].children[0]
-    // console.log(cell)
-
-    if(cmd == 0) {
-        $(cell).removeClass('tracking')
-        $(cell).removeClass('stopping')
-        $(cell).addClass('not-tracking')
-        $(cell).html('Not tracking')
-        $('#tracker #status').html('Status: <span class="badge badge-secondary not-tracking">Stopped</span>')
-    } else if(cmd == 1) {
-        $(cell).removeClass('not-tracking')
-        $(cell).removeClass('stopping')
-        $(cell).addClass('tracking')
-        $(cell).html('Tracking')
-        $('#tracker #status').html('Status: <span class="badge badge-secondary tracking">Active</span>')
-    } else if (cmd == 2) {
-        $(cell).removeClass('not-tracking')
-        $(cell).removeClass('tracking')
-        $(cell).addClass('stopping')
-        $(cell).html('Stopping')
-        $('#tracker #status').html('Status: <span class="badge badge-secondary stopping">Stopping</span>')
-    }
-    
-}
-
 function displayTracker(i) {
     $('#tracker h4').html('Tracking ' + window.accounts[i].name + '...')
     var startDate = new Date().toDateString();

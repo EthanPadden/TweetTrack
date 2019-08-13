@@ -8,10 +8,10 @@ function getRunningTrackers() {
             if (data.status == 0) {
                for(var i in data.trackers) {
                    addAccount(data.trackers[i])
-                    constructTracker(data.trackers[i].handle)
+                    // constructTracker(data.trackers[i].handle)
                }
 
-                   updateStats(data.trackers, 0)
+                //    updateStats(data.trackers, 0)
          
 
                
