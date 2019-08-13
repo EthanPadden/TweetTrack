@@ -26,3 +26,13 @@ function calculateEngagement(stats) {
 
     return results;
 }
+
+function statusHTML(isTracking) {
+    if(isTracking) return '<span class="badge badge-secondary tracking">Tracking</span>'
+    else return '<span class="badge badge-secondary not-tracking">Not tracking</span>'
+}
+
+function getStoredAccountInfo(trackerId) {
+    var tr = $('#' + trackerId) 
+    console.log(tr)
+}

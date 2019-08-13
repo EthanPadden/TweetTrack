@@ -124,25 +124,7 @@ router.get('/deleteTracker', function (req, res, next) {
 })
 
 router.get('/getStats', function (req, res, next) {
-  // Currently based on the assumption that there will only be one tracker per handle
-  /** APPROACH:
-   * Check if there is a tracker running for a particular user
-   * If there isnt, respond with the last stats gathered and a status 1
-   * If there is, respond with the current stats and a status 0
-   */
-
-  console.log('Request to get stats from tracker for ' + req.query.handle)
-  Trackers.findOne({handle: req.query.handle}, function (err, tracker) {
-    if (err) res.send(err)
-    else if (tracker) {
-      if (!tracker._id) res.json({'status': 2})
-      else returnStats(tracker._id.toString(), res)
-    }
-  })
-})
-
-function returnStats (id, res) {
-  Stats.findOne({tracker_id: id}, function (err, stats) {
+  Stats.findOne({tracker_id: req.query.id}, function (err, stats) {
     if (err) res.send(err)
     else if (stats) {
       res.json({'status': 0, 'stats': stats})
@@ -150,7 +132,8 @@ function returnStats (id, res) {
       res.json({'status': 'stats_not_found'})
     }
   })
-}
+})
+
 router.get('/getTweets', function (req, res, next) {
   Tweets.find({handle: req.query.handle}, function (err, tweets) {
     if (err) res.send(err)
