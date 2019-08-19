@@ -32,3 +32,18 @@ function statusHTML(isTracking) {
     if(isTracking) return '<span class="badge badge-secondary tracking">Tracking</span>'
     else return '<span class="badge badge-secondary not-tracking">Not tracking</span>'
 }
+
+function getStoredAccountInfo(trackerId) {
+    var tr = $('#' + trackerId)[0]
+    var cells = $(tr).children()
+    console.log(cells)
+
+    var acctInfo = {
+        name:$(cells[0]).html(),
+        handle:$(cells[1]).html().split('@')[1],
+        tweet_count:parseInt($(cells[2]).html()),
+        follower_count:parseInt($(cells[3]).html())
+    }
+
+    return acctInfo
+}
