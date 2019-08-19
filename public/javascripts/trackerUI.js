@@ -1,22 +1,34 @@
-function buildTracker(tracker) {
-    getStoredAccountInfo(tracker._id)
-    // $.ajax({
-    //     type: 'GET',
-    //     url: '/track/getStats',
-    //     data: { 'id': tracker._id },
-    //     success: function(data) {
-    //         if (data.status == 0) {
-    //             trackerHTML(tracker, stats)
-    //         } else if(data.status) console.log("Error: status " + data.status);
-    //         else console.log("Error: no status available");
-    //     },
-    //     error: function(errMsg) {
-    //         console.log(errMsg);
-    //     }
-    // });
+function buildTracker(tracker, followersCount) {
+    $.ajax({
+        type: 'GET',
+        url: '/track/getStats',
+        data: { 'id': tracker._id },
+        success: function(data) {
+            if (data.status == 0) {
+                // TODO: Change system so that stats are stored in correct format:
+                var statsInput = {
+                    tweet_count:data.stats.tweet_count,
+                    followers_count:followersCount,
+                    favourite_count:data.stats.likes_count,
+                    retweet_count:data.stats.rt_count,
+                    mention_count:data.stats.mentions_count
+                }
+
+                var engmt = calculateEngagement(statsInput)
+                trackerHTML(tracker, data.stats, engmt)
+            } else if(data.status) console.log("Error: status " + data.status);
+            else console.log("Error: no status available");
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
 }
 
-function constructTracker(tracker, stats) {
+function trackerHTML(tracker, stats, engmt) {
+    // console.log(tracker)
+    // console.log(stats)
+    // console.log(engmt)
 //     var status = statusHTML(tracker.status)
 //     var engmtInput = {
 //         tweet_count:stats.tweet_count,

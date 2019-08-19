@@ -10,6 +10,7 @@ function addAccount(tracker) {
         success: function(data){
             if(data.status == 0) {
                 addUserToTable(data, tracker._id, (tracker.status == 1));
+                buildTracker(tracker, data.followersCount)
             }
             else if (data.status == -1) $('#handle-msg').html("Account not found");
         },

@@ -8,7 +8,8 @@ function getRunningTrackers() {
             if (data.status == 0) {
                for(var i in data.trackers) {
                    addAccount(data.trackers[i])
-                   buildTracker(data.trackers[i])
+                   // Build tracker is called in the above function
+                //    buildTracker(data.trackers[i])
                }
             } else if(data.status) console.log("Error: status " + data.status);
             else console.log("Error: no status available");
