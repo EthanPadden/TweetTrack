@@ -20,8 +20,8 @@ function calculateEngagement(stats) {
     }   
 
     var results = {
-        "avg_likes":Math.round(avgFavourites),
-        "avg_rts":Math.round(avgRetweets),
+        "avg_favourites":Math.round(avgFavourites),
+        "avg_retweets":Math.round(avgRetweets),
         "engagement":Math.round(engmt)
     }
 
@@ -36,7 +36,6 @@ function statusHTML(isTracking) {
 function getStoredAccountInfo(trackerId) {
     var tr = $('#' + trackerId)[0]
     var cells = $(tr).children()
-    console.log(cells)
 
     var acctInfo = {
         name:$(cells[0]).html(),
