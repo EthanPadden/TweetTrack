@@ -1,5 +1,4 @@
 function calculateEngagement(stats) {
-    console.log(stats)
     /* Input:
     {
         tweet_count: int,
@@ -16,7 +15,7 @@ function calculateEngagement(stats) {
     if(stats.tweet_count > 0) {
         avgFavourites = stats.favourite_count/stats.tweet_count
         avgRetweets = stats.retweet_count/stats.tweet_count
-        engmt = 10*(avgFavourites/stats.followers_count) + 100*(avgRetweets/stats.followers_count) + stats.favourite_count + stats.retweet_count + stats.mention_count
+        engmt = 10*(avgFavourites/stats.followers_count) + 100*(avgRetweets/stats.followers_count) + stats.mention_count
     }   
 
     var results = {
@@ -45,4 +44,29 @@ function getStoredAccountInfo(trackerId) {
     }
 
     return acctInfo
+}
+
+function createTrackerChart(trackerId, stats) {
+    var selector = '#tracker-section #tracker-' + trackerId + ' #engmt-chart'
+    var ctx = $(selector)
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+        labels: ["Avg Likes","Avg Retweets", "Mentions"],
+
+        datasets: [
+            {
+            backgroundColor: ['#FFE400', '#FF652F', '#14A76C'],
+            data: [(10*stats.avg_favourites), (100*stats.avg_retweets), stats.mention_count]
+            }
+        ]
+        },
+        options: {
+        title: {
+            display: true,
+            text: 'Contribution to metric'
+        }
+        }
+    });
 }

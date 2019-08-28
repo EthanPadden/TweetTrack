@@ -28,7 +28,6 @@ function trackerHTML(tracker, stats) {
     }
 
     var engmtStats = calculateEngagement(statsInput)
-    console.log(tracker)
 
     var html = '<div class="row no-margin tracker" id="tracker-' + tracker._id + '">'
     + '<div class="col-1"></div>'
@@ -57,4 +56,7 @@ function trackerHTML(tracker, stats) {
 +  '<div class="col-1"></div></div>'
 
 $('#tracker-section > div.col').append(html)
+
+ engmtStats.mention_count = stats.mentions_count
+ createTrackerChart(tracker._id, engmtStats)
 }
