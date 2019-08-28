@@ -1,11 +1,11 @@
 var selectedTweet = -1
 
-$("body").on('click', '#tracker-link-btn', function(e){
-    var tracker = $(e.target).parents()[5]
-    var trackerId = tracker.id.split('tracker-')[1]
-    window.tracker_id = trackerId
-    $(location).attr('href', '/tracker?id=' + trackerId);
- });
+ $(document).ready(function(){
+    var trackerId = document.cookie.split('tracker_id=')[1]
+    console.log(trackerId)
+    //  setTitle(handle)
+    //  gatherTweets(handle)
+ })
 
 
  $("body").on('mouseenter', '#tweet-table-body tr', function(e){
@@ -13,6 +13,7 @@ $("body").on('click', '#tracker-link-btn', function(e){
     if(select != selectedTweet)
    $(select).css('background-color', '#96BFFF')
  })
+
  $("body").on('mouseleave', '#tweet-table-body tr', function(e){
      var select = e.target.parentNode
      if(select != selectedTweet)
@@ -112,11 +113,6 @@ function extractEmojies(text) {
         
 }
 
- $(document).ready(function(){
-    var handle = document.cookie.split('handle=')[1]
-     setTitle(handle)
-     gatherTweets(handle)
- })
 
  function setTitle(handle) {
     $('#analysis-section h4').html('Analysis - ' + handle)

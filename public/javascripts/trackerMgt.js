@@ -4,6 +4,12 @@ $(document).ready(function () {
   }
   $('#handle-input').tooltip(options)
 })
+$("body").on('click', '#tracker-link-btn', function(e){
+  var tracker = $(e.target).parents()[5]
+  var trackerId = tracker.id.split('tracker-')[1]
+  window.tracker_id = trackerId
+  $(location).attr('href', '/tracker?tracker_id=' + trackerId);
+});
 
 $('#handle-input').keyup(function (event) {
   var handle = event.target.value

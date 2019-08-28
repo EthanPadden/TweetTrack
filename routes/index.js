@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/tracker', function(req, res, next) {
-  res.cookie('handle', req.query.handle)
+  res.cookie('tracker_id', req.query.tracker_id)
   res.render('tracker', { title: 'Tracker', layout:'layout_details'});
 })
 
