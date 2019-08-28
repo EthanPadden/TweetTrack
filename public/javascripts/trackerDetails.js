@@ -1,10 +1,13 @@
 var selectedTweet = -1
 
 $("body").on('click', '#tracker-link-btn', function(e){
-    var handle = e.target.outerHTML.split('=')[3].split('"')[1]
-    window.trackHandle = handle
-    $(location).attr('href', '/tracker?handle=' + handle );
+    var tracker = $(e.target).parents()[5]
+    var trackerId = tracker.id.split('tracker-')[1]
+    window.tracker_id = trackerId
+    $(location).attr('href', '/tracker?id=' + trackerId);
  });
+
+
  $("body").on('mouseenter', '#tweet-table-body tr', function(e){
     var select = e.target.parentNode
     if(select != selectedTweet)
