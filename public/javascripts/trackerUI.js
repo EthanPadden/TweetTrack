@@ -28,7 +28,7 @@ function trackerHTML(tracker, stats) {
     }
 
     var engmtStats = calculateEngagement(statsInput)
-    console.log(engmtStats)
+    console.log(tracker)
 
     var html = '<div class="row no-margin tracker" id="tracker-' + tracker._id + '">'
     + '<div class="col-1"></div>'
@@ -41,7 +41,7 @@ function trackerHTML(tracker, stats) {
     + '<div class="col-2"><button type="button" class="btn btn-danger" id="stop-track-btn">Stop</button></div>'
     + '</div>'
      +   '<div class="row">'
-      +    '<div class="col-4" id="start-date">Started: ' + new Date(tracker.start_date).toDateString() + '</div>'
+      +    '<div class="col-4" id="start-date">Started: ' + tracker.start_date.split(' IST')[0] + '</div>'
        +   '<div class="col-3" id="status">Status: ' + status + '</div>'
         +  '<div class="col-5" id="last-updated">Last updated: ' + new Date().toDateString() + '</div>'
 
