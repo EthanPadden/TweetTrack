@@ -172,7 +172,6 @@ function extractEmojies(text) {
  }
 
  function addTweetToTable(data) {
-   
     var tableRow = '<tr id="' + data._id + '">'
                 + '<td>' + data.text.slice(0,40) + '...</td>'
                 // + '<td>' + data.text + '...</td>'
@@ -180,10 +179,20 @@ function extractEmojies(text) {
                 + '<td>' + data.favourite_count + '</td>'
                 + '<td>' + data.rt_count + '</td>'
                 + '<td>Calculating...</td>'
+                + '<td class="hidden">' + data.is_rt + '</td>'
+                + '<td class="hidden">-1</td>'
+                + '<td class="hidden">-1</td>'
                 + '</tr>';
                 var tableHTML = $('#tweet-table-body').html();
                 tableHTML += tableRow;
                 $('#tweet-table-body').html(tableHTML);
+}
+
+function appendEngmtStatsToTweetRow(tweetId, data) {
+   var row = $('#' + tweetId)
+   var cells = $(row).children()
+   $(cells[6]).html(data.mentions_stats.before_mentions)
+   $(cells[7]).html(data.mentions_stats.after_mentions)
 }
 
 function gatherEngmtStats(i) {
@@ -203,6 +212,9 @@ function gatherEngmtStats(i) {
                     var cell = $(row).children()[4]
                     $(cell).html(engmt)
                     gatherEngmtStats(++i)
+                    appendEngmtStatsToTweetRow(id, data)
+                    // console.log(data)
+                    // console.log(engmt)
                 }
                 else if (data.status == -1) console.log("Error");
             },
