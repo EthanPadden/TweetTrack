@@ -134,6 +134,17 @@ router.get('/getStats', function (req, res, next) {
   })
 })
 
+router.get('/getTracker', function (req, res, next) {
+  Trackers.findOne({_id:req.query.tracker_id}, function (err, tracker) {
+    if (err) res.send(err)
+    else if (tracker) {
+      res.json({'status': 0, 'tracker': tracker})
+    } else {
+      res.json({'status': 'tracker_not_found'})
+    }
+  })
+})
+
 router.get('/getTweets', function (req, res, next) {
   Tweets.find({handle: req.query.handle}, function (err, tweets) {
     if (err) res.send(err)
