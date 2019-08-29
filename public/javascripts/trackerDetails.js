@@ -66,7 +66,10 @@ function getServerAccountInfo(handle) {
  $("body").on('click', '#tweet-table-body', function(e){
     var stats = extractStoredTweetEngmtStats(e.target.parentNode)
     if(stats.status == -1) alert("Please wait until engagement is calculated")
-    else if (stats.status == 0) displayTweetEngmtDetails(stats)
+    else if (stats.status == 0) {
+        displayTweetEngmtDetails(stats)
+        generateTweetEngmtChart(stats)
+    }
  });
 
  function displayTweetEngmtDetails(data) {
@@ -235,57 +238,15 @@ function extractStoredTweetEngmtStats(row) {
                     }*/
 
   var wL = 1
-  var wR = 10
-  var lM = 100
+  var wR = 1
+  var lM = 1
 
-
-var texts = []
-var engmts = []
-var hasLinks = []
-var l = []
-
-function generateBarGraph() {
-    var rows = $('#tweet-table-body').children()
-   
-    for(var i in texts) {
-        var children = $(rows[i]).children()
-        
-    }
-
-    var ctx = $('#analysis-section canvas')
-
-    var green = '#14A76C'
-    var red = '#FF652F'
-
-    var colours = []
-    for(var i in hasLinks) {
-        if(hasLinks[i] == true) colours[i] = green
-        else colours[i] = red
-    }
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: l,
-          datasets: [
-            {
-              label: "Engagement score",
-              backgroundColor: colours,
-              data: engmts
-            }
-          ]
-        },
-        options: {
-          legend: { display: false }
-
-        }
-    });
-}
 function generateTweetEngmtChart(data) {
+    console.log(data)
     var ctx = $('#analysis-section canvas')
-    var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions*100
+    var mentionRatio = data.mentions_a
+    if(data.mentions_b > 0) mentionRatio = data.mentions_a/data.mentions_b * 100
     var mentionColour;
-    console.log(mentionRatio)
     if(mentionRatio < 100) mentionColour = '#FF652F'
     else mentionColour = '#14A76C'
     new Chart(ctx, {
@@ -296,7 +257,7 @@ function generateTweetEngmtChart(data) {
         datasets: [
             {
             backgroundColor: ['#FFE400', '#007BFF', mentionColour],
-            data: [(wL*data.tweet.favourite_count), (wR*data.tweet.rt_count), Math.abs(lM*mentionRatio)]
+            data: [(wL*data.favourite_count), (wR*data.retweet_count), Math.abs(lM*mentionRatio)]
             }
         ]
         },
@@ -308,4 +269,3 @@ function generateTweetEngmtChart(data) {
         }
     });
 }
-$('#analysis-graph-btn').click(generateBarGraph)
