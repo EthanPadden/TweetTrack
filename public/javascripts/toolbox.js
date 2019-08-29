@@ -110,3 +110,33 @@ function generateTweetEngmtChart(data, ctx) {
         }
     });
 }
+
+function extractEmojies(text) {
+    var emojiRegex = /([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g;
+
+    var emojies = []
+    // for(var i in text) {
+    //     if (text[i].match(emojiRegex)) {
+    //         emojies.push(text[i])
+    //     }
+    // }
+
+    return text.match(emojiRegex)
+        
+}
+
+function extractMentionsAndHashtags(text){
+    var words = text.split(' ')
+    var mentions = []
+    var hashtags = []
+
+    for(var i in words) {
+        if(words[i].indexOf('@') == 0) mentions.push(words[i])
+        if(words[i].indexOf('#') == 0) hashtags.push(words[i])
+    }
+
+    return {
+        'mentions':mentions,
+        'hashtags':hashtags
+    }
+}

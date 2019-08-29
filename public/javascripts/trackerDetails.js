@@ -105,35 +105,8 @@ function getServerAccountInfo(handle) {
  }
 
 
-function extractMentionsAndHashtags(text){
-    var words = text.split(' ')
-    var mentions = []
-    var hashtags = []
 
-    for(var i in words) {
-        if(words[i].indexOf('@') == 0) mentions.push(words[i])
-        if(words[i].indexOf('#') == 0) hashtags.push(words[i])
-    }
 
-    return {
-        'mentions':mentions,
-        'hashtags':hashtags
-    }
-}
-
-function extractEmojies(text) {
-    var emojiRegex = /([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g;
-
-    var emojies = []
-    // for(var i in text) {
-    //     if (text[i].match(emojiRegex)) {
-    //         emojies.push(text[i])
-    //     }
-    // }
-
-    return text.match(emojiRegex)
-        
-}
 
 
  function setTitle(name) {
@@ -229,10 +202,3 @@ function extractStoredTweetEngmtStats(row) {
         'mentions_a':$(cells[7]).html(),
     }
 }
-/*if(data.tweet.text.indexOf('RT ') != 0) {
-                        engmts.push(engmt)
-                        
-                        hasLinks.push((data.tweet.text.indexOf('http') != -1))
-                        l.push('.')
-        
-                    }*/
