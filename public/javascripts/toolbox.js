@@ -70,3 +70,15 @@ function createTrackerChart(trackerId, stats) {
         }
     });
 }
+
+function calculateTweetEngagement(data) {
+    var likes = data.tweet.favourite_count
+    var rts = data.tweet.rt_count
+    var mentionRatio = data.mentions_stats.after_mentions
+    if(data.mentions_stats.before_mentions > 0) mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions*100
+
+    
+    var engmt = (wL * likes) + (wR * rts) + (lM * mentionRatio)
+    // console.log('likes: ' + likes + ' rts: ' + rts + ' m: ' + mentionRatio)
+    return Math.round(engmt)
+}

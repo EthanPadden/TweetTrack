@@ -161,7 +161,7 @@ function extractEmojies(text) {
                     addTweetToTable(data.tweets[i])
                 }
 
-                // gatherEngmtStats(0)
+                gatherEngmtStats(0)
             }
             else if (data.status == -1) console.log("Error");
         },
@@ -198,7 +198,7 @@ function gatherEngmtStats(i) {
             data: {'_id':id},
             success: function(data){
                 if(data.status == 0) {
-                    var engmt = calcGatheredStats(data)
+                    var engmt = calculateTweetEngagement(data)
                     var row = $('#tweet-table-body').children()[i]
                     var cell = $(row).children()[4]
                     $(cell).html(engmt)
@@ -224,18 +224,7 @@ function gatherEngmtStats(i) {
   var wL = 1
   var wR = 10
   var lM = 100
-function calcGatheredStats(data) {
 
-
-
-    var likes = data.tweet.favourite_count
-    var rts = data.tweet.rt_count
-    var mentionRatio = data.mentions_stats.after_mentions/data.mentions_stats.before_mentions*100
-    
-    var engmt = (wL * likes) + (wR * rts) + (lM * mentionRatio)
-    // console.log('likes: ' + likes + ' rts: ' + rts + ' m: ' + mentionRatio)
-    return Math.round(engmt)
-}
 
 var texts = []
 var engmts = []
