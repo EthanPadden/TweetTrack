@@ -2,7 +2,6 @@ var selectedTweet = -1
 
  $(document).ready(function(){
     var trackerId = document.cookie.split('tracker_id=')[1]
-    console.log(trackerId)
     getTracker(trackerId)
     //  setTitle(handle)
     //  gatherTweets(handle)
@@ -15,7 +14,7 @@ var selectedTweet = -1
         data: {'tracker_id':trackerId},
         success: function(data){
             if(data.status == 0) {
-                console.log(data.tracker)
+                getServerAccountInfo(data.tracker.handle)
             }
             else console.log("Tracker not found");
         },
@@ -29,11 +28,10 @@ function getServerAccountInfo(handle) {
     $.ajax({
         type: 'GET',
         url: '/account/getBasicInfo',
-        data: {'handle':tracker.handle},
+        data: {'handle':handle},
         success: function(data){
             if(data.status == 0) {
-                addUserToTable(data, tracker._id, (tracker.status == 1));
-                buildTracker(tracker)
+                
             }
             else if (data.status == -1) $('#handle-msg').html("Account not found");
         },
