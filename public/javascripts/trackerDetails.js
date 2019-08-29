@@ -68,7 +68,7 @@ function getServerAccountInfo(handle) {
     if(stats.status == -1) alert("Please wait until engagement is calculated")
     else if (stats.status == 0) {
         displayTweetEngmtDetails(stats)
-        generateTweetEngmtChart(stats)
+        generateTweetEngmtChart(stats, $('#analysis-section canvas'))
     }
  });
 
@@ -236,36 +236,3 @@ function extractStoredTweetEngmtStats(row) {
                         l.push('.')
         
                     }*/
-
-  var wL = 1
-  var wR = 1
-  var lM = 1
-
-function generateTweetEngmtChart(data) {
-    console.log(data)
-    var ctx = $('#analysis-section canvas')
-    var mentionRatio = data.mentions_a
-    if(data.mentions_b > 0) mentionRatio = data.mentions_a/data.mentions_b * 100
-    var mentionColour;
-    if(mentionRatio < 100) mentionColour = '#FF652F'
-    else mentionColour = '#14A76C'
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-        labels: ["Likes","Retweets", "Mentions Ratio"],
-
-        datasets: [
-            {
-            backgroundColor: ['#FFE400', '#007BFF', mentionColour],
-            data: [(wL*data.favourite_count), (wR*data.retweet_count), Math.abs(lM*mentionRatio)]
-            }
-        ]
-        },
-        options: {
-        title: {
-            display: true,
-            text: 'Contribution to metric'
-        }
-        }
-    });
-}
