@@ -64,25 +64,13 @@ function getServerAccountInfo(handle) {
 
  
  $("body").on('click', '#tweet-table-body', function(e){
-     var id = e.target.parentNode.id
-
-     $.ajax({
-        type: 'GET',
-        url: '/track/tweetEngmt',
-        data: {'_id':id},
-        success: function(data){
-            if(data.status == 0) {
-                displayTweetEngmtDetails(data)
-            }
-            else if (data.status == -1) console.log("Error");
-        },
-        error: function(errMsg) {
-            console.log(errMsg);
-        }
-    });
+    var stats = extractStoredTweetEngmtStats(e.target.parentNode)
+    if(stats.status == -1) alert("Please wait until engagement is calculated")
+    else if (stats.status == 0) displayTweetEngmtDetails(stats)
  });
 
  function displayTweetEngmtDetails(data) {
+     // Next change here
     var spanBold = '<span style="font-weight:bolder">'
 
     $('#likes').html(spanBold + 'Likes: </span>' + data.tweet.favourite_count)
@@ -213,8 +201,6 @@ function gatherEngmtStats(i) {
                     $(cell).html(engmt)
                     gatherEngmtStats(++i)
                     appendEngmtStatsToTweetRow(id, data)
-                    // console.log(data)
-                    // console.log(engmt)
                 }
                 else if (data.status == -1) console.log("Error");
             },
@@ -225,6 +211,21 @@ function gatherEngmtStats(i) {
     }
 }
 
+function extractStoredTweetEngmtStats(row) {
+    var cells = $(row).children()
+    var status
+    if($(cells[4]).html() == 'Calculating...') status = -1
+    else status = 0
+    return {
+        'status':status,
+        'favourite_count':$(cells[2]).html(),
+        'retweet_count':$(cells[3]).html(),
+        'engagement':$(cells[4]).html(),
+        'is_rt':$(cells[5]).html(),
+        'mentions_b':$(cells[6]).html(),
+        'mentions_a':$(cells[7]).html(),
+    }
+}
 /*if(data.tweet.text.indexOf('RT ') != 0) {
                         engmts.push(engmt)
                         
