@@ -3,8 +3,7 @@ var selectedTweet = -1
  $(document).ready(function(){
     var trackerId = document.cookie.split('tracker_id=')[1]
     getTracker(trackerId)
-    //  setTitle(handle)
-    //  gatherTweets(handle)
+    gatherTweets(trackerId)
  })
 
  function getTracker(trackerId) {
@@ -151,18 +150,18 @@ function extractEmojies(text) {
     $('#analysis-section h4').html('Analysis - ' + name)
  }
 
- function gatherTweets(handle) {
+ function gatherTweets(trackerId) {
     $.ajax({
         type: 'GET',
         url: '/track/getTweets',
-        data: {'handle':handle},
+        data: {'tracker_id':trackerId},
         success: function(data){
             if(data.status == 0) {
                 for(var i in data.tweets) {
                     addTweetToTable(data.tweets[i])
                 }
 
-                gatherEngmtStats(0)
+                // gatherEngmtStats(0)
             }
             else if (data.status == -1) console.log("Error");
         },

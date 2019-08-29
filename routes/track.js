@@ -146,7 +146,7 @@ router.get('/getTracker', function (req, res, next) {
 })
 
 router.get('/getTweets', function (req, res, next) {
-  Tweets.find({handle: req.query.handle}, function (err, tweets) {
+  Tweets.find({tracker_id: req.query.tracker_id}, function (err, tweets) {
     if (err) res.send(err)
     else if (tweets) {
       var tweetRes = []
