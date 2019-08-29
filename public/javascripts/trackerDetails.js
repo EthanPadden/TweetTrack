@@ -31,7 +31,7 @@ function getServerAccountInfo(handle) {
         data: {'handle':handle},
         success: function(data){
             if(data.status == 0) {
-                
+                setTitle(data.name)
             }
             else if (data.status == -1) $('#handle-msg').html("Account not found");
         },
@@ -40,9 +40,6 @@ function getServerAccountInfo(handle) {
         }
     });
 }
-
-
-
 
  $("body").on('mouseenter', '#tweet-table-body tr', function(e){
     var select = e.target.parentNode
@@ -150,8 +147,8 @@ function extractEmojies(text) {
 }
 
 
- function setTitle(handle) {
-    $('#analysis-section h4').html('Analysis - ' + handle)
+ function setTitle(name) {
+    $('#analysis-section h4').html('Analysis - ' + name)
  }
 
  function gatherTweets(handle) {
