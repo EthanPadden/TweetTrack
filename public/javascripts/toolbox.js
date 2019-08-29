@@ -70,3 +70,20 @@ function createTrackerChart(trackerId, stats) {
         }
     });
 }
+
+function getTracker(trackerId) {
+    $.ajax({
+        type: 'GET',
+        url: '/track/getTracker',
+        data: {'tracker_id':trackerId},
+        success: function(data){
+            if(data.status == 0) {
+                console.log(data.tracker)
+            }
+            else console.log("Tracker not found");
+        },
+        error: function(errMsg) {
+            console.log(errMsg);
+        }
+    });
+}
