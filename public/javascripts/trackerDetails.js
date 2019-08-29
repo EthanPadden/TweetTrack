@@ -73,33 +73,32 @@ function getServerAccountInfo(handle) {
      // Next change here
     var spanBold = '<span style="font-weight:bolder">'
 
-    $('#likes').html(spanBold + 'Likes: </span>' + data.tweet.favourite_count)
-    $('#rts').html(spanBold + 'RTs: </span>' + data.tweet.rt_count)
-    if(data.tweet.is_rt == 1) $('#is-rt').html('This is a retweet')
-    else if(data.tweet.is_rt == 0) $('#is-rt').html('This is not a retweet')
+    $('#likes').html(spanBold + 'Likes: </span>' + data.favourite_count)
+    $('#rts').html(spanBold + 'RTs: </span>' + data.retweet_count)
+    if(data.is_rt == 1) $('#is-rt').html('This is a retweet')
+    else if(data.is_rt == 0) $('#is-rt').html('This is not a retweet')
     
-    if(data.tweet.text.indexOf('http') == -1) $('#has-link').html('This has no links')
-    if(data.tweet.text.indexOf('http') != -1) $('#has-link').html('This has one or more links')
+    if(data.text.indexOf('http') == -1) $('#has-link').html('This has no links')
+    if(data.text.indexOf('http') != -1) $('#has-link').html('This has one or more links')
 
-    $('#mentions-b').html(spanBold + 'Mentions before: </span>' + data.mentions_stats.before_mentions)
-    $('#mentions-a').html(spanBold + 'Mentions after: </span>' + data.mentions_stats.after_mentions)
+    $('#mentions-b').html(spanBold + 'Mentions before: </span>' + data.mentions_b)
+    $('#mentions-a').html(spanBold + 'Mentions after: </span>' + data.mentions_b)
 
 
-    var engmt = calcGatheredStats(data)
-    $('#engmt').html('Engagement: ' + engmt)
-    generateTweetEngmtChart(data)
+    // var engmt = calcGatheredStats(data)
+    $('#engmt').html('Engagement: ' + data.engagement)
+    // generateTweetEngmtChart(data)
 
-    var parts = extractMentionsAndHashtags(data.tweet.text)
+    var parts = extractMentionsAndHashtags(data.text)
     $('#mentions-used').html(spanBold + 'Mentioned users: </span>' + parts.mentions)
     $('#hashtags-used').html(spanBold + 'Hashtags used: </span>' + parts.hashtags)
 
-    var emojies = extractEmojies(data.tweet.text)
+    var emojies = extractEmojies(data.text)
     if(emojies != null) 
     $('#emojies-used').html(spanBold + 'Emojies used: </span>' + emojies)
     else 
     $('#emojies-used').html(spanBold + 'Emojies used: </span>None')
     $('#tweet-engmt-info').removeClass('hidden')
-    console.log("HERE")
  }
 
 
@@ -218,6 +217,7 @@ function extractStoredTweetEngmtStats(row) {
     else status = 0
     return {
         'status':status,
+        'text':$(cells[0]).html(),
         'favourite_count':$(cells[2]).html(),
         'retweet_count':$(cells[3]).html(),
         'engagement':$(cells[4]).html(),
