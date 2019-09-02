@@ -1,3 +1,4 @@
+// 1. Gather statistics from server
 function buildTracker(tracker) {
     $.ajax({
         type: 'GET',
@@ -14,6 +15,7 @@ function buildTracker(tracker) {
     });
 }
 
+// 2. Create tracker HTML
 function trackerHTML(tracker, stats) {
     var status = statusHTML(tracker.status)
     var accountStats = getStoredAccountInfo(tracker._id)
