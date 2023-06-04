@@ -1,5 +1,8 @@
 var mongoose = require('mongoose');
-var creds = require('dbCreds')
-var connection = mongoose.connect('mongodb://' + creds.user_name + ':' + creds.psw + '@' + creds.host + ':' + creds.port + '/' + creds.db, { useNewUrlParser: true });
+require('dotenv').config();
+const dbUsername = process.env.DB_USERNAME;
+const dbPassword = process.env.DB_PASSWORD;
+const dbCluster = process.env.DB_CLUSTER;
 
+var connection = mongoose.connect('mongodb+srv://' + dbUsername + ':' + dbPassword + '@' + dbCluster + '.yrvmfzg.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true });
 exports.connection = connection;
